@@ -1,5 +1,5 @@
 /*******************************************************************************
-**! \file   RunTests.sql
+**! \file   RunTests.ssunit.sql
 **! \brief  The RunTests stored procedure.
 **! \author Chris Oldwood
 **/
@@ -111,4 +111,16 @@ as
 			for [Outcome] in ([Passed], [FAILED], [Unknown])
 	)
 	as PivotTable;
+
+	-- Signal test run failure only in batch mode.
+	if (ssunit.IsInteractive() = 0)
+	begin
+		declare @failures int;
+		select	@failures = count(*)
+		from	ssunit.TestResult r
+		where	r.Outcome = ssunit.TestOutcome_Failed();
+
+		if (@failures != 0)
+			raiserror('One or more unit tests failed', 16, 1);
+	end
 go
