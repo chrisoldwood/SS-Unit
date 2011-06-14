@@ -16,7 +16,7 @@ create function ssunit.IsInteractive() returns bit
 as
 begin
 	declare	@application sysname;
-	set		@application = program_name();
+	set		@application = app_name();
 
 	declare @isInteractive bit;
 	set		@isInteractive = 0;
