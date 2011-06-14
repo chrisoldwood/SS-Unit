@@ -1,0 +1,5 @@
+SystemUser.dbo.sql
+BugStatus.dbo.sql
+Bug.dbo.sql
+Bug_FindBugsSubmittedByUser.dbo.sql
+CreateSchema.test.sql
