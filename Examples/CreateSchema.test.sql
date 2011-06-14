@@ -1,6 +1,6 @@
 /*******************************************************************************
 **! \file   CreateSchema.test.sql
-**! \brief  Creates the schema for the example unit tests.
+**! \brief  Creates the schema for the Examples unit tests.
 **! \author Chris Oldwood
 **/
 
