@@ -1,32 +1,87 @@
 @echo off
+rem ************************************************************
+rem
+rem Build a database and run a set of unit tests for the SS-Unit
+rem framework.
+rem
+rem NB: Many of the tests are supposed to fail and so we cannot
+rem use the "-b" switch and "errorlevel" to return a definitive
+rem test suite result.
+rem
+rem ************************************************************
 
+:handle_help_request
+if /i "%1" == "-?"     call :usage & exit /b 0
+if /i "%1" == "--help" call :usage & exit /b 0
+
+:check_mandatory_args
+if /i "%1" == "" call :usage & exit /b 1
+
+:set_vars
 setlocal
+setlocal enabledelayedexpansion
 set server=%1
 set database=SSUnit_Tests
 
-echo Creating database...
-sqlcmd -E -S %server% -d master -Q "drop database %database%;"
-sqlcmd -E -S %server% -d master -Q "create database %database%;"
+:check_optional_args
+if /i "%2" == "--testsonly" goto :run_tests
 
-echo Creating 'dbo' sample objects...
-sqlcmd -E -S %server% -d %database% -i GetIntegerValue.dbo.sql
-sqlcmd -E -S %server% -d %database% -i GetStringValue.dbo.sql
-sqlcmd -E -S %server% -d %database% -i GetDateTimeValue.dbo.sql
+echo.
+echo ----------------------------------------
+echo Creating '%database%' database
+echo ----------------------------------------
+echo.
+
+sqlcmd -E -S %server% -d master -i CreateDatabase.dbo.sql
+
+for /f "delims=" %%f in (object-scripts.txt) do (
+	echo %%f
+	sqlcmd -E -S %server% -d %database% -b -i "%%f"
+	if errorlevel 1 (
+		echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
+		exit /b 1
+	)
+)
 
 pushd ..
 call Install %server% %database%
 popd
+if errorlevel 1 (
+	echo ERROR: Failed to install SS-Unit [!ERRORLEVEL!]
+	exit /b 1
+)
 
+:run_tests
+echo.
+echo ----------------------------------------
+echo Running unit tests
+echo (Failures are to be expected) 
+echo ----------------------------------------
+echo.
 
-echo Creating 'test' objects...
-sqlcmd -E -S %server% -d %database% -i CreateSchema.test.sql
+for /f "delims=" %%f in (test-scripts.txt) do (
+	echo.
+	echo ========================================
+	echo %%f
+	echo ========================================
+	echo.
+	sqlcmd -E -S %server% -d %database% -i "%%f"
+	if errorlevel 1 (
+		echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
+		exit /b 1
+	)
+)
 
-echo Running tests...
+:success
+exit /b 0
+
+rem ************************************************************
+rem Functions
+rem ************************************************************
+
+:usage
 echo.
-sqlcmd -E -S %server% -d %database% -i BasicAsserts.test.sql
+echo Usage: %~n0 ^<db server^> [--testsonly]
 echo.
-sqlcmd -E -S %server% -d %database% -i IntegerAsserts.test.sql
-echo.
-sqlcmd -E -S %server% -d %database% -i StringAsserts.test.sql
-echo.
-sqlcmd -E -S %server% -d %database% -i DateTimeAsserts.test.sql
+echo e.g.   %~n0 .\SQLEXPRESS
+goto :eof
