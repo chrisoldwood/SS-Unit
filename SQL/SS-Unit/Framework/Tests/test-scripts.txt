@@ -1,0 +1,4 @@
+BasicAsserts.test.sql
+IntegerAsserts.test.sql
+StringAsserts.test.sql
+DateTimeAsserts.test.sql

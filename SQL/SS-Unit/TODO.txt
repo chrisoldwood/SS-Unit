@@ -1,0 +1,17 @@
+- Support grouping tests (i.e. fixtures)
+
+- Support SetUp/TearDown (test and fixture level)
+
+- Integer asserts for <, <=, >, >= operators
+
+- String assert using LIKE operator
+
+- DateTime asserts for <, <=, >, >= operators
+
+- Support wider output in batch mode (global vars table?)
+
+- Use transactions to avoid needing a TearDown
+
+- See if DDL trigger can be used to auto drop test procedures to avoid creation failure
+
+- Denote helper procedures so they can be auto dropped too.
