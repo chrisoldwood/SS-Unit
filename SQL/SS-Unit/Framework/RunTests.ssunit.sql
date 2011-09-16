@@ -1,16 +1,16 @@
-/*******************************************************************************
-**! \file   RunTests.ssunit.sql
-**! \brief  The RunTests stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   RunTests.ssunit.sql
+ * \brief  The RunTests stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.RunTests') is not null)
 	drop procedure ssunit.RunTests;
 go
 
-/*******************************************************************************
-** Runs the suite of unit tests.
-**/
+/**
+ * Runs the suite of unit tests.
+ */
 
 create procedure ssunit.RunTests
 as

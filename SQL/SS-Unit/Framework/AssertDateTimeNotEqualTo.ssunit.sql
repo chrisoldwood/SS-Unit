@@ -1,21 +1,21 @@
-/*******************************************************************************
-**! \file   AssertDateTimeNotEqualTo.ssunit.sql
-**! \brief  The AssertDateTimeNotEqualTo stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertDateTimeNotEqualTo.ssunit.sql
+ * \brief  The AssertDateTimeNotEqualTo stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertDateTimeNotEqualTo') is not null)
 	drop procedure ssunit.AssertDateTimeNotEqualTo;
 go
 
-/*******************************************************************************
-** Asserts that the two DateTimes are not equivalent.
-**/
+/**
+ * Asserts that the two DateTimes are not equivalent.
+ */
 
 create procedure ssunit.AssertDateTimeNotEqualTo
 (
-	@expected	datetime,	-- The expected value.
-	@actual		datetime	-- The actual value.
+	@expected	datetime,	--!< The expected value.
+	@actual		datetime	--!< The actual value.
 )
 as
 	declare @reason ssunit.TextMessage;

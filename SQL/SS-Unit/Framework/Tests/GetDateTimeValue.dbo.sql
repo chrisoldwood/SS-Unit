@@ -1,16 +1,16 @@
-/*******************************************************************************
-**! \file   GetDateTimeValue.dbo.sql
-**! \brief  The GetDateTimeValue user-defined function.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   GetDateTimeValue.dbo.sql
+ * \brief  The GetDateTimeValue user-defined function.
+ * \author Chris Oldwood
+ */
 
 if (object_id('dbo.GetDateTimeValue') is not null)
 	drop function dbo.GetDateTimeValue;
 go
 
-/*******************************************************************************
-** An example UDF that returns a datetime value.
-**/
+/**
+ * An example UDF that returns a datetime value.
+ */
 
 create function dbo.GetDateTimeValue()
 	returns datetime

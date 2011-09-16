@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   SystemUser.test.sql
-**! \brief  Unit tests for the SystemUser table and objects.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   SystemUser.test.sql
+ * \brief  Unit tests for the SystemUser table and objects.
+ * \author Chris Oldwood
+ */
 
 create procedure test.SystemUser_InsertDuplicate
 as

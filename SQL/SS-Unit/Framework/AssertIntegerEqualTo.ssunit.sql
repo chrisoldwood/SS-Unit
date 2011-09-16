@@ -1,21 +1,21 @@
-/*******************************************************************************
-**! \file   AssertIntegerEqualTo.ssunit.sql
-**! \brief  The AssertIntegerEqualTo stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertIntegerEqualTo.ssunit.sql
+ * \brief  The AssertIntegerEqualTo stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertIntegerEqualTo') is not null)
 	drop procedure ssunit.AssertIntegerEqualTo;
 go
 
-/*******************************************************************************
-** Asserts that the two integers are equivalent.
-**/
+/**
+ * Asserts that the two integers are equivalent.
+ */
 
 create procedure ssunit.AssertIntegerEqualTo
 (
-	@expected	int,	-- The expected value.
-	@actual		int		-- The actual value.
+	@expected	int,	--!< The expected value.
+	@actual		int		--!< The actual value.
 )
 as
 	declare @reason ssunit.TextMessage;

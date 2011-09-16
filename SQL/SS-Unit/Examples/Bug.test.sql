@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   Bug.test.sql
-**! \brief  Unit tests for the Bug table and objects.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   Bug.test.sql
+ * \brief  Unit tests for the Bug table and objects.
+ * \author Chris Oldwood
+ */
 
 create procedure test.InsertInvalidUser
 as
@@ -19,9 +19,9 @@ as
 go
 
 /*******************************************************************************
-** Helper procedures.
-** NB: These have to be manually dropped at the moment.
-**/
+ * Helper procedures.
+ * NB: These have to be manually dropped at the moment.
+ */
 
 if (object_id('test.InsertUser') is not null)
 	drop procedure test.InsertUser
@@ -60,8 +60,8 @@ as
 	set identity_insert dbo.Bug off;
 go
 
-/**
-*******************************************************************************/
+/*
+***************************************************************************** */
 
 create procedure test._@Test@_Bug_FindBugsSubmittedByUser_ShouldReturnBugIdAndSummary
 as

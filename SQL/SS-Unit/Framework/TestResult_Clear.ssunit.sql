@@ -1,16 +1,16 @@
-/*******************************************************************************
-**! \file   TestResult_Clear.ssunit.sql
-**! \brief  The TestResult_Clear stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   TestResult_Clear.ssunit.sql
+ * \brief  The TestResult_Clear stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.TestResult_Clear') is not null)
 	drop procedure ssunit.TestResult_Clear;
 go
 
-/*******************************************************************************
-** Clears the table of test results.
-**/
+/**
+ * Clears the table of test results.
+ */
 
 create procedure ssunit.TestResult_Clear
 as

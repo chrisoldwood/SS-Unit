@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   IntegerAsserts.test.sql
-**! \brief  Unit tests for the AssertInteger* functions.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   IntegerAsserts.test.sql
+ * \brief  Unit tests for the AssertInteger* functions.
+ * \author Chris Oldwood
+ */
 
 create procedure test._@Test@_AssertIntegerEqualTo_ShouldPass_WhenValuesSimilar
 as

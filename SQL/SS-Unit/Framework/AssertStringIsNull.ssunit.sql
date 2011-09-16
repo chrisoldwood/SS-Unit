@@ -1,20 +1,20 @@
-/*******************************************************************************
-**! \file   AssertStringIsNull.ssunit.sql
-**! \brief  The AssertStringIsNull stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertStringIsNull.ssunit.sql
+ * \brief  The AssertStringIsNull stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertStringIsNull') is not null)
 	drop procedure ssunit.AssertStringIsNull;
 go
 
-/*******************************************************************************
-** Asserts that the String value is null.
-**/
+/**
+ * Asserts that the String value is null.
+ */
 
 create procedure ssunit.AssertStringIsNull
 (
-	@actual		varchar(max)	-- The actual value.
+	@actual		varchar(max)	--!< The actual value.
 )
 as
 	if (@actual is null)

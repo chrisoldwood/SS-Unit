@@ -1,16 +1,16 @@
-/*******************************************************************************
-**! \file   IsInteractive.ssunit.sql
-**! \brief  The IsInteractive user-defined function.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   IsInteractive.ssunit.sql
+ * \brief  The IsInteractive user-defined function.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.IsInteractive') is not null)
 	drop function ssunit.IsInteractive;
 go
 
-/*******************************************************************************
-** Queries if the test run is in an interactive tool (e.g. SSMS) or not.
-**/
+/**
+ * Queries if the test run is in an interactive tool (e.g. SSMS) or not.
+ */
 
 create function ssunit.IsInteractive() returns bit
 as

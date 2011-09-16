@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   DateTimeAsserts.test.sql
-**! \brief  Unit tests for the AssertDateTime* functions.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   DateTimeAsserts.test.sql
+ * \brief  Unit tests for the AssertDateTime* functions.
+ * \author Chris Oldwood
+ */
 
 create procedure test._@Test@_AssertDateTimeEqualTo_ShouldPass_WhenValuesSimilar
 as

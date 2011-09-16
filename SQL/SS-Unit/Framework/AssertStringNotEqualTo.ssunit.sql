@@ -1,21 +1,21 @@
-/*******************************************************************************
-**! \file   AssertStringNotEqualTo.ssunit.sql
-**! \brief  The AssertStringNotEqualTo stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertStringNotEqualTo.ssunit.sql
+ * \brief  The AssertStringNotEqualTo stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertStringNotEqualTo') is not null)
 	drop procedure ssunit.AssertStringNotEqualTo;
 go
 
-/*******************************************************************************
-** Asserts that the two Strings are not equivalent.
-**/
+/**
+ * Asserts that the two Strings are not equivalent.
+ */
 
 create procedure ssunit.AssertStringNotEqualTo
 (
-	@expected	varchar(max),	-- The expected value.
-	@actual		varchar(max)	-- The actual value.
+	@expected	varchar(max),	--!< The expected value.
+	@actual		varchar(max)	--!< The actual value.
 )
 as
 	declare @reason ssunit.TextMessage;
