@@ -1,22 +1,22 @@
-/*******************************************************************************
-**! \file   AssertThrew.ssunit.sql
-**! \brief  The AssertThrew stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertThrew.ssunit.sql
+ * \brief  The AssertThrew stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertThrew') is not null)
 	drop procedure ssunit.AssertThrew;
 go
 
-/*******************************************************************************
-** Asserts that the test raised an error that contained the specified message.
-** NB: The error is compared with the LIKE operator.
-**/
+/**
+ * Asserts that the test raised an error that contained the specified message.
+ * NB: The error is compared with the LIKE operator.
+ */
 
 create procedure ssunit.AssertThrew
 (
-	@error		ssunit.TextMessage,		-- The expected error message.
-	@procedure	ssunit.ProcedureName	-- The helper procedure to run.
+	@error		ssunit.TextMessage,		--!< The expected error message.
+	@procedure	ssunit.ProcedureName	--!< The helper procedure to run.
 )
 as
 	begin try

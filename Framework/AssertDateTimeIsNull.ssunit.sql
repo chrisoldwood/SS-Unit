@@ -1,20 +1,20 @@
-/*******************************************************************************
-**! \file   AssertDateTimeIsNull.ssunit.sql
-**! \brief  The AssertDateTimeIsNull stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertDateTimeIsNull.ssunit.sql
+ * \brief  The AssertDateTimeIsNull stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertDateTimeIsNull') is not null)
 	drop procedure ssunit.AssertDateTimeIsNull;
 go
 
-/*******************************************************************************
-** Asserts that the DateTime value is null.
-**/
+/**
+ * Asserts that the DateTime value is null.
+ */
 
 create procedure ssunit.AssertDateTimeIsNull
 (
-	@actual		datetime		-- The actual value.
+	@actual		datetime		--!< The actual value.
 )
 as
 	if (@actual is null)

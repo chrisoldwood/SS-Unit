@@ -1,20 +1,20 @@
-/*******************************************************************************
-**! \file   RunTest.sql
-**! \brief  The RunTest stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   RunTest.ssunit.sql
+ * \brief  The RunTest stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.RunTest') is not null)
 	drop procedure ssunit.RunTest;
 go
 
-/*******************************************************************************
-** Runs a single unit test.
-**/
+/**
+ * Runs a single unit test.
+ */
 
 create procedure ssunit.RunTest
 (
-	@procedure	ssunit.ProcedureName	-- The unit test procedure.
+	@procedure	ssunit.ProcedureName	--!< The unit test procedure.
 )
 as
 	begin try

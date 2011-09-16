@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   BasicAsserts.test.sql
-**! \brief  Unit tests for the fundamental assert procedures.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   BasicAsserts.test.sql
+ * \brief  Unit tests for the fundamental assert procedures.
+ * \author Chris Oldwood
+ */
 
 create procedure test._@Test@_AssertPass_ShouldPassTheTest
 as

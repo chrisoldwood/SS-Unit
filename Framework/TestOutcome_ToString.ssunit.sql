@@ -1,20 +1,20 @@
-/*******************************************************************************
-**! \file   TestOutcome_ToString.ssunit.sql
-**! \brief  The TestOutcome_ToString user defined function.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   TestOutcome_ToString.ssunit.sql
+ * \brief  The TestOutcome_ToString user defined function.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.TestOutcome_ToString') is not null)
 	drop function ssunit.TestOutcome_ToString;
 go
 
-/*******************************************************************************
-** The function to convert the enumeration value into a string.
-**/
+/**
+ * The function to convert the enumeration value into a string.
+ */
 
 create function ssunit.TestOutcome_ToString
 (
-	@value	ssunit.TestOutcome	-- The enumeration value.
+	@value	ssunit.TestOutcome	--!< The enumeration value.
 )
 	returns varchar(10)
 as

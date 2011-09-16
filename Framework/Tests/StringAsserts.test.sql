@@ -1,8 +1,8 @@
-/*******************************************************************************
-**! \file   StringAsserts.test.sql
-**! \brief  Unit tests for the AssertString* functions.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   StringAsserts.test.sql
+ * \brief  Unit tests for the AssertString* functions.
+ * \author Chris Oldwood
+ */
 
 create procedure test._@Test@_AssertStringEqualTo_ShouldPass_WhenValuesSimilar
 as

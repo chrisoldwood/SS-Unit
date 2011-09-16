@@ -1,21 +1,21 @@
-/*******************************************************************************
-**! \file   TestResult_SetTestFailed.ssunit.sql
-**! \brief  The TestResult_SetTestFailed stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   TestResult_SetTestFailed.ssunit.sql
+ * \brief  The TestResult_SetTestFailed stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.TestResult_SetTestFailed') is not null)
 	drop procedure ssunit.TestResult_SetTestFailed;
 go
 
-/*******************************************************************************
-** Stores the outcome of the test as having failed.
-**/
+/**
+ * Stores the outcome of the test as having failed.
+ */
 
 create procedure ssunit.TestResult_SetTestFailed
 (
-	@procedure	ssunit.ProcedureName,	-- The name of the unit test procedure
-	@reason		ssunit.TextMessage		-- The reason why the test failed.
+	@procedure	ssunit.ProcedureName,	--!< The name of the unit test procedure
+	@reason		ssunit.TextMessage		--!< The reason why the test failed.
 )
 as
 	--begin try

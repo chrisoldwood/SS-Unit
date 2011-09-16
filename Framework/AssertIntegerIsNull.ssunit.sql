@@ -1,20 +1,20 @@
-/*******************************************************************************
-**! \file   AssertIntegerIsNull.ssunit.sql
-**! \brief  The AssertIntegerIsNull stored procedure.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   AssertIntegerIsNull.ssunit.sql
+ * \brief  The AssertIntegerIsNull stored procedure.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.AssertIntegerIsNull') is not null)
 	drop procedure ssunit.AssertIntegerIsNull;
 go
 
-/*******************************************************************************
-** Asserts that the integer value is null.
-**/
+/**
+ * Asserts that the integer value is null.
+ */
 
 create procedure ssunit.AssertIntegerIsNull
 (
-	@actual		int		-- The actual value.
+	@actual		int		--!< The actual value.
 )
 as
 	if (@actual is null)

@@ -1,21 +1,21 @@
-/*******************************************************************************
-**! \file   FormatStringNullFailure.ssunit.sql
-**! \brief  The FormatStringNullFailure user-defined function.
-**! \author Chris Oldwood
-**/
+/**
+ * \file   FormatStringNullFailure.ssunit.sql
+ * \brief  The FormatStringNullFailure user-defined function.
+ * \author Chris Oldwood
+ */
 
 if (object_id('ssunit.FormatStringNullFailure') is not null)
 	drop function ssunit.FormatStringNullFailure;
 go
 
-/*******************************************************************************
-** Formats the message for a failed String comparison with NULL.
-**/
+/**
+ * Formats the message for a failed String comparison with NULL.
+ */
 
 create function ssunit.FormatStringNullFailure
 (
-	@expected	varchar(max),	-- The expected value.
-	@actual		varchar(max)	-- The actual value.
+	@expected	varchar(max),	--!< The expected value.
+	@actual		varchar(max)	--!< The actual value.
 )
 	returns ssunit.TextMessage
 as
