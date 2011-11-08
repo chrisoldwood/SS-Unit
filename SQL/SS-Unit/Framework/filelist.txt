@@ -1,6 +1,8 @@
 CreateSchema.ssunit.sql
 
+SchemaName.ssunit.sql
 ProcedureName.ssunit.sql
+FixtureName.ssunit.sql
 TestOutcome.ssunit.sql
 TextMessage.ssunit.sql
 
@@ -30,6 +32,10 @@ FormatIntegerCompareFailure.ssunit.sql
 AssertIntegerEqualTo.ssunit.sql
 AssertIntegerNotEqualTo.ssunit.sql
 AssertIntegerIsNull.ssunit.sql
+AssertIntegerLessThan.ssunit.sql
+AssertIntegerLessThanOrEqualTo.ssunit.sql
+AssertIntegerGreaterThan.ssunit.sql
+AssertIntegerGreaterThanOrEqualTo.ssunit.sql
 
 AssertTrue.ssunit.sql
 AssertFalse.ssunit.sql
@@ -39,13 +45,21 @@ FormatStringCompareFailure.ssunit.sql
 AssertStringEqualTo.ssunit.sql
 AssertStringNotEqualTo.ssunit.sql
 AssertStringIsNull.ssunit.sql
+AssertStringLike.ssunit.sql
+AssertStringNotLike.ssunit.sql
 
 FormatDateTimeNullFailure.ssunit.sql
 FormatDateTimeCompareFailure.ssunit.sql
 AssertDateTimeEqualTo.ssunit.sql
 AssertDateTimeNotEqualTo.ssunit.sql
 AssertDateTimeIsNull.ssunit.sql
+AssertDateTimeLessThan.ssunit.sql
+AssertDateTimeLessThanOrEqualTo.ssunit.sql
+AssertDateTimeGreaterThan.ssunit.sql
+AssertDateTimeGreaterThanOrEqualTo.ssunit.sql
 
+GetFixtureName.ssunit.sql
+TestFixture_Delete.ssunit.sql
 IsInteractive.ssunit.sql
 RunTest.ssunit.sql
 RunTests.ssunit.sql

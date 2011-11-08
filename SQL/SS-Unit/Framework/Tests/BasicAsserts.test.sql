@@ -30,13 +30,13 @@ as
 	exec ssunit.AssertFail 'a fail overrides a pass';
 go
 
-create procedure test._@Test@_AssertPass_ShouldNotPassTheTest_WhenTestAlreadyFailed
+create procedure test._@Test@_AssertPass_ShouldFail_WhenTestAlreadyFailed
 as
 	exec ssunit.AssertFail 'a fail overrides a pass';
 	exec ssunit.AssertPass;
 go
 
-create procedure test._@Test@_AssertFail_ShouldReportFirstFailure
+create procedure test._@Test@_AssertFail_ShouldFail_AndReportFirstFailure
 as
 	exec ssunit.AssertFail '1st failure reported';
 	exec ssunit.AssertFail '2nd failure reported';
@@ -104,4 +104,6 @@ as
 	exec ssunit.AssertFalse @actual;
 go
 
-exec ssunit.RunTests;
+declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
+
+exec ssunit.RunTests @displayWidth = @displayWidth;

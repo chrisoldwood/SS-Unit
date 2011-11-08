@@ -84,4 +84,54 @@ as
 	exec ssunit.AssertStringIsNull @actual;
 go
 
-exec ssunit.RunTests;
+create procedure test._@Test@_AssertStringLike_ShouldPass_WhenValueMatchesRegex
+as
+	declare @actual varchar(max) = 'unit test';
+
+	exec ssunit.AssertStringLike '%test', @actual;
+go
+
+create procedure test._@Test@_AssertStringLike_ShouldFail_WhenValueDoesNotMatchRegex
+as
+	declare @actual varchar(max) = 'unit test';
+
+	exec ssunit.AssertStringLike 'NoMatch', @actual;
+go
+
+create procedure test._@Test@_AssertStringLike_ShouldFail_WhenRegexIsNull
+as
+	exec ssunit.AssertStringLike null, 'unit test';
+go
+
+create procedure test._@Test@_AssertStringLike_ShouldFail_WhenActualValueIsNull
+as
+	exec ssunit.AssertStringLike 'regex', null;
+go
+
+create procedure test._@Test@_AssertStringNotLike_ShouldPass_WhenValueDoesNotMatchRegex
+as
+	declare @actual varchar(max) = 'unit test';
+
+	exec ssunit.AssertStringNotLike 'NoMatch', @actual;
+go
+
+create procedure test._@Test@_AssertStringNotLike_ShouldFail_WhenValueMatchesRegex
+as
+	declare @actual varchar(max) = 'unit test';
+
+	exec ssunit.AssertStringNotLike '%test', @actual;
+go
+
+create procedure test._@Test@_AssertStringNotLike_ShouldFail_WhenRegexIsNull
+as
+	exec ssunit.AssertStringNotLike null, 'unit test';
+go
+
+create procedure test._@Test@_AssertStringNotLike_ShouldFail_WhenActualValueIsNull
+as
+	exec ssunit.AssertStringNotLike 'regex', null;
+go
+
+declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
+
+exec ssunit.RunTests @displayWidth = @displayWidth;
