@@ -24,13 +24,13 @@ begin
 	set		@expectedAsString = isnull(@expected, '(null)');
 
 	if (@expected is not null)
-		set @expectedAsString = '"' + @expectedAsString + '"';
+		set @expectedAsString = '''' + @expectedAsString + '''';
 
 	declare @actualAsString ssunit.TextMessage;
 	set		@actualAsString  = isnull(@actual, '(null)');
 
 	if (@actual is not null)
-		set @actualAsString = '"' + @actualAsString + '"';
+		set @actualAsString = '''' + @actualAsString + '''';
 
 	declare @reason ssunit.TextMessage;
 

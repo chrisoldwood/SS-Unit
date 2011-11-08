@@ -27,8 +27,8 @@ as
 		set		@actualAsString  = isnull(@actual, '(null)');
 
 		declare @reason ssunit.TextMessage;
-		set		@reason = 'Value was not NULL -'
-						+ ' Actual: "' + @actualAsString +'"';
+		set		@reason = 'Actual was not NULL -'
+						+ ' Actual: ''' + @actualAsString +'''';
 
 		exec ssunit.AssertFail @reason;
 	end
