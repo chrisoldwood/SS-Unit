@@ -1,4 +1,4 @@
 GetIntegerValue.dbo.sql
 GetStringValue.dbo.sql
 GetDateTimeValue.dbo.sql
-CreateSchema.test.sql
+CreateSchemas.test.sql

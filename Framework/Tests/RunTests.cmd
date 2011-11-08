@@ -22,6 +22,7 @@ setlocal
 setlocal enabledelayedexpansion
 set server=%1
 set database=SSUnit_Tests
+set displayWidth=120
 
 :check_optional_args
 if /i "%2" == "--testsonly" goto :run_tests
@@ -65,7 +66,7 @@ for /f "delims=" %%f in (test-scripts.txt) do (
 	echo %%f
 	echo ========================================
 	echo.
-	sqlcmd -E -S %server% -d %database% -i "%%f"
+	sqlcmd -E -S %server% -d %database% -i "%%f" -v DisplayWidth=%displayWidth%
 	if errorlevel 1 (
 		echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
 		exit /b 1

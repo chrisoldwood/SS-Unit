@@ -14,12 +14,20 @@ go
 
 create procedure ssunit.RunTest
 (
-	@procedure	ssunit.ProcedureName	--!< The unit test procedure.
+	@procedure			ssunit.ProcedureName,	--!< The unit test procedure.
+	@setUpProcedure		ssunit.ProcedureName,	--!< The test set up procedure.
+	@tearDownProcedure	ssunit.ProcedureName	--!< The test tear down procedure.
 )
 as
 	begin try
 
+		if (@setUpProcedure is not null)
+			exec @setUpProcedure;
+
 		exec @procedure;
+
+		if (@tearDownProcedure is not null)
+			exec @tearDownProcedure;
 
 		if (ssunit.TestResult_TestOutcome(@procedure) is null)
 		begin
