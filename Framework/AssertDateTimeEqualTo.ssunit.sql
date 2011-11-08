@@ -26,13 +26,13 @@ as
 
 		exec ssunit.AssertFail @reason;
 	end
-	else if (@expected = @actual)
+	else if (@actual = @expected)
 	begin
 		exec ssunit.AssertPass;
 	end
 	else
 	begin
-		set @reason = ssunit.FormatDateTimeCompareFailure('Values differ', @expected, @actual);
+		set @reason = ssunit.FormatDateTimeCompareFailure('Actual/Expected values differ', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

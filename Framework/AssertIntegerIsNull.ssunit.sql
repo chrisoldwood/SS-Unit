@@ -27,7 +27,7 @@ as
 		set		@actualAsString  = isnull(convert(varchar(max), @actual), '(null)');
 
 		declare @reason ssunit.TextMessage;
-		set		@reason = 'Value was not NULL -'
+		set		@reason = 'Actual was not NULL -'
 						+ ' Actual: '   + @actualAsString;
 
 		exec ssunit.AssertFail @reason;

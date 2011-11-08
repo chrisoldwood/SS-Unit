@@ -30,8 +30,8 @@ begin
 	declare @reason ssunit.TextMessage;
 
 	set @reason = @error + ' -'
-				+ ' Expected: "' + @expectedAsString + '"'
-				+ ' Actual: "'   + @actualAsString   + '"';
+				+ ' Expected: ''' + @expectedAsString + ''''
+				+ ' Actual: '''   + @actualAsString   + '''';
 
 	return @reason
 end
