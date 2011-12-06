@@ -1,3 +1,12 @@
+Version 0.9
+===========
+
+- Added support for per-test and per-fixture SetUp & TearDown procedures.
+- Added more assert procedures (less than, greater than, like etc.)
+- Added ability to run tests defined in schemas other than 'test'.
+- Added support for overriding the output width in batch mode.
+
+
 Version 0.5
 ===========
 
@@ -7,4 +16,4 @@ Version 0.5
 Chris Oldwood 
 [gort@cix.co.uk]
 
-14th June 2011
+10th November 2011

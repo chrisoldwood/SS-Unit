@@ -9,3 +9,13 @@
 - Better handling of displayWidth in tests (string and parse in Run() or helper function?)
 
 - Assert for "integer between" 
+
+- Strip fixture name from test results (separate column?)
+
+- Not implemented ASSERT.
+
+- Row count ASSERT.
+
+- Table empty ASSERT.
+
+- Don't report detailed results just Pass/Fail counts.
