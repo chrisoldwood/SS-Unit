@@ -244,6 +244,79 @@ as
 	exec ssunit.AssertIntegerGreaterThanOrEqualTo 42, @actual;
 go
 
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenLowerValueIsNull
+as
+	declare @actual int;
+	set		@actual = dbo.GetIntegerValue();
+
+	exec ssunit.AssertIntegerBetween null, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenUpperValueIsNull
+as
+	declare @actual int;
+	set		@actual = dbo.GetIntegerValue();
+
+	exec ssunit.AssertIntegerBetween 41, null, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenActualValueIsNull
+as
+	declare @actual int;
+	set		@actual = null;
+
+	exec ssunit.AssertIntegerBetween 41, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenUpperBoundLessThanLowerBound
+as
+	declare @actual int = dbo.GetIntegerValue();
+
+	exec ssunit.AssertIntegerBetween 43, 41, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenActualValueIsLessThanLowerBound
+as
+	declare @actual int = 40;
+
+	exec ssunit.AssertIntegerBetween 41, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldFail_WhenActualValueIsGreaterThanUpperBound
+as
+	declare @actual int = 44;
+
+	exec ssunit.AssertIntegerBetween 41, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldPass_WhenActualValueIsEqualToLowerBound
+as
+	declare @actual int = 41;
+
+	exec ssunit.AssertIntegerBetween 41, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldPass_WhenActualValueIsEqualToUpperBound
+as
+	declare @actual int = 43;
+
+	exec ssunit.AssertIntegerBetween 41, 43, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldPass_WhenActualValueIsEqualToLowerAndUpperBounds
+as
+	declare @actual int = dbo.GetIntegerValue();
+
+	exec ssunit.AssertIntegerBetween 42, 42, @actual;
+go
+
+create procedure test._@Test@_AssertIntegerBetween_ShouldPass_WhenValueAndRangeIsNegative
+as
+	declare @actual int = -42;
+
+	exec ssunit.AssertIntegerBetween -43, -41, @actual;
+go
+
 declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
 
 exec ssunit.RunTests @displayWidth = @displayWidth;
