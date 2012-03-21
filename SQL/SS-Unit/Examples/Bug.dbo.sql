@@ -1,5 +1,5 @@
 /**
- * \file   Bug.dbo.sql
+ * \file
  * \brief  The Bug table.
  * \author Chris Oldwood
  */
@@ -14,10 +14,11 @@ go
 
 create table dbo.Bug
 (
-	BugId			int				not null identity,	--!< The unique ID of the bug.
-	Summary			varchar(256)	not null,			--!< A summary of the bug.
-	SubmitUserId	int				not null,			--!< The use that submitted the bug.
-	BugStatus		tinyint			not null,			--!< Then current status of the bug.
+	BugId			pub.BugId_t			not null identity,	--!< The unique ID of the bug.
+	Summary			pub.BodyText_t		not null,			--!< A summary of the bug.
+	SubmitUserId	pub.UserId_t		not null,			--!< The user that submitted the bug.
+	BugStatus		pub.BugStatus_t		not null,			--!< Then current status of the bug.
+	AssignedUserId	pub.UserId_t		null,				--!< The user that is assigned to the bug.
 );
 go
 
@@ -36,6 +37,24 @@ go
 
 alter table dbo.Bug
 	add constraint Bug_Default_BugStatus
-	default (dbo.BugStatus_Open())
+	default (pub.BugStatus_Open())
 	for BugStatus;
+go
+
+/**
+ * The constraint used to check the bug status is valid.
+ */
+
+alter table dbo.Bug
+	add constraint Bug_Check_BugStatus
+	check (pub.BugStatus_IsValid(BugStatus) <> 0);
+go
+
+/**
+ * The constraint used to ensure the assigned user is valid.
+ */
+
+alter table dbo.Bug
+	add constraint Bug_FK_AssignedUserId
+	foreign key (AssignedUserId) references SystemUser (UserId);
 go

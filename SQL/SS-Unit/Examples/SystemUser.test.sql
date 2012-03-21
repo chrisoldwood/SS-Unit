@@ -1,5 +1,5 @@
 /**
- * \file   SystemUser.test.sql
+ * \file
  * \brief  Unit tests for the SystemUser table and objects.
  * \author Chris Oldwood
  */

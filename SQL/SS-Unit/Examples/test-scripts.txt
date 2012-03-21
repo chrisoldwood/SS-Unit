@@ -1,2 +1,3 @@
 SystemUser.test.sql
+BugStatus.test.sql
 Bug.test.sql

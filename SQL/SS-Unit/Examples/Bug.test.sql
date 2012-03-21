@@ -1,5 +1,5 @@
 /**
- * \file   Bug.test.sql
+ * \file
  * \brief  Unit tests for the Bug table and objects.
  * \author Chris Oldwood
  */
@@ -8,8 +8,8 @@ create procedure test._@FixtureSetUp@_$Bug$_
 as
 	create table test.BugResults
 	(
-		BugId	int				not null,
-		Summary	varchar(256)	not null,
+		BugId	pub.BugId_t		not null,
+		Summary	pub.BodyText_t	not null,
 	);
 go
 
@@ -20,8 +20,8 @@ go
 
 create procedure test._@TestSetUp@_$Bug$_
 as
-	declare @userId int = 99;
-	declare @loginName varchar(50) = 'test';
+	declare @userId pub.UserId_t = 99;
+	declare @loginName pub.LoginName_t = 'test';
 
 	set identity_insert dbo.SystemUser on;
 
@@ -30,8 +30,8 @@ as
 
 	set identity_insert dbo.SystemUser off;
 
-	declare @bugId int = 42;
-	declare @summary varchar(50) = 'test summary';
+	declare @bugId pub.BugId_t = 42;
+	declare @summary pub.BodyText_t = 'test summary';
 
 	set identity_insert dbo.Bug on;
 
@@ -49,7 +49,7 @@ go
 
 create procedure test.InsertInvalidUser
 as
-	declare @invalidUserId int = -1;
+	declare @invalidUserId pub.UserId_t = -1;
 
 	insert into dbo.Bug(Summary, SubmitUserId)
 	             values('test',  @invalidUserId);
@@ -60,14 +60,27 @@ as
 	exec ssunit.AssertThrew '%foreign%key%constraint%SubmitUserId%', 'test.InsertInvalidUser';
 go
 
+create procedure test.InsertInvalidBugStatus
+as
+	declare @invalidBugStatus pub.BugStatus_t = 255;
+
+	insert into dbo.Bug(Summary, SubmitUserId, BugStatus)
+	             values('test',  99,           @invalidBugStatus);
+go
+
+create procedure test._@Test@_$Bug$_InsertingBug_ShouldThrow_WhenInvalidBugStatusSpecified
+as
+	exec ssunit.AssertThrew '%Bug_Check_BugStatus%', 'test.InsertInvalidBugStatus';
+go
+
 create procedure test._@Test@_$Bug$_FindBugsSubmittedByUser_ShouldReturnBugIdAndSummary
 as
-	declare @userId int = 99;
-	declare @bugId int = 42;
-	declare @summary varchar(50) = 'test summary';
+	declare @userId pub.UserId_t = 99;
+	declare @bugId pub.BugId_t = 42;
+	declare @summary pub.BodyText_t = 'test summary';
 
 	insert into BugResults
-	exec dbo.Bug_FindBugsSubmittedByUser @userId;
+	exec pub.Bug_FindBugsSubmittedByUser @userId;
 
 	declare @count int;
 	select	@count = count(*) from BugResults

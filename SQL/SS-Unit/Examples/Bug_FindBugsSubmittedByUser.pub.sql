@@ -1,5 +1,5 @@
 /**
- * \file   Bug_FindBugsSubmittedByUser.dbo.sql
+ * \file
  * \brief  The Bug_FindBugsSubmittedByUser stored prcoedure.
  * \author Chris Oldwood
  */
@@ -12,9 +12,9 @@ go
  * Find all bugs that were submitted by the specified user.
  */
 
-create procedure dbo.Bug_FindBugsSubmittedByUser
+create procedure pub.Bug_FindBugsSubmittedByUser
 (
-	@userId		int		--!< The user to find bugs for.
+	@userId		pub.UserId_t		--!< The user to find bugs for.
 )
 as
 	select	b.BugId,

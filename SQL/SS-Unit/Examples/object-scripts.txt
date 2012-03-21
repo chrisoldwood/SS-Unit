@@ -1,5 +1,7 @@
+CreateSchema.pub.sql
+Types.pub.sql
 SystemUser.dbo.sql
-BugStatus.dbo.sql
+BugStatus.pub.sql
 Bug.dbo.sql
-Bug_FindBugsSubmittedByUser.dbo.sql
+Bug_FindBugsSubmittedByUser.pub.sql
 CreateSchema.test.sql
