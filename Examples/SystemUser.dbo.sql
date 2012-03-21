@@ -1,5 +1,5 @@
 /**
- * \file   SystemUser.dbo.sql
+ * \file
  * \brief  The SystemUser table.
  * \author Chris Oldwood
  */
@@ -14,11 +14,11 @@ go
 
 create table dbo.SystemUser
 (
-	UserId		int				not null identity,	--!< The unique ID of the user.
-	LoginName	varchar(50)		not null,			--!< The users' login name.
-	FirstName	varchar(50)		not null,			--!< The users' first name.
-	LastName	varchar(50)		not null,			--!< The users' last name.
-	CreateTime	datetime		not null,			--!< The date & time of record creation.
+	UserId		pub.UserId_t			not null identity,	--!< The unique ID of the user.
+	LoginName	pub.LoginName_t			not null,			--!< The users' login name.
+	FirstName	pub.NamePart_t			not null,			--!< The users' first name.
+	LastName	pub.NamePart_t			not null,			--!< The users' last name.
+	CreateTime	pub.AuditDateTime_t		not null,			--!< The date & time of record creation.
 );
 go
 

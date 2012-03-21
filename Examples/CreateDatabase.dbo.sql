@@ -1,5 +1,5 @@
 /**
- * \file   CreateDatabase.test.sql
+ * \file
  * \brief  Creates the Examples database.
  * \author Chris Oldwood
  */
