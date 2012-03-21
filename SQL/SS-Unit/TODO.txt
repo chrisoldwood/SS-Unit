@@ -1,21 +1,11 @@
 - Add error handling for fixture set up/tear down errors (all tests failed if tear down fails?)
 
-- Use transactions to avoid needing a TearDown
-
 - See if DDL trigger can be used to auto drop test procedures to avoid creation failure
 
 - Denote helper procedures so they can be auto dropped too (fixture sufficent?)
 
 - Better handling of displayWidth in tests (string and parse in Run() or helper function?)
 
-- Assert for "integer between" 
-
 - Strip fixture name from test results (separate column?)
-
-- Not implemented ASSERT.
-
-- Row count ASSERT.
-
-- Table empty ASSERT.
 
 - Don't report detailed results just Pass/Fail counts.
