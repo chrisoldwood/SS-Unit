@@ -5,6 +5,7 @@ ProcedureName.ssunit.sql
 FixtureName.ssunit.sql
 TestOutcome.ssunit.sql
 TextMessage.ssunit.sql
+TableName.ssunit.sql
 
 CurrentTest.ssunit.sql
 TestResult.ssunit.sql
@@ -26,6 +27,7 @@ TestResult_DeleteResult.ssunit.sql
 AssertPass.ssunit.sql
 AssertFail.ssunit.sql
 AssertThrew.ssunit.sql
+AssertNotImplemented.ssunit.sql
 
 FormatIntegerNullFailure.ssunit.sql
 FormatIntegerCompareFailure.ssunit.sql
@@ -36,6 +38,7 @@ AssertIntegerLessThan.ssunit.sql
 AssertIntegerLessThanOrEqualTo.ssunit.sql
 AssertIntegerGreaterThan.ssunit.sql
 AssertIntegerGreaterThanOrEqualTo.ssunit.sql
+AssertIntegerBetween.ssunit.sql
 
 AssertTrue.ssunit.sql
 AssertFalse.ssunit.sql
@@ -57,6 +60,9 @@ AssertDateTimeLessThan.ssunit.sql
 AssertDateTimeLessThanOrEqualTo.ssunit.sql
 AssertDateTimeGreaterThan.ssunit.sql
 AssertDateTimeGreaterThanOrEqualTo.ssunit.sql
+
+AssertTableRowCountEqualTo.ssunit.sql
+AssertTableIsEmpty.ssunit.sql
 
 GetFixtureName.ssunit.sql
 TestFixture_Delete.ssunit.sql

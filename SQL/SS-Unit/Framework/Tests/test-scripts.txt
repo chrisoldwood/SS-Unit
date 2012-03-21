@@ -4,3 +4,4 @@ StringAsserts.test.sql
 DateTimeAsserts.test.sql
 AlternateSchemaTest.unit_test.sql
 FixtureTests.test.sql
+TableAsserts.test.sql

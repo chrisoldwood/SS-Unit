@@ -104,6 +104,11 @@ as
 	exec ssunit.AssertFalse @actual;
 go
 
+create procedure test._@Test@_AssertNotImplemented_ShouldFail
+as
+	exec ssunit.AssertNotImplemented;
+go
+
 declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
 
 exec ssunit.RunTests @displayWidth = @displayWidth;
