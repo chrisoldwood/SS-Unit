@@ -17,6 +17,16 @@ as
 	drop table test.TestTable;
 go
 
+create procedure test._@Test@_$Table$_AssertTableRowCountEqualTo_ShouldFail_WhenTableNameIsNull
+as
+	exec ssunit.AssertTableRowCountEqualTo 0, null;
+go
+
+create procedure test._@Test@_$Table$_AssertTableRowCountEqualTo_ShouldFail_WhenExpectedCountIsNull
+as
+	exec ssunit.AssertTableRowCountEqualTo null, 'test.TestTable';
+go
+
 create procedure test._@Test@_$Table$_AssertTableRowCountEqualTo_ShouldPass_WhenRowCountMatches
 as
 	insert into test.TestTable values(0);
@@ -29,6 +39,11 @@ as
 	insert into test.TestTable values(0);
 
 	exec ssunit.AssertTableRowCountEqualTo 0, 'test.TestTable';
+go
+
+create procedure test._@Test@_$Table$_AssertTableEmpty_ShouldFail_WhenTableNameIsNull
+as
+	exec ssunit.AssertTableIsEmpty null;
 go
 
 create procedure test._@Test@_$Table$_AssertTableEmpty_ShouldPass_WhenTableIsEmpty
