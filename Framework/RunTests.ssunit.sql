@@ -16,11 +16,30 @@ go
 
 create procedure ssunit.RunTests
 (
-	@schemaName		ssunit.SchemaName = 'test',		--!< The schema used for the tests.
-	@displayWidth	int = 80						--!< The width of the console in batch mode.
+	@schemaName		ssunit.SchemaName = null,	--!< The schema used for the tests.
+	@displayWidth	int = null,					--!< The width of the console in batch mode.
+	@reportResults	bit = null,					--!< Return the per-test results?
+	@reportSummary	bit = null,					--!< Return the test result summary?
+	@isInteractive	bit = null					--!< Override the output mode.
 )
 as
 	set nocount on;
+
+	-- Configure runner.
+	if (@schemaName is null)
+		select @schemaName = SchemaName from ssunit.Configuration c;
+
+	if (@displayWidth is null)
+		select @displayWidth = c.DisplayWidth from ssunit.Configuration c;
+
+	if (@reportResults is null)
+		select @reportResults = c.ReportResults from ssunit.Configuration c;
+
+	if (@reportSummary is null)
+		select @reportSummary = c.ReportSummary from ssunit.Configuration c;
+
+	if (@isInteractive is null)
+		set @isInteractive = ssunit.IsInteractive();
 
 	-- Clear out any old results.
 	exec ssunit.TestResult_Clear;
@@ -149,62 +168,68 @@ as
 	close TestCursor;
 	deallocate TestCursor;
 
-	declare @testPrefix ssunit.ProcedureName;
-	set		@testPrefix = @schemaName + '._@Test@_';
-
 	-- Display the result of each test.
-	if (ssunit.IsInteractive() = 1)
+	if (@reportResults = 1)
 	begin
-		select	ssunit.TestOutcome_ToString(r.Outcome)			as [Outcome],
-				replace(r.TestProcedure, @testPrefix, '')		as [Test Name],
-				isnull(r.FailureReason, '')						as [Failure Reason]
-		from	ssunit.TestResult r
-		order	by r.TestOrder;
-	end
-	else
-	begin
-		declare @outcomeWidth   int = 8;
-		declare @procedureWidth int = (@displayWidth - @outcomeWidth) / 2;
-		declare @reasonWidth    int = (@displayWidth - (@outcomeWidth + @procedureWidth));
+		if (@isInteractive = 1)
+		begin
+			select	ssunit.TestOutcome_ToString(r.Outcome)			as [Outcome],
+					ssunit.FormatResultTestName(r.TestProcedure)	as [Test Name],
+					isnull(r.FailureReason, '')						as [Failure Reason]
+			from	ssunit.TestResult r
+			order	by r.TestOrder;
+		end
+		else
+		begin
+			declare @outcomeWidth   int = 8;
+			declare @procedureWidth int = (@displayWidth - @outcomeWidth) / 2;
+			declare @reasonWidth    int = (@displayWidth - (@outcomeWidth + @procedureWidth));
 
-		declare @query varchar(max) =
-		  'select convert(varchar(' + convert(varchar, @outcomeWidth-1)   + '), ssunit.TestOutcome_ToString(r.Outcome))              as [Outcome], '
-		+ '       convert(varchar(' + convert(varchar, @procedureWidth-1) + '), replace(r.TestProcedure, ''' + @testPrefix + ''', '''')) as [Test Name], '
-		+ '       convert(varchar(' + convert(varchar, @reasonWidth-1)    + '), isnull(r.FailureReason, ''''))                       as [Failure Reason] '
-		+ 'from   ssunit.TestResult r '
-		+ 'order  by r.TestOrder; ';
+			declare @query varchar(max) =
+			  'select convert(varchar(' + convert(varchar, @outcomeWidth-1)   + '), ssunit.TestOutcome_ToString(r.Outcome))       as [Outcome], '
+			+ '       convert(varchar(' + convert(varchar, @procedureWidth-1) + '), ssunit.FormatResultTestName(r.TestProcedure)) as [Test Name], '
+			+ '       convert(varchar(' + convert(varchar, @reasonWidth-1)    + '), isnull(r.FailureReason, ''''))                as [Failure Reason] '
+			+ 'from   ssunit.TestResult r '
+			+ 'order  by r.TestOrder; ';
 
-		exec(@query);
-		--print @query;
+			exec(@query);
+			--print @query;
+		end
 	end
 
 	-- Separate the results/summary.
-	if (ssunit.IsInteractive() = 0)
+	if ((@reportResults = 1) and (@reportSummary = 1))
 	begin
-		select '';
+		if (@isInteractive = 0)
+		begin
+			select '';
+		end
 	end
 
 	-- Display a summary of the test results.
-	select	isnull([Passed],  0) as [Passed],
-			isnull([FAILED],  0) as [Failed],
-			isnull([Unknown], 0) as [Unknown]
-	from
-	(
-			select	ssunit.TestOutcome_ToString(r.Outcome)	as [Outcome],
-					count(*)								as [Total]
-			from	ssunit.TestResult r
-			group	by r.Outcome
-	)
-	as SourceTable
-	pivot
-	(
-			sum([Total])
-			for [Outcome] in ([Passed], [FAILED], [Unknown])
-	)
-	as PivotTable;
+	if (@reportSummary = 1)
+	begin
+		select	isnull([Passed],  0) as [Passed],
+				isnull([FAILED],  0) as [Failed],
+				isnull([Unknown], 0) as [Unknown]
+		from
+		(
+				select	ssunit.TestOutcome_ToString(r.Outcome)	as [Outcome],
+						count(*)								as [Total]
+				from	ssunit.TestResult r
+				group	by r.Outcome
+		)
+		as SourceTable
+		pivot
+		(
+				sum([Total])
+				for [Outcome] in ([Passed], [FAILED], [Unknown])
+		)
+		as PivotTable;
+	end
 
 	-- Signal test run failure only in batch mode.
-	if (ssunit.IsInteractive() = 0)
+	if (@isInteractive = 0)
 	begin
 		declare @failures int;
 		select	@failures = count(*)
