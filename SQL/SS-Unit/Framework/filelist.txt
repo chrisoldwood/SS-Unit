@@ -64,8 +64,11 @@ AssertDateTimeGreaterThanOrEqualTo.ssunit.sql
 AssertTableRowCountEqualTo.ssunit.sql
 AssertTableIsEmpty.ssunit.sql
 
+Configuration.ssunit.sql
+
 GetFixtureName.ssunit.sql
 TestFixture_Delete.ssunit.sql
 IsInteractive.ssunit.sql
+FormatResultTestName.ssunit.sql
 RunTest.ssunit.sql
 RunTests.ssunit.sql
