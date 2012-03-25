@@ -4,8 +4,6 @@
 
 - Denote helper procedures so they can be auto dropped too (fixture sufficent?)
 
-- Better handling of displayWidth in tests (string and parse in Run() or helper function?)
+- Better handling of displayWidth in tests (string and parse in Run() or helper function? sql_variant?)
 
-- Strip fixture name from test results (separate column?)
-
-- Don't report detailed results just Pass/Fail counts.
+- Global settings table and procs to handle display width, report summary etc.
