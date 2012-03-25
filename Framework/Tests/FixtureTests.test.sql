@@ -9,34 +9,6 @@ as
 	exec ssunit.AssertPass;
 go
 
-create procedure test._@Test@_GetFixtureName_ShouldReturnNull_WhenNoNameExists
-as
-	declare @actual ssunit.FixtureName = ssunit.GetFixtureName('test._@Test@_NoFixtureName');
-
-	exec ssunit.AssertStringIsNull @actual;
-go
-
-create procedure test._@Test@_GetFixtureName_ShouldReturnName_WhenNameExists
-as
-	declare @expected ssunit.FixtureName = 'FixtureName';
-	declare @testName ssunit.ProcedureName = 'test._@Test@_$' + @expected + '$_TestName';
-
-	declare @actual ssunit.FixtureName = ssunit.GetFixtureName(@testName);
-
-	exec ssunit.AssertStringEqualTo @expected, @actual;
-go
-
-create procedure test._@Test@_GetFixtureName_ShouldReturnNull_WhenFixtureNameMalformed
-as
-	declare @actual ssunit.FixtureName = ssunit.GetFixtureName('test._@Test@_$FixtureName_');
-
-	exec ssunit.AssertStringIsNull @actual;
-
-	set @actual = ssunit.GetFixtureName('test._@Test@_FixtureName$_');
-
-	exec ssunit.AssertStringIsNull @actual;
-go
-
 create procedure test._@FixtureSetUp@_$Fixture1$_FixtureSetUp
 as
 	create table test.TestCounter
