@@ -18,15 +18,22 @@ create procedure ssunit.AssertTableRowCountEqualTo
 	@table		ssunit.TableName	--!< The table to verify.
 )
 as
-	declare @count int;
+	if (@table is null)
+	begin
+		exec ssunit.AssertFail 'Table name was (null)';
+	end
+	else
+	begin
+		declare @count int;
 
-	select	@count = p.rows
-	from	sys.tables t
-	join	sys.schemas s
-	on		s.schema_id = t.schema_id
-	join	sys.partitions p
-	on		p.object_id = t.object_id
-	where	s.name+'.'+t.name = @table;
+		select	@count = p.rows
+		from	sys.tables t
+		join	sys.schemas s
+		on		s.schema_id = t.schema_id
+		join	sys.partitions p
+		on		p.object_id = t.object_id
+		where	s.name+'.'+t.name = @table;
 
-	exec ssunit.AssertIntegerEqualTo @expected, @count;
+		exec ssunit.AssertIntegerEqualTo @expected, @count;
+	end
 go
