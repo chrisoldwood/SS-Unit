@@ -231,6 +231,10 @@ can still get a lot done with just these few:-
 <td>Denotes the test as having conclusively failed</td>
 </tr>
 <tr>
+<td>AssertNotImplemented</td>
+<td>Fails the test with a reason of "Not implemented"</td>
+</tr>
+<tr>
 <td>AssertTrue</td>
 <td>Compares the resultant value to 1 (i.e. true)</td>
 </tr>
@@ -269,6 +273,10 @@ can still get a lot done with just these few:-
 <tr>
 <td>Assert<i>Xxx</i>IsNull</td>
 <td>Compares the resultant Xxx value to NULL</td>
+</tr>
+<tr>
+<td>AssertIntegerBetween</td>
+<td>Compares an integer to a range (lower and upper bounds are inclusive)</td>
 </tr>
 <tr>
 <td>AssertStringLike</td>
@@ -426,7 +434,19 @@ and reporting:-
 <tr>
 <td>@displayWidth</td>
 <td>When running in 'batch mode' the console width is assumed to be 80 chars
-    wide, this parameter allows you to widen or truncate the output</td>
+    wide, use this parameter to widen or truncate the output</td>
+</tr>
+<tr>
+<td>@reportResults</td>
+<td>Set this to 0 (false) to hide the per-test results</td>
+</tr>
+<tr>
+<td>@reportSummary</td>
+<td>Set this to 0 (false) to hide the results summary</td>
+</tr>
+<tr>
+<td>@isInteractive</td>
+<td>Override the SQL client type by setting this to 0 for batch mode and 1 for interactive</td>
 </tr>
 </table>
 <p>
