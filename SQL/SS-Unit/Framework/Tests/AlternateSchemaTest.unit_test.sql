@@ -9,7 +9,4 @@ as
 	exec ssunit.AssertPass;
 go
 
-declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
-
-exec ssunit.RunTests @schemaName = 'unit_test',
-					 @displayWidth = @displayWidth;
+exec ssunit.RunTests @schemaName = 'unit_test';

@@ -244,6 +244,4 @@ as
 	exec ssunit.AssertDateTimeGreaterThanOrEqualTo '2001-01-01 01:01:01.010', @actual;
 go
 
-declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
-
-exec ssunit.RunTests @displayWidth = @displayWidth;
+exec ssunit.RunTests;

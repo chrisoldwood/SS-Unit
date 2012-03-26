@@ -60,6 +60,4 @@ as
 	exec ssunit.AssertTableIsEmpty 'test.TestTable';
 go
 
-declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0) then 80 else convert(int, '$(DisplayWidth)') end;
-
-exec ssunit.RunTests @displayWidth = @displayWidth;
+exec ssunit.RunTests;
