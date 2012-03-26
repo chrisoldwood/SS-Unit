@@ -16,11 +16,11 @@ go
 
 create procedure ssunit.RunTests
 (
-	@schemaName		ssunit.SchemaName = null,	--!< The schema used for the tests.
-	@displayWidth	int = null,					--!< The width of the console in batch mode.
-	@reportResults	bit = null,					--!< Return the per-test results?
-	@reportSummary	bit = null,					--!< Return the test result summary?
-	@isInteractive	bit = null					--!< Override the output mode.
+	@schemaName		ssunit.SchemaName = null,			--!< The schema used for the tests.
+	@displayWidth	int = null,							--!< The width of the console in batch mode.
+	@reportResults	ssunit.ReportCondition = null,		--!< Return the per-test results?
+	@reportSummary	ssunit.ReportCondition = null,		--!< Return the test result summary?
+	@isInteractive	bit = null							--!< Override the output mode.
 )
 as
 	set nocount on;
@@ -168,8 +168,21 @@ as
 	close TestCursor;
 	deallocate TestCursor;
 
+	-- Any failures?
+	declare @failures int;
+	select	@failures = count(*)
+	from	ssunit.TestResult r
+	where	r.Outcome = ssunit.TestOutcome_Failed();
+
+	-- Toggle outputs based on failure count.
+	if ( (@reportResults = ssunit.ReportCondition_OnFailure()) and (@failures != 0))
+		set @reportResults = ssunit.ReportCondition_Always();
+
+	if ( (@reportSummary = ssunit.ReportCondition_OnFailure()) and (@failures != 0))
+		set @reportSummary = ssunit.ReportCondition_Always();
+
 	-- Display the result of each test.
-	if (@reportResults = 1)
+	if (@reportResults = ssunit.ReportCondition_Always())
 	begin
 		if (@isInteractive = 1)
 		begin
@@ -198,7 +211,7 @@ as
 	end
 
 	-- Separate the results/summary.
-	if ((@reportResults = 1) and (@reportSummary = 1))
+	if ((@reportResults = ssunit.ReportCondition_Always()) and (@reportSummary = ssunit.ReportCondition_Always()))
 	begin
 		if (@isInteractive = 0)
 		begin
@@ -207,7 +220,7 @@ as
 	end
 
 	-- Display a summary of the test results.
-	if (@reportSummary = 1)
+	if (@reportSummary = ssunit.ReportCondition_Always())
 	begin
 		select	isnull([Passed],  0) as [Passed],
 				isnull([FAILED],  0) as [Failed],
@@ -229,14 +242,8 @@ as
 	end
 
 	-- Signal test run failure only in batch mode.
-	if (@isInteractive = 0)
+	if ( (@isInteractive = 0) and (@failures != 0) )
 	begin
-		declare @failures int;
-		select	@failures = count(*)
-		from	ssunit.TestResult r
-		where	r.Outcome = ssunit.TestOutcome_Failed();
-
-		if (@failures != 0)
-			raiserror('One or more unit tests failed', 16, 1);
+		raiserror('One or more unit tests failed', 16, 1);
 	end
 go
