@@ -18,4 +18,9 @@ call RunTests .\SQLEXPRESS --testsonly ^
      | egrep -v "^Passed.*+ShouldPass" ^
      | egrep -v "^FAILED.*+ShouldFail" ^
      | egrep -v "^Passed.*GetFixtureName" ^
-     | egrep -v "^Passed.*FormatResultTestName"
+     | egrep -v "^Passed.*FormatResultTestName" ^
+     | egrep -v "^Passed.*SetSchemaNameDefault" ^
+     | egrep -v "^Passed.*SetDisplayWidthDefault" ^
+     | egrep -v "^Passed.*SetReportResultsDefault" ^
+     | egrep -v "^Passed.*SetReportSummaryDefault" ^
+     | egrep -v "^Passed.*ReportCondition"

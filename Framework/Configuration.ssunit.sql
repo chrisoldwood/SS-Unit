@@ -17,19 +17,23 @@ go
 create table ssunit.Configuration
 (
 	--! The schema used for the tests.
-	SchemaName		ssunit.SchemaName	null,
+	SchemaName		ssunit.SchemaName		not null,
 
 	--! The width of the console in batch mode.
-	DisplayWidth	int					null,
+	DisplayWidth	int						not null,
 
 	--! Return the per-test results?
-	ReportResults	bit					null,
+	ReportResults	ssunit.ReportCondition	not null,
 
 	--! Return the test result summary?
-	ReportSummary	bit					null,
+	ReportSummary	ssunit.ReportCondition	not null,
 );
 go
 
+set nocount on;
+
+declare @always ssunit.ReportCondition = ssunit.ReportCondition_Always();
+
 insert into ssunit.Configuration
 	  (SchemaName, DisplayWidth, ReportResults, ReportSummary)
-select 'test',     80,           1,             1
+select 'test',     80,           @always,       @always

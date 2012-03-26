@@ -6,3 +6,5 @@ AlternateSchemaTest.unit_test.sql
 TestNameHelpers.test.sql
 FixtureTests.test.sql
 TableAsserts.test.sql
+ReportCondition.test.sql
+Configuration.test.sql
