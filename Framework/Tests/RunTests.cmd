@@ -60,6 +60,9 @@ echo (Failures are to be expected)
 echo ----------------------------------------
 echo.
 
+echo Setting display width to '%displayWidth%'
+sqlcmd -E -S %server% -d %database% -Q "exec ssunit.Configuration_SetDisplayWidthDefault %displayWidth%"
+
 for /f "delims=" %%f in (test-scripts.txt) do (
 	echo.
 	echo ========================================
