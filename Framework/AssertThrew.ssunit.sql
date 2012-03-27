@@ -10,7 +10,12 @@ go
 
 /**
  * Asserts that the test raised an error that contained the specified message.
- * NB: The error is compared with the LIKE operator.
+ * The error is compared with the LIKE operator and so can contain wildcard
+ * characters.
+ *
+ * \Note The helper procedure should contain the '_@Helper@_' attribute in its
+ * name so that it is dropped automatically by the framework at the end of the
+ * test run to save dropping it manually.
  */
 
 create procedure ssunit.AssertThrew
@@ -43,10 +48,4 @@ as
 		end
 
 	end catch
-
-	-- Drop the helper procedure.
-	declare @statement varchar(max);
-	set		@statement = 'drop procedure ' + @procedure;
-
-	exec(@statement);
 go

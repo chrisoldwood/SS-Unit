@@ -1,5 +1,1 @@
 - Add error handling for fixture set up/tear down errors (all tests failed if tear down fails?)
-
-- Denote helper procedures so they can be auto dropped too (fixture sufficent?)
-
-- HelpFile details on the global settings

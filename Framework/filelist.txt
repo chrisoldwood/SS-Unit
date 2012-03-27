@@ -71,6 +71,7 @@ Configuration_SetValues.ssunit.sql
 TestSchema_Clear.ssunit.sql
 GetFixtureName.ssunit.sql
 TestFixture_Delete.ssunit.sql
+TestHelper_Delete.ssunit.sql
 IsInteractive.ssunit.sql
 FormatResultTestName.ssunit.sql
 RunTest.ssunit.sql

@@ -7,14 +7,14 @@
 exec ssunit.TestSchema_Clear;
 go
 
-create procedure test.SetSchemaNameDefaultToNull
+create procedure test._@Helper@_SetSchemaNameDefaultToNull
 as
 	exec ssunit.Configuration_SetSchemaNameDefault null;
 go
 
 create procedure test._@Test@_$Configuration$_SetSchemaNameDefault_ShouldThrow_WhenValueIsNull
 as
-	exec ssunit.AssertThrew '%invalid schema name%', 'test.SetSchemaNameDefaultToNull';
+	exec ssunit.AssertThrew '%invalid schema name%', 'test._@Helper@_SetSchemaNameDefaultToNull';
 go
 
 create procedure test._@Test@_$Configuration$_SetSchemaNameDefault_ShouldSetValue
@@ -34,34 +34,34 @@ as
 	exec ssunit.Configuration_SetSchemaNameDefault @oldValue;
 go
 
-create procedure test.SetDisplayWidthDefaultToNull
+create procedure test._@Helper@_SetDisplayWidthDefaultToNull
 as
 	exec ssunit.Configuration_SetDisplayWidthDefault null;
 go
 
 create procedure test._@Test@_$Configuration$_SetDisplayWidthDefault_ShouldThrow_WhenValueIsNull
 as
-	exec ssunit.AssertThrew '%invalid display width%', 'test.SetDisplayWidthDefaultToNull';
+	exec ssunit.AssertThrew '%invalid display width%', 'test._@Helper@_SetDisplayWidthDefaultToNull';
 go
 
-create procedure test.SetDisplayWidthDefaultToNegativeValue
+create procedure test._@Helper@_SetDisplayWidthDefaultToNegativeValue
 as
 	exec ssunit.Configuration_SetDisplayWidthDefault -80;
 go
 
 create procedure test._@Test@_$Configuration$_SetDisplayWidthDefault_ShouldThrow_WhenValueIsNegative
 as
-	exec ssunit.AssertThrew '%invalid display width%', 'test.SetDisplayWidthDefaultToNegativeValue';
+	exec ssunit.AssertThrew '%invalid display width%', 'test._@Helper@_SetDisplayWidthDefaultToNegativeValue';
 go
 
-create procedure test.SetDisplayWidthDefaultToZero
+create procedure test._@Helper@_SetDisplayWidthDefaultToZero
 as
 	exec ssunit.Configuration_SetDisplayWidthDefault 0;
 go
 
 create procedure test._@Test@_$Configuration$_SetDisplayWidthDefault_ShouldThrow_WhenValueIsZero
 as
-	exec ssunit.AssertThrew '%invalid display width%', 'test.SetDisplayWidthDefaultToZero';
+	exec ssunit.AssertThrew '%invalid display width%', 'test._@Helper@_SetDisplayWidthDefaultToZero';
 go
 
 create procedure test._@Test@_$Configuration$_SetDisplayWidthDefault_ShouldSetValue
@@ -81,24 +81,24 @@ as
 	exec ssunit.Configuration_SetDisplayWidthDefault @oldValue;
 go
 
-create procedure test.SetReportResultsDefaultToNull
+create procedure test._@Helper@_SetReportResultsDefaultToNull
 as
 	exec ssunit.Configuration_SetReportResultsDefault null;
 go
 
 create procedure test._@Test@_$Configuration$_SetReportResultsDefault_ShouldThrow_WhenValueIsNull
 as
-	exec ssunit.AssertThrew '%invalid ''report results'' flag%', 'test.SetReportResultsDefaultToNull';
+	exec ssunit.AssertThrew '%invalid ''report results'' flag%', 'test._@Helper@_SetReportResultsDefaultToNull';
 go
 
-create procedure test.SetReportResultsDefaultToInvalidValue
+create procedure test._@Helper@_SetReportResultsDefaultToInvalidValue
 as
 	exec ssunit.Configuration_SetReportResultsDefault 255;
 go
 
 create procedure test._@Test@_$Configuration$_SetReportResultsDefault_ShouldThrow_WhenValueIsInvalid
 as
-	exec ssunit.AssertThrew '%invalid ''report results'' flag%', 'test.SetReportResultsDefaultToInvalidValue';
+	exec ssunit.AssertThrew '%invalid ''report results'' flag%', 'test._@Helper@_SetReportResultsDefaultToInvalidValue';
 go
 
 create procedure test._@Test@_$Configuration$_SetReportResultsDefault_ShouldSetValue
@@ -118,24 +118,24 @@ as
 	exec ssunit.Configuration_SetReportResultsDefault @oldValue;
 go
 
-create procedure test.SetReportSummaryDefaultToNull
+create procedure test._@Helper@_SetReportSummaryDefaultToNull
 as
 	exec ssunit.Configuration_SetReportSummaryDefault null;
 go
 
 create procedure test._@Test@_$Configuration$_SetReportSummaryDefault_ShouldThrow_WhenValueIsNull
 as
-	exec ssunit.AssertThrew '%invalid ''report summary'' flag%', 'test.SetReportSummaryDefaultToNull';
+	exec ssunit.AssertThrew '%invalid ''report summary'' flag%', 'test._@Helper@_SetReportSummaryDefaultToNull';
 go
 
-create procedure test.SetReportSummaryDefaultToInvalidValue
+create procedure test._@Helper@_SetReportSummaryDefaultToInvalidValue
 as
 	exec ssunit.Configuration_SetReportSummaryDefault 255;
 go
 
 create procedure test._@Test@_$Configuration$_SetReportSummaryDefault_ShouldThrow_WhenValueIsInvalid
 as
-	exec ssunit.AssertThrew '%invalid ''report summary'' flag%', 'test.SetReportSummaryDefaultToInvalidValue';
+	exec ssunit.AssertThrew '%invalid ''report summary'' flag%', 'test._@Helper@_SetReportSummaryDefaultToInvalidValue';
 go
 
 create procedure test._@Test@_$Configuration$_SetReportSummaryDefault_ShouldSetValue
