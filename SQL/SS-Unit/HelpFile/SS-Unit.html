@@ -204,7 +204,7 @@ A slightly more subtle point you may have noticed is that all the SS-Unit
 objects live in a separate schema called <code>ssunit</code>. This gives it all
 the benefits of namespaces to avoid name clashes with your test or production
 code. The test runner assumes that all tests live in a schema called <code>test</code>
-but that can be overriden as explained later.
+but that can be overridden as explained later.
 </p>
 
 <a name="Asserts"></a>
@@ -256,19 +256,19 @@ can still get a lot done with just these few:-
 </tr>
 <tr>
 <td>Assert<i>Xxx</i>LessThan</td>
-<td>Perfoms a &lt; comparison with the resultant Xxx value</td>
+<td>Performs a &lt; comparison with the resultant Xxx value</td>
 </tr>
 <tr>
 <td>Assert<i>Xxx</i>LessThanOrEqualTo</td>
-<td>Perfoms a &lt;= comparison with the resultant Xxx value</td>
+<td>Performs a &lt;= comparison with the resultant Xxx value</td>
 </tr>
 <tr>
 <td>Assert<i>Xxx</i>GreaterThan</td>
-<td>Perfoms a &gt; comparison with the resultant Xxx value</td>
+<td>Performs a &gt; comparison with the resultant Xxx value</td>
 </tr>
 <tr>
 <td>Assert<i>Xxx</i>GreaterThanOrEqualTo</td>
-<td>Perfoms a &gt;= comparison with the resultant Xxx value</td>
+<td>Performs a &gt;= comparison with the resultant Xxx value</td>
 </tr>
 <tr>
 <td>Assert<i>Xxx</i>IsNull</td>
@@ -310,7 +310,7 @@ avoid the boilerplate code obscuring the salient part of the test the
 <code>AssertThrew</code> procedure takes an extra argument that is the name of
 a helper procedure to invoke as part of the test, e.g. 
 </p><pre>
-create procedure test.My_Procedure_That_Throws
+create procedure test._@Helper@_My_Procedure_That_Throws
 as
     -- simulate a constraint violation
     raiserror('my error', 16, 1);
@@ -318,7 +318,7 @@ go
 
 create procedure test._@Test@_ShouldThrow
 as
-    exec ssunit.AssertThrew 'my error', 'test.My_Procedure_That_Throws';
+    exec ssunit.AssertThrew 'my error', 'test._@Helper@_My_Procedure_That_Throws';
 go
 </pre><p>
 There are also two failure modes of an <code>AssertThrew</code> style test as
@@ -337,11 +337,17 @@ then use them as the <code>@error</code> message instead of something more
 vague, e.g.
 </p><pre>
     -- Matches any FK violation
-    exec ssunit.AssertThrew '%FOREIGN KEY%constraint%', 'test.My_Procedure_That_Throws';
+    exec ssunit.AssertThrew '%FOREIGN KEY%constraint%', 'test._@Helper@_My_Procedure_That_Throws';
 
     -- Matches specific constraint violation through constraint name
-    exec ssunit.AssertThrew '%MyTable_FK_MyColumn%', 'test.My_Procedure_That_Throws';
-</pre>
+    exec ssunit.AssertThrew '%MyTable_FK_MyColumn%', 'test._@Helper@_My_Procedure_That_Throws';
+</pre><p>
+The <code>_@Helper@_</code> attribute is used to indicate a helper procedure
+that should also be deleted once the tests have run. If the attribute is not
+applied then it must be handled either with the <code>TestSchema_Clear</code>
+utility procedure or manually with a traditional <code>drop procedure</code>
+call.
+</p>
 
 <a name="Fixtures"></a>
 <h5>SetUp & TearDown Helper Procedures</h5>
@@ -349,7 +355,7 @@ vague, e.g.
 <p>
 One technique for reducing noise and improving performance within the
 <i>arrangement</i> phase of a test is to factor out code into a helper function.
-The xUnit framework generally provides two mechansims for two separate
+The xUnit framework generally provides two mechanisms for two separate
 pairs of helper methods - one pair run per-test and the other pair run
 per-fixture. Within each pair the "SetUp" method is run before the test(s) and
 the "TearDown" method after.
@@ -413,13 +419,12 @@ one phase and then execute <code>ssunit.RunTests</code> right at the end in one
 go.
 </p>
 
-
 <a name="TestRunner"></a>
 <h5>Test Runner Parameters</h5>
 
 <p>
 The procedure you invoke to run the test suite (<code>ssunit.RunTests</code>)
-supports a number of parameters to control various aspects of test excution
+supports a number of parameters to control various aspects of test execution
 and reporting:-
 </p>
 <table id="parameters">
@@ -433,16 +438,16 @@ and reporting:-
 </tr>
 <tr>
 <td>@displayWidth</td>
-<td>When running in 'batch mode' the console width is assumed to be 80 chars
-    wide, use this parameter to widen or truncate the output</td>
+<td>When running in '<a href="#DisplayWidth">batch mode</a>' the console width is
+    assumed to be 80 chars wide, use this parameter to widen or truncate the output</td>
 </tr>
 <tr>
 <td>@reportResults</td>
-<td>Set this to 0 (false) to hide the per-test results</td>
+<td>An enumeration value used to control the output of the per-test results (see blow)</td>
 </tr>
 <tr>
 <td>@reportSummary</td>
-<td>Set this to 0 (false) to hide the results summary</td>
+<td>An enumeration value used to control the output of the results summary (see blow)</td>
 </tr>
 <tr>
 <td>@isInteractive</td>
@@ -450,25 +455,123 @@ and reporting:-
 </tr>
 </table>
 <p>
+The following example shows how to use a different schema and
+<a href="#DisplayWidth">widen the output</a> when running in batch mode:-
+</p><pre>
+exec ssunit.RunTests @schemaName = 'unit_test',
+                     @displayWidth = 180;
+</pre><p>
+The <code>@reportResults</code> and <code>@reportSummary</code> parameters are
+enumeration values of the pseudo-type <code>ssunit.ReportCondition</code>.
+Essentially this is a <code>tinyint</code> value with UDFs taking the place of
+the enumeration symbols (so you don't hard-code a literal value):-
+</p>
+<table id="Table1">
+<tr>
+<th>Value</th>
+<th>Symbol</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>Never</td>
+<td>ReportCondition_Never</td>
+<td>Never generate the report</td>
+</tr>
+<tr>
+<td>Always</td>
+<td>ReportCondition_Always</td>
+<td>Always generate the report</td>
+</tr>
+<tr>
+<td>On Failure</td>
+<td>ReportCondition_OnFailure</td>
+<td>Only generate the report when at least one test has failed</td>
+</tr>
+</table>
+<p>
+The following example shows how to configure the runner to only generate the
+per-test results when a test has failed:-
+</p><pre>
+declare @onFailure ssunit.ReportCondition = ssunit.ReportCondition_OnFailure();
+
+exec ssunit.RunTests @reportResults = @onFailure;
+</pre><p>
+For more details about using UDFs to encapsulate constants and enumerations see
+my blog post <a href="http://chrisoldwood.blogspot.co.uk/2010/09/implementing-constants-enumerations-in.html">Implementing Constants & Enumerations in a Database</a>.
+</p>
+
+<a name="GlobalParameters"></a>
+<h5>Global Parameters</h5>
+
+<p>
+To reduce the noise within each test script and ease the burden of constantly
+setting the test runner parameters there is a global collection of these
+that only need to be set once. You still have the option to override these
+defaults on a per-script basis by passing different values when invoking
+<code>ssunit.RunTests</code>. The table below lists the parameters and the
+API procedure used to set its default:-
+</p>
+<table id="globals">
+<tr>
+<th>Parameter</th>
+<th>API Procedure</th>
+</tr>
+<tr>
+<td>@schemaName</td>
+<td>ssunit.Configuration_SetSchemaNameDefault</td>
+</tr>
+<tr>
+<td>@displayWidth</td>
+<td>ssunit.Configuration_SetDisplayWidthDefault</td>
+</tr>
+<tr>
+<td>@reportResults</td>
+<td>ssunit.Configuration_SetReportResultsDefault</td>
+</tr>
+<tr>
+<td>@reportSummary</td>
+<td>ssunit.Configuration_SetReportSummaryDefault</td>
+</tr>
+</table>
+<p>
+NB: The @isInteractive parameter was added to aid in testing SS-Unit and as a
+workaround for when the UDF <code>ssunit.IsInteractive()</code> doesn't correctly
+categorise the client so there is no way to override the default.
+</p>
+
+<a name="DisplayWidth"></a>
+<h5>Console Display Width</h5>
+
+<p>
 The framework has the notion of whether the tests are being run interactively,
 such as via SSMS, or in batch mode via a command line tool like SQLCMD. This
 discovery is done by the UDF <code>ssunit.IsInteractive()</code> which just
-queries the built-in <code>app_name()</code> function.
-</p><p> 
+queries the built-in <code>app_name()</code> function and matches it to known
+SQL clients.
+</p><p>
 The <code>@displayWidth</code> parameter is only used in batch mode and allows
-the runner to size the "Test Name" and "Failure Reason" columns to avoid the
-text wrapping. When running as part of an automated build you are probably
-redirecting the output and so effectvely want to configure a "very wide" console.
-The framework test script (<code>RunTests.cmd</code>) uses the <i>variables</i>
-feature of SQLCMD to inject the width into the script (I use a 120 char wide
-console by default):-
+the runner to size the "Test Name" and "Failure Reason" columns to avoid ugly
+text wrapping in a console window. When running as part of an automated build you are probably
+redirecting the output and so effectively want to configure an "infinitely wide"
+console instead.
+</p><p>
+As of v1.0 the SS-Unit framework test script (<code>RunTests.cmd</code>) uses
+the <a href="#GlobalParameters">global parameters</a> feature to set the display
+width once by invoking the relevant procedure:-
+</p><pre>
+set displayWidth=120
+. . .
+sqlcmd -E -S %server% -d %database% -Q "exec ssunit.Configuration_SetDisplayWidthDefault %displayWidth%"
+</pre><p>
+Prior to v1.0 the test script used the <i>variables</i> feature of SQLCMD to 
+inject the display width into the test script at run time:-
 </p><pre>
 set displayWidth=120
 . . .
 sqlcmd -E -S %server% -d %database% -i "%%f" -v DisplayWidth=%displayWidth%
 </pre><p>
 Then in the SQL test script you need to parse that into an int so it can be
-passed to <code>RunTests</code>. You also need to remember that the same script
+supplied to <code>RunTests</code>. You also need to remember that the same script
 run under SSMS will not substitute the variable and so you need to guard
 against it causing an error:-
 </p><pre>
@@ -478,10 +581,7 @@ declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0)
                             end;
 
 exec ssunit.RunTests @displayWidth = @displayWidth;
-</pre><p>
-<i>NB: I'm hoping to simplify this in some way in the future to keep the test
-runner noise down.</i>
-</p>
+</pre>
 
 <hr>
 

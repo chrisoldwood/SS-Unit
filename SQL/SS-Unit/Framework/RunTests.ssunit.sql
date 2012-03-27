@@ -168,6 +168,9 @@ as
 	close TestCursor;
 	deallocate TestCursor;
 
+	-- Remove any additional helper procedures.
+	exec ssunit.TestHelper_Delete @schemaName;
+
 	-- Any failures?
 	declare @failures int;
 	select	@failures = count(*)

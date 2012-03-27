@@ -47,7 +47,7 @@ as
 	delete from dbo.SystemUser;
 go
 
-create procedure test.InsertInvalidUser
+create procedure test._@Helper@_InsertInvalidUser
 as
 	declare @invalidUserId pub.UserId_t = -1;
 
@@ -57,10 +57,10 @@ go
 
 create procedure test._@Test@_$Bug$_InsertingBug_ShouldThrow_WhenInvalidUserSpecified
 as
-	exec ssunit.AssertThrew '%foreign%key%constraint%SubmitUserId%', 'test.InsertInvalidUser';
+	exec ssunit.AssertThrew '%foreign%key%constraint%SubmitUserId%', 'test._@Helper@_InsertInvalidUser';
 go
 
-create procedure test.InsertInvalidBugStatus
+create procedure test._@Helper@_InsertInvalidBugStatus
 as
 	declare @invalidBugStatus pub.BugStatus_t = 255;
 
@@ -70,7 +70,7 @@ go
 
 create procedure test._@Test@_$Bug$_InsertingBug_ShouldThrow_WhenInvalidBugStatusSpecified
 as
-	exec ssunit.AssertThrew '%Bug_Check_BugStatus%', 'test.InsertInvalidBugStatus';
+	exec ssunit.AssertThrew '%Bug_Check_BugStatus%', 'test._@Helper@_InsertInvalidBugStatus';
 go
 
 create procedure test._@Test@_$Bug$_FindBugsSubmittedByUser_ShouldReturnBugIdAndSummary

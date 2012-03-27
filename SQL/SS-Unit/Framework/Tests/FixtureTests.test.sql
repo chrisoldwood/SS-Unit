@@ -76,4 +76,16 @@ as
 	exec ssunit.AssertPass;
 go
 
+create procedure test._@Helper@_HelperProcedure
+as
+	exec ssunit.AssertPass;
+go
+
+create procedure test._@Test@_TestShouldPassAndDeleteHelperProcedure
+as
+	exec test._@Helper@_HelperProcedure;
+
+	exec ssunit.AssertPass;
+go
+
 exec ssunit.RunTests;
