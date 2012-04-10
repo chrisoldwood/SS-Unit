@@ -1,25 +1,25 @@
 /**
- * \file   GetFixtureName.ssunit.sql
+ * \file
  * \brief  The GetFixtureName user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.GetFixtureName') is not null)
-	drop function ssunit.GetFixtureName;
+if (object_id('ssunit_impl.GetFixtureName') is not null)
+	drop function ssunit_impl.GetFixtureName;
 go
 
 /**
  * Retrieves the name of the test fixture from the test name, if present.
  */
 
-create function ssunit.GetFixtureName
+create function ssunit_impl.GetFixtureName
 (
 	@procedure	ssunit.ProcedureName	--!< The name of the unit test procedure
 )
-	returns ssunit.FixtureName
+	returns ssunit_impl.FixtureName
 as
 begin
-	declare @name ssunit.FixtureName = null;
+	declare @name ssunit_impl.FixtureName = null;
 
 	declare @startIndex int = charindex('_$', @procedure);
 

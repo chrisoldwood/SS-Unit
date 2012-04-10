@@ -1,18 +1,18 @@
 /**
- * \file   RunTest.ssunit.sql
+ * \file
  * \brief  The RunTest stored procedure.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.RunTest') is not null)
-	drop procedure ssunit.RunTest;
+if (object_id('ssunit_impl.RunTest') is not null)
+	drop procedure ssunit_impl.RunTest;
 go
 
 /**
  * Runs a single unit test.
  */
 
-create procedure ssunit.RunTest
+create procedure ssunit_impl.RunTest
 (
 	@procedure			ssunit.ProcedureName,	--!< The unit test procedure.
 	@setUpProcedure		ssunit.ProcedureName,	--!< The test set up procedure.
@@ -29,9 +29,9 @@ as
 		if (@tearDownProcedure is not null)
 			exec @tearDownProcedure;
 
-		if (ssunit.TestResult_TestOutcome(@procedure) is null)
+		if (ssunit_impl.TestResult_TestOutcome(@procedure) is null)
 		begin
-			exec ssunit.TestResult_SetTestInconclusive @procedure = @procedure;
+			exec ssunit_impl.TestResult_SetTestInconclusive @procedure = @procedure;
 		end
 
 	end try

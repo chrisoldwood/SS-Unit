@@ -1,5 +1,5 @@
 /**
- * \file   IsInteractive.ssunit.sql
+ * \file
  * \brief  The IsInteractive user-defined function.
  * \author Chris Oldwood
  */
