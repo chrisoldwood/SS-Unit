@@ -1,18 +1,18 @@
 /**
- * \file   TestResult_SetTestFailed.ssunit.sql
+ * \file
  * \brief  The TestResult_SetTestFailed stored procedure.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.TestResult_SetTestFailed') is not null)
-	drop procedure ssunit.TestResult_SetTestFailed;
+if (object_id('ssunit_impl.TestResult_SetTestFailed') is not null)
+	drop procedure ssunit_impl.TestResult_SetTestFailed;
 go
 
 /**
  * Stores the outcome of the test as having failed.
  */
 
-create procedure ssunit.TestResult_SetTestFailed
+create procedure ssunit_impl.TestResult_SetTestFailed
 (
 	@procedure	ssunit.ProcedureName,	--!< The name of the unit test procedure
 	@reason		ssunit.TextMessage		--!< The reason why the test failed.
@@ -21,7 +21,7 @@ as
 	--begin try
 		begin transaction;
 
-		insert into ssunit.TestResult
+		insert into ssunit_impl.TestResult
 		(
 			TestProcedure,
 			Outcome,
@@ -30,7 +30,7 @@ as
 		values
 		(
 			@procedure,
-			ssunit.TestOutcome_Failed(),
+			ssunit_impl.TestOutcome_Failed(),
 			@reason
 		);
 

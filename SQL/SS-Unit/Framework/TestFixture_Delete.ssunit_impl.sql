@@ -1,21 +1,21 @@
 /**
- * \file   TestFixture_Delete.ssunit.sql
+ * \file
  * \brief  The TestFixture_Delete stored procedure.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.TestFixture_Delete') is not null)
-	drop procedure ssunit.TestFixture_Delete;
+if (object_id('ssunit_impl.TestFixture_Delete') is not null)
+	drop procedure ssunit_impl.TestFixture_Delete;
 go
 
 /**
  * Deletes the test fixture helper procedures.
  */
 
-create procedure ssunit.TestFixture_Delete
+create procedure ssunit_impl.TestFixture_Delete
 (
 	@schemaName		ssunit.SchemaName,		--!< The schema used for the tests.
-	@fixtureName	ssunit.FixtureName		--!< The name of the fixture.
+	@fixtureName	ssunit_impl.FixtureName		--!< The name of the fixture.
 )
 as
 	declare @testSchemaId int;

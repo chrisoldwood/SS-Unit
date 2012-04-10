@@ -1,5 +1,5 @@
 /**
- * \file   TestSchema_Clear.ssunit.sql
+ * \file
  * \brief  The TestSchema_Clear stored procedure.
  * \author Chris Oldwood
  */
@@ -28,7 +28,7 @@ create procedure ssunit.TestSchema_Clear
 as
 	-- Get the configueration
 	if (@schemaName is null)
-		select @schemaName = SchemaName from ssunit.Configuration c;
+		select @schemaName = SchemaName from ssunit_impl.Configuration c;
 
 	declare @testSchemaId int;
 
