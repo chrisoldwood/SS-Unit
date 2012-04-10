@@ -1,18 +1,18 @@
 /**
- * \file   FormatDateTimeNullFailure.ssunit.sql
+ * \file
  * \brief  The FormatDateTimeNullFailure user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatDateTimeNullFailure') is not null)
-	drop function ssunit.FormatDateTimeNullFailure;
+if (object_id('ssunit_impl.FormatDateTimeNullFailure') is not null)
+	drop function ssunit_impl.FormatDateTimeNullFailure;
 go
 
 /**
  * Formats the message for a failed DateTime comparison with NULL.
  */
 
-create function ssunit.FormatDateTimeNullFailure
+create function ssunit_impl.FormatDateTimeNullFailure
 (
 	@expected	datetime,	--!< The expected value.
 	@actual		datetime	--!< The actual value.

@@ -1,5 +1,5 @@
 /**
- * \file   AssertFail.ssunit.sql
+ * \file
  * \brief  The AssertFail stored procedure.
  * \author Chris Oldwood
  */
@@ -19,21 +19,21 @@ create procedure ssunit.AssertFail
 )
 as
 	declare @procedure ssunit.ProcedureName;
-	set		@procedure = ssunit.CurrentTest_TestName();
+	set		@procedure = ssunit_impl.CurrentTest_TestName();
 
-	declare	@outcome ssunit.TestOutcome
-	select	@outcome = ssunit.TestResult_TestOutcome(@procedure);
+	declare	@outcome ssunit_impl.TestOutcome
+	select	@outcome = ssunit_impl.TestResult_TestOutcome(@procedure);
 
-	if (@outcome = ssunit.TestOutcome_Passed())
+	if (@outcome = ssunit_impl.TestOutcome_Passed())
 	begin
-		exec ssunit.TestResult_DeleteResult @procedure = @procedure;
+		exec ssunit_impl.TestResult_DeleteResult @procedure = @procedure;
 
 		set @outcome = null;
 	end
 
 	if (@outcome is null)
 	begin
-		exec ssunit.TestResult_SetTestFailed @procedure = @procedure,
+		exec ssunit_impl.TestResult_SetTestFailed @procedure = @procedure,
 											 @reason = @reason;
 	end
 go

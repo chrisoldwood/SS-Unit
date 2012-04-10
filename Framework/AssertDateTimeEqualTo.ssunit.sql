@@ -1,5 +1,5 @@
 /**
- * \file   AssertDateTimeEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertDateTimeEqualTo stored procedure.
  * \author Chris Oldwood
  */
@@ -22,7 +22,7 @@ as
 
 	if ( (@expected is null) or (@actual is null) )
 	begin
-		set @reason = ssunit.FormatDateTimeNullFailure(@expected, @actual);
+		set @reason = ssunit_impl.FormatDateTimeNullFailure(@expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end
@@ -32,7 +32,7 @@ as
 	end
 	else
 	begin
-		set @reason = ssunit.FormatDateTimeCompareFailure('Actual/Expected values differ', @expected, @actual);
+		set @reason = ssunit_impl.FormatDateTimeCompareFailure('Actual/Expected values differ', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

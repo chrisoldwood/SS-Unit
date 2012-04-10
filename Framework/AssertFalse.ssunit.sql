@@ -1,5 +1,5 @@
 /**
- * \file   AssertFalse.ssunit.sql
+ * \file
  * \brief  The AssertFalse stored procedure.
  * \author Chris Oldwood
  */

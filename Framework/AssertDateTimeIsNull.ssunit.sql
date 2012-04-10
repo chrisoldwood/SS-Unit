@@ -1,5 +1,5 @@
 /**
- * \file   AssertDateTimeIsNull.ssunit.sql
+ * \file
  * \brief  The AssertDateTimeIsNull stored procedure.
  * \author Chris Oldwood
  */

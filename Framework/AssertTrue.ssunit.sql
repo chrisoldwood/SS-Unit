@@ -1,5 +1,5 @@
 /**
- * \file   AssertTrue.ssunit.sql
+ * \file
  * \brief  The AssertTrue stored procedure.
  * \author Chris Oldwood
  */

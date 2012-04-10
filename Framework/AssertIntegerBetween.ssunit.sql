@@ -1,5 +1,5 @@
 /**
- * \file   AssertIntegerBetween.ssunit.sql
+ * \file
  * \brief  The AssertIntegerBetween stored procedure.
  * \author Chris Oldwood
  */

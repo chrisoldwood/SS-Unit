@@ -1,5 +1,5 @@
 /**
- * \file   AssertPass.ssunit.sql
+ * \file
  * \brief  The AssertPass stored procedure.
  * \author Chris Oldwood
  */
@@ -16,13 +16,13 @@ go
 create procedure ssunit.AssertPass
 as
 	declare @procedure ssunit.ProcedureName;
-	set		@procedure = ssunit.CurrentTest_TestName();
+	set		@procedure = ssunit_impl.CurrentTest_TestName();
 
-	declare	@outcome ssunit.TestOutcome
-	select	@outcome = ssunit.TestResult_TestOutcome(@procedure);
+	declare	@outcome ssunit_impl.TestOutcome
+	select	@outcome = ssunit_impl.TestResult_TestOutcome(@procedure);
 
 	if (@outcome is null)
 	begin
-		exec ssunit.TestResult_SetTestPassed @procedure = @procedure;
+		exec ssunit_impl.TestResult_SetTestPassed @procedure = @procedure;
 	end
 go

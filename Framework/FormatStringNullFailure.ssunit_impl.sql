@@ -1,18 +1,18 @@
 /**
- * \file   FormatStringNullFailure.ssunit.sql
+ * \file
  * \brief  The FormatStringNullFailure user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatStringNullFailure') is not null)
-	drop function ssunit.FormatStringNullFailure;
+if (object_id('ssunit_impl.FormatStringNullFailure') is not null)
+	drop function ssunit_impl.FormatStringNullFailure;
 go
 
 /**
  * Formats the message for a failed String comparison with NULL.
  */
 
-create function ssunit.FormatStringNullFailure
+create function ssunit_impl.FormatStringNullFailure
 (
 	@expected	varchar(max),	--!< The expected value.
 	@actual		varchar(max)	--!< The actual value.

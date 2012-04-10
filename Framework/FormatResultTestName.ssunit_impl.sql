@@ -1,11 +1,11 @@
 /**
- * \file   FormatResultTestName.ssunit.sql
+ * \file
  * \brief  The FormatResultTestName user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatResultTestName') is not null)
-	drop function ssunit.FormatResultTestName;
+if (object_id('ssunit_impl.FormatResultTestName') is not null)
+	drop function ssunit_impl.FormatResultTestName;
 go
 
 /**
@@ -15,7 +15,7 @@ go
  * unadorned name which is hopefully the more useful part.
  */
 
-create function ssunit.FormatResultTestName
+create function ssunit_impl.FormatResultTestName
 (
 	@procedure	ssunit.ProcedureName	--!< The name of the unit test procedure
 )
@@ -29,7 +29,7 @@ begin
 		set @procedure = substring(@procedure, @index+1, len(@procedure)-@index);
 	end
 
-	declare @fixtureName ssunit.FixtureName = ssunit.GetFixtureName(@procedure);
+	declare @fixtureName ssunit_impl.FixtureName = ssunit_impl.GetFixtureName(@procedure);
 
 	if (@fixtureName is not null)
 	begin

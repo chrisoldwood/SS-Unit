@@ -1,18 +1,18 @@
 /**
- * \file   FormatDateTimeCompareFailure.ssunit.sql
+ * \file
  * \brief  The FormatDateTimeCompareFailure user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatDateTimeCompareFailure') is not null)
-	drop function ssunit.FormatDateTimeCompareFailure;
+if (object_id('ssunit_impl.FormatDateTimeCompareFailure') is not null)
+	drop function ssunit_impl.FormatDateTimeCompareFailure;
 go
 
 /**
  * Formats the message for a failed comparison between two DateTimes.
  */
 
-create function ssunit.FormatDateTimeCompareFailure
+create function ssunit_impl.FormatDateTimeCompareFailure
 (
 	@error		ssunit.TextMessage,	--!< The short error message.
 	@expected	datetime,			--!< The expected value.

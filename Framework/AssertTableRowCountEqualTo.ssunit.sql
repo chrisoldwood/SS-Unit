@@ -1,5 +1,5 @@
 /**
- * \file   AssertTableRowCountEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertTableRowCountEqualTo stored procedure.
  * \author Chris Oldwood
  */
