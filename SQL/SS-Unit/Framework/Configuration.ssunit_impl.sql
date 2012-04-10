@@ -1,11 +1,11 @@
 /**
- * \file   Configuration.ssunit.sql
+ * \file
  * \brief  The Configuration table.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.Configuration') is not null)
-	drop table ssunit.Configuration;
+if (object_id('ssunit_impl.Configuration') is not null)
+	drop table ssunit_impl.Configuration;
 go
 
 /**
@@ -14,7 +14,7 @@ go
  * ssunit.RunTests.
  */
 
-create table ssunit.Configuration
+create table ssunit_impl.Configuration
 (
 	--! The schema used for the tests.
 	SchemaName		ssunit.SchemaName		not null,
@@ -34,6 +34,6 @@ set nocount on;
 
 declare @always ssunit.ReportCondition = ssunit.ReportCondition_Always();
 
-insert into ssunit.Configuration
+insert into ssunit_impl.Configuration
 	  (SchemaName, DisplayWidth, ReportResults, ReportSummary)
 select 'test',     80,           @always,       @always

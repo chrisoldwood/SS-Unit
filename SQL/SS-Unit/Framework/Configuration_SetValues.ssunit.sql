@@ -1,5 +1,5 @@
 /**
- * \file   Configuration_SetValues.ssunit.sql
+ * \file
  * \brief  The Configuration table stored procedures.
  * \author Chris Oldwood
  */
@@ -38,7 +38,7 @@ as
 		if (@value is null)
 			raiserror('Invalid schema name: (null)', 16, 1);
 	
-		update	ssunit.Configuration
+		update	ssunit_impl.Configuration
 		set		SchemaName = @value;
 
 	end try
@@ -79,7 +79,7 @@ as
 			raiserror(@error, 16, 1);
 		end
 	
-		update	ssunit.Configuration
+		update	ssunit_impl.Configuration
 		set		DisplayWidth = @value;
 
 	end try
@@ -121,7 +121,7 @@ as
 			raiserror(@error, 16, 1);
 		end
 	
-		update	ssunit.Configuration
+		update	ssunit_impl.Configuration
 		set		ReportResults = @value;
 
 	end try
@@ -163,7 +163,7 @@ as
 			raiserror(@error, 16, 1);
 		end
 	
-		update	ssunit.Configuration
+		update	ssunit_impl.Configuration
 		set		ReportSummary = @value;
 
 	end try

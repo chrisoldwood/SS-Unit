@@ -1,5 +1,5 @@
 /**
- * \file   ReportCondition.ssunit.sql
+ * \file
  * \brief  The ReportCondition user defined type.
  * \author Chris Oldwood
  */
@@ -17,6 +17,10 @@ go
 
 create type ssunit.ReportConditionDisplayString from varchar(10);
 go
+
+/*
+ * The report condition enumeration type implementation.
+ */
 
 if (object_id('ssunit.ReportCondition_Never') is not null)
 	drop function ssunit.ReportCondition_Never;
