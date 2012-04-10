@@ -1,5 +1,5 @@
 /**
- * \file   AssertDateTimeLessThanOrEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertDateTimeLessThanOrEqualTo stored procedure.
  * \author Chris Oldwood
  */
@@ -22,7 +22,7 @@ as
 
 	if ( (@expected is null) or (@actual is null) )
 	begin
-		set @reason = ssunit.FormatDateTimeNullFailure(@expected, @actual);
+		set @reason = ssunit_impl.FormatDateTimeNullFailure(@expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end
@@ -32,7 +32,7 @@ as
 	end
 	else
 	begin
-		set @reason = ssunit.FormatDateTimeCompareFailure('Actual was greater than Expected', @expected, @actual);
+		set @reason = ssunit_impl.FormatDateTimeCompareFailure('Actual was greater than Expected', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

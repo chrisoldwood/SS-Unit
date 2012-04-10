@@ -1,5 +1,5 @@
 /**
- * \file   AssertStringNotLike.ssunit.sql
+ * \file
  * \brief  The AssertStringNotLike stored procedure.
  * \author Chris Oldwood
  */

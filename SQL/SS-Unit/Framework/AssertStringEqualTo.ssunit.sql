@@ -1,5 +1,5 @@
 /**
- * \file   AssertStringEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertStringEqualTo stored procedure.
  * \author Chris Oldwood
  */
@@ -22,7 +22,7 @@ as
 
 	if ( (@expected is null) or (@actual is null) )
 	begin
-		set @reason = ssunit.FormatStringNullFailure(@expected, @actual);
+		set @reason = ssunit_impl.FormatStringNullFailure(@expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end
@@ -32,7 +32,7 @@ as
 	end
 	else
 	begin
-		set @reason = ssunit.FormatStringCompareFailure('Actual/Expected values differ', @expected, @actual);
+		set @reason = ssunit_impl.FormatStringCompareFailure('Actual/Expected values differ', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

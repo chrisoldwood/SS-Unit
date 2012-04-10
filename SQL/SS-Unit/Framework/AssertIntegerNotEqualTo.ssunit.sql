@@ -1,5 +1,5 @@
 /**
- * \file   AssertIntegerNotEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertIntegerNotEqualTo stored procedure.
  * \author Chris Oldwood
  */
@@ -22,7 +22,7 @@ as
 
 	if ( (@expected is null) or (@actual is null) )
 	begin
-		set @reason = ssunit.FormatIntegerNullFailure(@expected, @actual);
+		set @reason = ssunit_impl.FormatIntegerNullFailure(@expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end
@@ -32,7 +32,7 @@ as
 	end
 	else
 	begin
-		set @reason = ssunit.FormatIntegerCompareFailure('Actual/Expected values were equal', @expected, @actual);
+		set @reason = ssunit_impl.FormatIntegerCompareFailure('Actual/Expected values were equal', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

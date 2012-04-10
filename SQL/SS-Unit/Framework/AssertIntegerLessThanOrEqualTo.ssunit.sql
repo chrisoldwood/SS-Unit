@@ -1,5 +1,5 @@
 /**
- * \file   AssertIntegerLessThanOrEqualTo.ssunit.sql
+ * \file
  * \brief  The AssertIntegerLessThanOrEqualTo stored procedure.
  * \author Chris Oldwood
  */
@@ -22,7 +22,7 @@ as
 
 	if ( (@expected is null) or (@actual is null) )
 	begin
-		set @reason = ssunit.FormatIntegerNullFailure(@expected, @actual);
+		set @reason = ssunit_impl.FormatIntegerNullFailure(@expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end
@@ -32,7 +32,7 @@ as
 	end
 	else
 	begin
-		set @reason = ssunit.FormatIntegerCompareFailure('Actual was greater than Expected', @expected, @actual);
+		set @reason = ssunit_impl.FormatIntegerCompareFailure('Actual was greater than Expected', @expected, @actual);
 
 		exec ssunit.AssertFail @reason;
 	end

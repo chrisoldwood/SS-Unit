@@ -1,5 +1,5 @@
 /**
- * \file   AssertNotImplemented.ssunit.sql
+ * \file
  * \brief  The AssertNotImplemented stored procedure.
  * \author Chris Oldwood
  */

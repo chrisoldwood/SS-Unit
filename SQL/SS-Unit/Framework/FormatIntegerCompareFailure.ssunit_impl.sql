@@ -1,18 +1,18 @@
 /**
- * \file   FormatIntegerCompareFailure.ssunit.sql
+ * \file
  * \brief  The FormatIntegerCompareFailure user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatIntegerCompareFailure') is not null)
-	drop function ssunit.FormatIntegerCompareFailure;
+if (object_id('ssunit_impl.FormatIntegerCompareFailure') is not null)
+	drop function ssunit_impl.FormatIntegerCompareFailure;
 go
 
 /**
  * Formats the message for a failed comparison between two integers.
  */
 
-create function ssunit.FormatIntegerCompareFailure
+create function ssunit_impl.FormatIntegerCompareFailure
 (
 	@error		ssunit.TextMessage,	--!< The short error message.
 	@expected	int,				--!< The expected value.

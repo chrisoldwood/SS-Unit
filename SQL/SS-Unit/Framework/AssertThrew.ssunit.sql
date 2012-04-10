@@ -1,5 +1,5 @@
 /**
- * \file   AssertThrew.ssunit.sql
+ * \file
  * \brief  The AssertThrew stored procedure.
  * \author Chris Oldwood
  */

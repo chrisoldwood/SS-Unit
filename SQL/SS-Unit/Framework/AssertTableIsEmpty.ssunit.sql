@@ -1,5 +1,5 @@
 /**
- * \file   AssertTableIsEmpty.ssunit.sql
+ * \file
  * \brief  The AssertTableIsEmpty stored procedure.
  * \author Chris Oldwood
  */

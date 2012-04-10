@@ -1,5 +1,5 @@
 /**
- * \file   AssertIntegerIsNull.ssunit.sql
+ * \file
  * \brief  The AssertIntegerIsNull stored procedure.
  * \author Chris Oldwood
  */

@@ -1,18 +1,18 @@
 /**
- * \file   FormatIntegerNullFailure.ssunit.sql
+ * \file
  * \brief  The FormatIntegerNullFailure user-defined function.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.FormatIntegerNullFailure') is not null)
-	drop function ssunit.FormatIntegerNullFailure;
+if (object_id('ssunit_impl.FormatIntegerNullFailure') is not null)
+	drop function ssunit_impl.FormatIntegerNullFailure;
 go
 
 /**
  * Formats the message for a failed integer comparison with NULL.
  */
 
-create function ssunit.FormatIntegerNullFailure
+create function ssunit_impl.FormatIntegerNullFailure
 (
 	@expected	int,	--!< The expected value.
 	@actual		int		--!< The actual value.
