@@ -1,5 +1,5 @@
 /**
- * \file   RunTests.ssunit.sql
+ * \file
  * \brief  The RunTests stored procedure.
  * \author Chris Oldwood
  */
@@ -27,22 +27,22 @@ as
 
 	-- Configure runner.
 	if (@schemaName is null)
-		select @schemaName = SchemaName from ssunit.Configuration c;
+		select @schemaName = SchemaName from ssunit_impl.Configuration c;
 
 	if (@displayWidth is null)
-		select @displayWidth = c.DisplayWidth from ssunit.Configuration c;
+		select @displayWidth = c.DisplayWidth from ssunit_impl.Configuration c;
 
 	if (@reportResults is null)
-		select @reportResults = c.ReportResults from ssunit.Configuration c;
+		select @reportResults = c.ReportResults from ssunit_impl.Configuration c;
 
 	if (@reportSummary is null)
-		select @reportSummary = c.ReportSummary from ssunit.Configuration c;
+		select @reportSummary = c.ReportSummary from ssunit_impl.Configuration c;
 
 	if (@isInteractive is null)
 		set @isInteractive = ssunit.IsInteractive();
 
 	-- Clear out any old results.
-	exec ssunit.TestResult_Clear;
+	exec ssunit_impl.TestResult_Clear;
 
 	declare @testSchemaId int;
 
@@ -53,7 +53,7 @@ as
 
 	-- Find all unit test stored procedures.
 	select	(@schemaName + '.' + p.name) as TestProcedure,
-			ssunit.GetFixtureName(p.name) as FixtureName
+			ssunit_impl.GetFixtureName(p.name) as FixtureName
 	into	#Tests
 	from	sys.procedures p
 	where	p.schema_id = @testSchemaId
@@ -61,15 +61,15 @@ as
 	order	by FixtureName;
 
 	-- Find all unit test fixtures.
-	select	ssunit.GetFixtureName(p.name) as FixtureName,
+	select	ssunit_impl.GetFixtureName(p.name) as FixtureName,
 			count(*) as TestCount
 	into	#Fixtures
 	from	sys.procedures p
 	where	p.schema_id = @testSchemaId
 	and		p.name like '[_]@Test@[_]%'
-	group	by ssunit.GetFixtureName(p.name)
+	group	by ssunit_impl.GetFixtureName(p.name)
 
-	declare @currentFixture ssunit.FixtureName = '[none]',
+	declare @currentFixture ssunit_impl.FixtureName = '[none]',
 			@fixtureTestCount int = 0,
 			@fixtureSetUpProcedure ssunit.ProcedureName,
 			@fixtureTearDownProcedure ssunit.ProcedureName,
@@ -87,7 +87,7 @@ as
 	while (1 = 1)
 	begin
 		declare @testProcedure ssunit.ProcedureName,
-				@fixtureName ssunit.FixtureName;
+				@fixtureName ssunit_impl.FixtureName;
 
 		fetch	next
 		from	TestCursor
@@ -129,37 +129,46 @@ as
 			and		p.name like @fixtureFilter
 			and		p.name like '[_]@TestTearDown@[_]%'
 
-			if (@fixtureSetUpProcedure is not null)
-				exec @fixtureSetUpProcedure;
-
 			set @currentFixture = @fixtureName;
 		end
 
 		-- Run the test.
-		exec ssunit.CurrentTest_SetTest @procedure = @testProcedure;
+		exec ssunit_impl.CurrentTest_SetTest @procedure = @testProcedure;
 
-		exec ssunit.RunTest	@procedure = @testProcedure,
-							@setUpProcedure = @testSetUpProcedure,
-							@tearDownProcedure = @testTearDownProcedure;
+		if (@fixtureSetUpProcedure is not null)
+		begin
+			exec ssunit_impl.RunFixtureSetUp @procedure = @fixtureSetUpProcedure;
+
+			set @fixtureSetUpProcedure = null;
+		end
+
+		exec ssunit_impl.RunTest @procedure = @testProcedure,
+								 @setUpProcedure = @testSetUpProcedure,
+								 @tearDownProcedure = @testTearDownProcedure;
 
 		-- Drop the unit test procedure.
 		exec('drop procedure ' + @testProcedure);
 
-		set @fixtureTestCount = @fixtureTestCount - 1;
+		if (@currentFixture is not null)
+		begin
+			set @fixtureTestCount = @fixtureTestCount - 1;
+		end
 
 		-- Cleanup fixture, if last test for fixture.
 		if (@fixtureTestCount = 0)
 		begin
-			if (@currentFixture is not null)
+			if (@fixtureTearDownProcedure is not null)
 			begin
-				if (@fixtureTearDownProcedure is not null)
-					exec @fixtureTearDownProcedure;
+				exec ssunit_impl.RunFixtureTearDown @procedure = @fixtureTearDownProcedure;
 
-				exec ssunit.TestFixture_Delete @schemaName, @currentFixture;
+				set @fixtureTearDownProcedure = null;
 			end
 
-			set @fixtureSetUpProcedure = null;
-			set @fixtureTearDownProcedure = null;
+			if (@currentFixture is not null)
+			begin
+				exec ssunit_impl.TestFixture_Delete @schemaName, @currentFixture;
+			end
+
 			set @testSetUpProcedure = null;
 			set @testTearDownProcedure = null;
 		end
@@ -169,13 +178,13 @@ as
 	deallocate TestCursor;
 
 	-- Remove any additional helper procedures.
-	exec ssunit.TestHelper_Delete @schemaName;
+	exec ssunit_impl.TestHelper_Delete @schemaName;
 
 	-- Any failures?
 	declare @failures int;
 	select	@failures = count(*)
-	from	ssunit.TestResult r
-	where	r.Outcome = ssunit.TestOutcome_Failed();
+	from	ssunit_impl.TestResult r
+	where	r.Outcome = ssunit_impl.TestOutcome_Failed();
 
 	-- Toggle outputs based on failure count.
 	if ( (@reportResults = ssunit.ReportCondition_OnFailure()) and (@failures != 0))
@@ -189,10 +198,10 @@ as
 	begin
 		if (@isInteractive = 1)
 		begin
-			select	ssunit.TestOutcome_ToString(r.Outcome)			as [Outcome],
-					ssunit.FormatResultTestName(r.TestProcedure)	as [Test Name],
-					isnull(r.FailureReason, '')						as [Failure Reason]
-			from	ssunit.TestResult r
+			select	ssunit_impl.TestOutcome_ToString(r.Outcome)			as [Outcome],
+					ssunit_impl.FormatResultTestName(r.TestProcedure)	as [Test Name],
+					isnull(r.FailureReason, '')							as [Failure Reason]
+			from	ssunit_impl.TestResult r
 			order	by r.TestOrder;
 		end
 		else
@@ -202,10 +211,10 @@ as
 			declare @reasonWidth    int = (@displayWidth - (@outcomeWidth + @procedureWidth));
 
 			declare @query varchar(max) =
-			  'select convert(varchar(' + convert(varchar, @outcomeWidth-1)   + '), ssunit.TestOutcome_ToString(r.Outcome))       as [Outcome], '
-			+ '       convert(varchar(' + convert(varchar, @procedureWidth-1) + '), ssunit.FormatResultTestName(r.TestProcedure)) as [Test Name], '
-			+ '       convert(varchar(' + convert(varchar, @reasonWidth-1)    + '), isnull(r.FailureReason, ''''))                as [Failure Reason] '
-			+ 'from   ssunit.TestResult r '
+			  'select convert(varchar(' + convert(varchar, @outcomeWidth-1)   + '), ssunit_impl.TestOutcome_ToString(r.Outcome))       as [Outcome], '
+			+ '       convert(varchar(' + convert(varchar, @procedureWidth-1) + '), ssunit_impl.FormatResultTestName(r.TestProcedure)) as [Test Name], '
+			+ '       convert(varchar(' + convert(varchar, @reasonWidth-1)    + '), isnull(r.FailureReason, ''''))                     as [Failure Reason] '
+			+ 'from   ssunit_impl.TestResult r '
 			+ 'order  by r.TestOrder; ';
 
 			exec(@query);
@@ -230,9 +239,9 @@ as
 				isnull([Unknown], 0) as [Unknown]
 		from
 		(
-				select	ssunit.TestOutcome_ToString(r.Outcome)	as [Outcome],
-						count(*)								as [Total]
-				from	ssunit.TestResult r
+				select	ssunit_impl.TestOutcome_ToString(r.Outcome)	as [Outcome],
+						count(*)									as [Total]
+				from	ssunit_impl.TestResult r
 				group	by r.Outcome
 		)
 		as SourceTable
