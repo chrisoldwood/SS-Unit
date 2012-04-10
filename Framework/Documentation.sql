@@ -30,20 +30,3 @@
  * using Doxygen and the sql2doxygen input filter.
  * See <a href="http://www.cix.co.uk/~gort">http://www.cix.co.uk/~gort</a>
  */
-
-/**
- * \namespace ssunit
- * \brief     The schema used for all SS-Unit objects.
- *
- * SS-Unit uses its own schema so that they will not conflict with your
- * application or your tests.
- */
-
-/**
- * \namespace test
- * \brief     The default schema for unit tests.
- *
- * SS-Unit assumes that all tests are part of a schema called 'test' by default.
- * You can put your tests in any schema but you will need to pass that schema
- * name to SS-Unit when running your tests so it can find them.
- */
