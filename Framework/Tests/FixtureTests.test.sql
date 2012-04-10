@@ -4,6 +4,9 @@
  * \author Chris Oldwood
  */
 
+exec ssunit.TestSchema_Clear;
+go
+
 create procedure test._@Test@_FixturelessTest_ShouldExecuteAnd_ShouldPass
 as
 	exec ssunit.AssertPass;
@@ -85,6 +88,26 @@ create procedure test._@Test@_TestShouldPassAndDeleteHelperProcedure
 as
 	exec test._@Helper@_HelperProcedure;
 
+	exec ssunit.AssertPass;
+go
+
+create procedure test._@FixtureSetUp@_$Fixture4$_FixtureSetUp
+as
+	raiserror('fixture set-up failure', 16, 1);
+go
+
+create procedure test._@Test@_$Fixture4$_TestShouldFail_WhenFixtureSetUpThrows
+as
+	exec ssunit.AssertPass;
+go
+
+create procedure test._@FixtureTearDown@_$Fixture5$_FixtureTearDown
+as
+	raiserror('fixture tear-down failure', 16, 1);
+go
+
+create procedure test._@Test@_$Fixture5$_TestShouldFail_WhenFixtureTearDownThrows
+as
 	exec ssunit.AssertPass;
 go
 
