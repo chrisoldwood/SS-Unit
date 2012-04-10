@@ -20,14 +20,14 @@ go
 create procedure test._@Test@_$Configuration$_SetSchemaNameDefault_ShouldSetValue
 as
 	declare @oldValue ssunit.SchemaName;
-	select	@oldValue = c.SchemaName from ssunit.Configuration c;
+	select	@oldValue = c.SchemaName from ssunit_impl.Configuration c;
 
 	declare @expected ssunit.SchemaName = 'unit test';
 
 	exec ssunit.Configuration_SetSchemaNameDefault @expected;
 
 	declare @actual ssunit.SchemaName;
-	select	@actual = c.SchemaName from ssunit.Configuration c;
+	select	@actual = c.SchemaName from ssunit_impl.Configuration c;
 	
 	exec ssunit.AssertStringEqualTo @expected, @actual;
 
@@ -67,14 +67,14 @@ go
 create procedure test._@Test@_$Configuration$_SetDisplayWidthDefault_ShouldSetValue
 as
 	declare @oldValue int;
-	select	@oldValue = c.DisplayWidth from ssunit.Configuration c;
+	select	@oldValue = c.DisplayWidth from ssunit_impl.Configuration c;
 
 	declare @expected int = 123456789;
 
 	exec ssunit.Configuration_SetDisplayWidthDefault @expected;
 
 	declare @actual int;
-	select	@actual = c.DisplayWidth from ssunit.Configuration c;
+	select	@actual = c.DisplayWidth from ssunit_impl.Configuration c;
 	
 	exec ssunit.AssertIntegerEqualTo @expected, @actual;
 
@@ -104,14 +104,14 @@ go
 create procedure test._@Test@_$Configuration$_SetReportResultsDefault_ShouldSetValue
 as
 	declare @oldValue ssunit.ReportCondition;
-	select	@oldValue = c.ReportResults from ssunit.Configuration c;
+	select	@oldValue = c.ReportResults from ssunit_impl.Configuration c;
 
 	declare @expected ssunit.ReportCondition = ssunit.ReportCondition_Never();
 
 	exec ssunit.Configuration_SetReportResultsDefault @expected;
 
 	declare @actual ssunit.ReportCondition;
-	select	@actual = c.ReportResults from ssunit.Configuration c;
+	select	@actual = c.ReportResults from ssunit_impl.Configuration c;
 	
 	exec ssunit.AssertIntegerEqualTo @expected, @actual;
 
@@ -141,14 +141,14 @@ go
 create procedure test._@Test@_$Configuration$_SetReportSummaryDefault_ShouldSetValue
 as
 	declare @oldValue ssunit.ReportCondition;
-	select	@oldValue = c.ReportSummary from ssunit.Configuration c;
+	select	@oldValue = c.ReportSummary from ssunit_impl.Configuration c;
 
 	declare @expected ssunit.ReportCondition = ssunit.ReportCondition_Never();
 
 	exec ssunit.Configuration_SetReportSummaryDefault @expected;
 
 	declare @actual ssunit.ReportCondition;
-	select	@actual = c.ReportSummary from ssunit.Configuration c;
+	select	@actual = c.ReportSummary from ssunit_impl.Configuration c;
 	
 	exec ssunit.AssertIntegerEqualTo @expected, @actual;
 
