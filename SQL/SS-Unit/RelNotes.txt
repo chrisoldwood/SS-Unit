@@ -1,3 +1,7 @@
+Version 1.0
+===========
+
+
 Version 0.9
 ===========
 
@@ -16,4 +20,4 @@ Version 0.5
 Chris Oldwood 
 [gort@cix.co.uk]
 
-10th November 2011
+10th April 2012
