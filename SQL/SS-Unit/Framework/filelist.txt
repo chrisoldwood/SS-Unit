@@ -1,36 +1,35 @@
-CreateSchema.ssunit.sql
+CreateSchemas.sql
 
-SchemaName.ssunit.sql
-ProcedureName.ssunit.sql
-FixtureName.ssunit.sql
-TestOutcome.ssunit.sql
-TextMessage.ssunit.sql
-TableName.ssunit.sql
+Types.ssunit_impl.sql
+TestOutcome.ssunit_impl.sql
 
-CurrentTest.ssunit.sql
-TestResult.ssunit.sql
+Types.ssunit.sql
+ReportCondition.ssunit.sql
 
-TestOutcome_Unknown.ssunit.sql
-TestOutcome_Passed.ssunit.sql
-TestOutcome_Failed.ssunit.sql
-TestOutcome_ToString.ssunit.sql
+CurrentTest.ssunit_impl.sql
+CurrentTest_SetTest.ssunit_impl.sql
+CurrentTest_TestName.ssunit_impl.sql
 
-CurrentTest_SetTest.ssunit.sql
-CurrentTest_TestName.ssunit.sql
-TestResult_TestOutcome.ssunit.sql
-TestResult_Clear.ssunit.sql
-TestResult_SetTestInconclusive.ssunit.sql
-TestResult_SetTestPassed.ssunit.sql
-TestResult_SetTestFailed.ssunit.sql
-TestResult_DeleteResult.ssunit.sql
+TestResult.ssunit_impl.sql
+TestResult_TestOutcome.ssunit_impl.sql
+TestResult_Clear.ssunit_impl.sql
+TestResult_SetTestInconclusive.ssunit_impl.sql
+TestResult_SetTestPassed.ssunit_impl.sql
+TestResult_SetTestFailed.ssunit_impl.sql
+TestResult_DeleteResult.ssunit_impl.sql
+
+FormatIntegerNullFailure.ssunit_impl.sql
+FormatIntegerCompareFailure.ssunit_impl.sql
+FormatStringNullFailure.ssunit_impl.sql
+FormatStringCompareFailure.ssunit_impl.sql
+FormatDateTimeNullFailure.ssunit_impl.sql
+FormatDateTimeCompareFailure.ssunit_impl.sql
 
 AssertPass.ssunit.sql
 AssertFail.ssunit.sql
 AssertThrew.ssunit.sql
 AssertNotImplemented.ssunit.sql
 
-FormatIntegerNullFailure.ssunit.sql
-FormatIntegerCompareFailure.ssunit.sql
 AssertIntegerEqualTo.ssunit.sql
 AssertIntegerNotEqualTo.ssunit.sql
 AssertIntegerIsNull.ssunit.sql
@@ -43,16 +42,12 @@ AssertIntegerBetween.ssunit.sql
 AssertTrue.ssunit.sql
 AssertFalse.ssunit.sql
 
-FormatStringNullFailure.ssunit.sql
-FormatStringCompareFailure.ssunit.sql
 AssertStringEqualTo.ssunit.sql
 AssertStringNotEqualTo.ssunit.sql
 AssertStringIsNull.ssunit.sql
 AssertStringLike.ssunit.sql
 AssertStringNotLike.ssunit.sql
 
-FormatDateTimeNullFailure.ssunit.sql
-FormatDateTimeCompareFailure.ssunit.sql
 AssertDateTimeEqualTo.ssunit.sql
 AssertDateTimeNotEqualTo.ssunit.sql
 AssertDateTimeIsNull.ssunit.sql
@@ -64,15 +59,18 @@ AssertDateTimeGreaterThanOrEqualTo.ssunit.sql
 AssertTableRowCountEqualTo.ssunit.sql
 AssertTableIsEmpty.ssunit.sql
 
-ReportCondition.ssunit.sql
-Configuration.ssunit.sql
+Configuration.ssunit_impl.sql
 Configuration_SetValues.ssunit.sql
 
-TestSchema_Clear.ssunit.sql
-GetFixtureName.ssunit.sql
-TestFixture_Delete.ssunit.sql
-TestHelper_Delete.ssunit.sql
+GetFixtureName.ssunit_impl.sql
+FormatResultTestName.ssunit_impl.sql
 IsInteractive.ssunit.sql
-FormatResultTestName.ssunit.sql
-RunTest.ssunit.sql
+
+TestFixture_Delete.ssunit_impl.sql
+TestHelper_Delete.ssunit_impl.sql
+RunFixtureSetUp.ssunit_impl.sql
+RunFixtureTearDown.ssunit_impl.sql
+RunTest.ssunit_impl.sql
+
+TestSchema_Clear.ssunit.sql
 RunTests.ssunit.sql
