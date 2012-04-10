@@ -1,18 +1,18 @@
 /**
- * \file   TestHelper_Delete.ssunit.sql.ssunit.sql
+ * \file
  * \brief  The TestHelper_Delete stored procedure.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.TestHelper_Delete') is not null)
-	drop procedure ssunit.TestHelper_Delete;
+if (object_id('ssunit_impl.TestHelper_Delete') is not null)
+	drop procedure ssunit_impl.TestHelper_Delete;
 go
 
 /**
  * Deletes the test helper procedures.
  */
 
-create procedure ssunit.TestHelper_Delete
+create procedure ssunit_impl.TestHelper_Delete
 (
 	@schemaName		ssunit.SchemaName		--!< The schema used for the tests.
 )

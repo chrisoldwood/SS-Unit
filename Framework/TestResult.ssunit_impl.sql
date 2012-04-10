@@ -1,24 +1,24 @@
 /**
- * \file   TestResult.ssunit.sql
+ * \file
  * \brief  The TestResult table.
  * \author Chris Oldwood
  */
 
-if (object_id('ssunit.TestResult') is not null)
-	drop table ssunit.TestResult;
+if (object_id('ssunit_impl.TestResult') is not null)
+	drop table ssunit_impl.TestResult;
 go
 
 /**
  * The table that stores the results of each unit test that is run.
  */
 
-create table ssunit.TestResult
+create table ssunit_impl.TestResult
 (
 	--! The test stored procedure.
 	TestProcedure ssunit.ProcedureName not null primary key clustered,
 
 	--! The test outcome.
-	Outcome ssunit.TestOutcome not null,	
+	Outcome ssunit_impl.TestOutcome not null,	
 
 	--! The reason the test failed.
 	FailureReason ssunit.TextMessage null,	
