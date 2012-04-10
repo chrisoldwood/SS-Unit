@@ -1,4 +1,4 @@
-SS-Unit v0.9
+SS-Unit v1.0
 ============
 
 
@@ -6,7 +6,7 @@ SS-Unit v0.9
 ---------------
 
 None required, this archive contains only source files. You do need to have
-SQLCMD on your path to run the framework tests suite and examples.
+SQLCMD on your path to run the framework test suite and examples.
 
 
 2: Help/Manual
@@ -24,4 +24,4 @@ Web:   http://www.cix.co.uk/~gort
 
 Chris Oldwood 
 
-10th November 2011
+10th April 2012
