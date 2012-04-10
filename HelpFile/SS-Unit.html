@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>SS-Unit v0.9 Manual</title>
+<title>SS-Unit v1.0 Manual</title>
 <meta name="author" content="Chris Oldwood">
 <style>
 <!--
@@ -14,7 +14,7 @@ td		{ font-family: Verdana, Arial; font-size: 10pt; border: 1px solid black; ver
 
 <body>
 
-<h3 align="center">SS-Unit v0.9</h3>
+<h3 align="center">SS-Unit v1.0</h3>
 
 <a name="Introduction"></a>
 <h4>Introduction</h4>
@@ -205,6 +205,9 @@ objects live in a separate schema called <code>ssunit</code>. This gives it all
 the benefits of namespaces to avoid name clashes with your test or production
 code. The test runner assumes that all tests live in a schema called <code>test</code>
 but that can be overridden as explained later.
+</p><p>
+<i>NB: The schema <code>ssunit_impl</code> is used for the implementation of SS-Unit
+and so there should be no need to access its objects from tests.</i>
 </p>
 
 <a name="Asserts"></a>
@@ -342,7 +345,7 @@ vague, e.g.
     -- Matches specific constraint violation through constraint name
     exec ssunit.AssertThrew '%MyTable_FK_MyColumn%', 'test._@Helper@_My_Procedure_That_Throws';
 </pre><p>
-The <code>_@Helper@_</code> attribute is used to indicate a helper procedure
+The <code>_@Helper@_</code> attribute is used to indicate a <a href="#Helpers">helper procedure</a>
 that should also be deleted once the tests have run. If the attribute is not
 applied then it must be handled either with the <code>TestSchema_Clear</code>
 utility procedure or manually with a traditional <code>drop procedure</code>
@@ -417,6 +420,37 @@ There is no restriction on the number of fixtures and tests that you can define
 in a single script. If you prefer you can run all the test creation scripts in
 one phase and then execute <code>ssunit.RunTests</code> right at the end in one
 go.
+</p>
+
+<a name="Helpers"></a>
+<h5>General Helper Procedures</h5>
+
+<p>
+The SetUp and TearDown helper procedures are specific instances of procedures
+that are used to keep the test code readable by factoring out common code that
+is invoked before and/or after the tests are run. Sometimes you have code that
+is only common to a subset of the tests but you still want to factor it out, or
+as explained earlier, you are writing the helper used to test that an error is
+correctly raised. In these instances you can adorn the procedure with the
+<code>_@Helper@_</code> attribute:-
+</p><pre>
+create procedure test._@Helper@_Do_common_action
+as
+    -- Do something common such as inserting a piece of data
+go
+
+create procedure test._@Test@_Something_ShouldHappen_WhenAnotherThingOccurs
+as
+    -- Use helper in the arangement phase
+    exec test._@Helper@_Do_common_action;
+
+    -- Act
+
+    -- Assert
+go
+</pre><p>
+Test procedures are dropped right after execution whereas helper procedures are
+only dropped at the end of the test run so they can be used multiple times.
 </p>
 
 <a name="TestRunner"></a>
@@ -583,6 +617,61 @@ declare @displayWidth int = case when (isnumeric('$(DisplayWidth)') = 0)
 exec ssunit.RunTests @displayWidth = @displayWidth;
 </pre>
 
+<a name="CrossTalk"></a>
+<h5>Avoiding Cross-Talk</h5>
+
+<p>
+One of the problems with database unit testing is the stateful nature of the
+database. In an ideal world you could build the database before each test
+is run to minimise the problems of one test interfering with another, such as
+when you forget to clean-up a temporary results table or adorn a helper procedure
+with <code>_@Helper@_</code>.
+</p><p>
+Sadly performance problems make this idea unworkable in all but the most trivial
+cases and so it is preferable to build the database once and try and avoid them
+by remembering to clean-up correctly in the TearDown procedures. Given the
+distinct lack of data when unit testing it is feasible to write a permanent
+helper procedure that just deletes from <i>every</i> table as part of the
+fixture TearDown; you could also call it as part of the fixture SetUp for a
+belt-and-braces approach.
+</p><p>
+To aid with the schema side of the problem SS-Unit provides a procedure that
+you can use to "wipe the schema clean" before running any new tests - 
+<code>ssunit.TestSchema_Clear</code>. This procedure will drop all objects in
+the specified schema (or 'test' by default) so that you won't have any errors
+caused by attempting to create duplicate objects.
+</p><p>
+Putting all these ideas together means that a boiler-plate test script might look
+like the following:-
+</p><pre>
+exec ssunit.TestSchema_Clear;
+go
+
+create procedure test._@FixtureSetUp@_$MyFixture$_
+as
+    exec my_test_helpers.ClearAllTables;
+go
+
+create procedure test._@FixtureTearDown@_$MyFixture$_
+as
+    exec my_test_helpers.ClearAllTables;
+go
+
+--
+-- Tests go here...
+--
+
+exec ssunit.RunTests;
+</pre><p>
+Once you get more familar with the kinds of SQL error messages you see whilst
+writing unit tests with SS-Unit you may decide to forgo the pessimistic prologue
+and just stick to the actual tests and invoking <code>ssunit.RunTests</code>.
+</p><p>
+<i>NB: The reason the test runner doesn't use nested transactions to avoid the
+data problem is to ensure that the production code runs as much as possible as
+it would in the real world.</i>
+</p>
+
 <hr>
 
 <a name="Warranty"></a>
@@ -602,7 +691,7 @@ Email: <a href="mailto://gort@cix.co.uk">gort@cix.co.uk</a><br>
 Web: <a href="http://www.cix.co.uk/~gort">www.cix.co.uk/~gort</a><br>
 </p><p>
 Chris Oldwood<br>
-10th November 2011<br>
+10th April 2012<br>
 </p>
 
 </body>
