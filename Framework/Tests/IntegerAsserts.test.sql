@@ -1,5 +1,5 @@
 /**
- * \file   IntegerAsserts.test.sql
+ * \file
  * \brief  Unit tests for the AssertInteger* functions.
  * \author Chris Oldwood
  */

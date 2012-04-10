@@ -1,5 +1,5 @@
 /**
- * \file   TableAsserts.test.sql
+ * \file
  * \brief  Unit tests for the table assert procedures.
  * \author Chris Oldwood
  */

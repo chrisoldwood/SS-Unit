@@ -1,5 +1,5 @@
 /**
- * \file   Output.test.sql
+ * \file
  * \brief  Non-automated unit tests for checking the test runner output options.
  * \author Chris Oldwood
  * \note   These tests should be run manaully with a text mode client.

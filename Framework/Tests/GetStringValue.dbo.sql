@@ -1,5 +1,5 @@
 /**
- * \file   GetStringValue.dbo.sql
+ * \file
  * \brief  The GetStringValue user-defined function.
  * \author Chris Oldwood
  */
