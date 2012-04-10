@@ -1,5 +1,5 @@
 /**
- * \file   CreateDatabase.test.sql
+ * \file
  * \brief  Creates the database for the unit tests.
  * \author Chris Oldwood
  */

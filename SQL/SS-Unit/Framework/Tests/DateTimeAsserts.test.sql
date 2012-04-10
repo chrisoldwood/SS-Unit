@@ -1,5 +1,5 @@
 /**
- * \file   DateTimeAsserts.test.sql
+ * \file
  * \brief  Unit tests for the AssertDateTime* functions.
  * \author Chris Oldwood
  */

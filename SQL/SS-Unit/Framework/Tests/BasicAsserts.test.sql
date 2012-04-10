@@ -1,5 +1,5 @@
 /**
- * \file   BasicAsserts.test.sql
+ * \file
  * \brief  Unit tests for the fundamental assert procedures.
  * \author Chris Oldwood
  */

@@ -1,5 +1,5 @@
 /**
- * \file   GetDateTimeValue.dbo.sql
+ * \file
  * \brief  The GetDateTimeValue user-defined function.
  * \author Chris Oldwood
  */

@@ -1,5 +1,5 @@
 /**
- * \file   CreateSchema.test.sql
+ * \file
  * \brief  Creates the schemas for the unit tests.
  * \author Chris Oldwood
  */

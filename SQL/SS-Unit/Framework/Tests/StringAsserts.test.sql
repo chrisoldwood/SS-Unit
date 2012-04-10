@@ -1,5 +1,5 @@
 /**
- * \file   StringAsserts.test.sql
+ * \file
  * \brief  Unit tests for the AssertString* functions.
  * \author Chris Oldwood
  */

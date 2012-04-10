@@ -1,5 +1,5 @@
 /**
- * \file   GetIntegerValue.dbo.sql
+ * \file
  * \brief  The GetIntegerValue user-defined function.
  * \author Chris Oldwood
  */
