@@ -1,12 +1,21 @@
 Version 1.0
 ===========
 
+- Added various new AssertXxx procedures.
+- Added support for globally configuring the test runner.
+- Removed fixture name from test results to help readability.
+- Added procedure to clear out all objects from the test schema.
+- Added support for only listing detailed results when a test fails.
+- Added _@Helper@_ attribute to denote helper procedures (AssertThrew now relies on this).
+- Added handling of fixture set-up/tear-down errors.
+- Split SQL code into separate public and private schemas.
+
 
 Version 0.9
 ===========
 
 - Added support for per-test and per-fixture SetUp & TearDown procedures.
-- Added more assert procedures (less than, greater than, like etc.)
+- Added more assert procedures (less than, greater than, like etc.).
 - Added ability to run tests defined in schemas other than 'test'.
 - Added support for overriding the output width in batch mode.
 
