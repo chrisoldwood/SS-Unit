@@ -1,1 +1,3 @@
 - Document the TableXxx asserts
+
+- Fix AssertTableRowCountEqualTo.ssunit.sql with "and p.index_id in (0, 1)"
