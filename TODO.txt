@@ -1,3 +1,9 @@
 - Document the TableXxx asserts
 
 - Fix AssertTableRowCountEqualTo.ssunit.sql with "and p.index_id in (0, 1)"
+
+- Add option to invoke teardown before setup
+
+- Consider reporting a TearDown failure before an assert failure
+
+- Add a result set comparison assert
