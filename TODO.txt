@@ -7,3 +7,5 @@
 - Consider reporting a TearDown failure before an assert failure
 
 - Add a result set comparison assert
+
+- Allow the _@Test@_ attributes to appear anywhere (so the test name leads)
