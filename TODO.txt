@@ -19,3 +19,5 @@
 - Asserts - Date only
 
 - Asserts - DateTime needs a tolerance (minutes?) or DateTimeBetween
+
+- AssertThrowsAnyError overload
