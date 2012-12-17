@@ -4,6 +4,7 @@ Types.ssunit_impl.sql
 TestOutcome.ssunit_impl.sql
 
 Types.ssunit.sql
+Bool.ssunit.sql
 ReportCondition.ssunit.sql
 
 CurrentTest.ssunit_impl.sql
@@ -24,15 +25,21 @@ FormatStringNullFailure.ssunit_impl.sql
 FormatStringCompareFailure.ssunit_impl.sql
 FormatDateTimeNullFailure.ssunit_impl.sql
 FormatDateTimeCompareFailure.ssunit_impl.sql
+FormatDateNullFailure.ssunit_impl.sql
+FormatDateCompareFailure.ssunit_impl.sql
+FormatRealNullFailure.ssunit_impl.sql
+FormatRealCompareFailure.ssunit_impl.sql
 
 AssertPass.ssunit.sql
 AssertFail.ssunit.sql
 AssertThrew.ssunit.sql
+AssertThrewAnyError.ssunit.sql
 AssertNotImplemented.ssunit.sql
 
 AssertIntegerEqualTo.ssunit.sql
 AssertIntegerNotEqualTo.ssunit.sql
 AssertIntegerIsNull.ssunit.sql
+AssertIntegerIsNotNull.ssunit.sql
 AssertIntegerLessThan.ssunit.sql
 AssertIntegerLessThanOrEqualTo.ssunit.sql
 AssertIntegerGreaterThan.ssunit.sql
@@ -45,19 +52,41 @@ AssertFalse.ssunit.sql
 AssertStringEqualTo.ssunit.sql
 AssertStringNotEqualTo.ssunit.sql
 AssertStringIsNull.ssunit.sql
+AssertStringIsNotNull.ssunit.sql
 AssertStringLike.ssunit.sql
 AssertStringNotLike.ssunit.sql
 
 AssertDateTimeEqualTo.ssunit.sql
 AssertDateTimeNotEqualTo.ssunit.sql
 AssertDateTimeIsNull.ssunit.sql
+AssertDateTimeIsNotNull.ssunit.sql
 AssertDateTimeLessThan.ssunit.sql
 AssertDateTimeLessThanOrEqualTo.ssunit.sql
 AssertDateTimeGreaterThan.ssunit.sql
 AssertDateTimeGreaterThanOrEqualTo.ssunit.sql
 
+AssertDateEqualTo.ssunit.sql
+AssertDateNotEqualTo.ssunit.sql
+AssertDateIsNull.ssunit.sql
+AssertDateIsNotNull.ssunit.sql
+AssertDateLessThan.ssunit.sql
+AssertDateLessThanOrEqualTo.ssunit.sql
+AssertDateGreaterThan.ssunit.sql
+AssertDateGreaterThanOrEqualTo.ssunit.sql
+
+AssertRealEqualTo.ssunit.sql
+AssertRealNotEqualTo.ssunit.sql
+AssertRealIsNull.ssunit.sql
+AssertRealIsNotNull.ssunit.sql
+AssertRealLessThan.ssunit.sql
+AssertRealLessThanOrEqualTo.ssunit.sql
+AssertRealGreaterThan.ssunit.sql
+AssertRealGreaterThanOrEqualTo.ssunit.sql
+AssertRealBetween.ssunit.sql
+
 AssertTableRowCountEqualTo.ssunit.sql
 AssertTableIsEmpty.ssunit.sql
+AssertTableEqualTo.ssunit.sql
 
 Configuration.ssunit_impl.sql
 Configuration_SetValues.ssunit.sql
@@ -70,6 +99,8 @@ TestFixture_Delete.ssunit_impl.sql
 TestHelper_Delete.ssunit_impl.sql
 RunFixtureSetUp.ssunit_impl.sql
 RunFixtureTearDown.ssunit_impl.sql
+RunTestSetUp.ssunit_impl.sql
+RunTestTearDown.ssunit_impl.sql
 RunTest.ssunit_impl.sql
 
 TestSchema_Clear.ssunit.sql
