@@ -36,6 +36,37 @@ as
 	exec ssunit.AssertDateTimeEqualTo '2001-01-01 01:01:01.010', @actual;
 go
 
+create procedure test._@Test@_AssertDateTimeEqualTo_ShouldPass_WhenValueWithinTolerance
+as
+	declare @tolerance int = 1000;
+
+	declare @actual datetime;
+	set		@actual = dbo.GetDateTimeValue();
+
+	exec ssunit.AssertDateTimeEqualTo '2001-01-01 01:01:02.010', @actual, @tolerance;
+	exec ssunit.AssertDateTimeEqualTo '2001-01-01 01:01:00.010', @actual, @tolerance;
+go
+
+create procedure test._@Test@_AssertDateTimeEqualTo_ShouldFail_WhenValueOutsideTolerance
+as
+	declare @tolerance int = 1000;
+
+	declare @actual datetime;
+	set		@actual = dbo.GetDateTimeValue();
+
+	exec ssunit.AssertDateTimeEqualTo '2001-01-01 03:03:03.000', @actual, @tolerance;
+go
+
+create procedure test._@Test@_AssertDateTimeEqualTo_ShouldFail_WhenToleranceIsNegative
+as
+	declare @tolerance int = -1000;
+
+	declare @actual datetime;
+	set		@actual = dbo.GetDateTimeValue();
+
+	exec ssunit.AssertDateTimeEqualTo '2001-01-01 01:01:02.010', @actual, @tolerance;
+go
+
 create procedure test._@Test@_AssertDateTimeNotEqualTo_ShouldPass_WhenValuesDiffer
 as
 	declare @actual datetime;
@@ -82,6 +113,22 @@ as
 	set		@actual = '2001-01-01 01:01:01.010';
 
 	exec ssunit.AssertDateTimeIsNull @actual;
+go
+
+create procedure test._@Test@_AssertDateTimeIsNotNull_ShouldFail_WhenValueIsNull
+as
+	declare @actual datetime;
+	set		@actual = null;
+
+	exec ssunit.AssertDateTimeIsNotNull @actual;
+go
+
+create procedure test._@Test@_AssertDateTimeIsNotNull_ShouldPass_WhenValueIsNotNull
+as
+	declare @actual datetime;
+	set		@actual = '2001-01-01 01:01:01.010';
+
+	exec ssunit.AssertDateTimeIsNotNull @actual;
 go
 
 create procedure test._@Test@_AssertDateTimeLessThan_ShouldPass_WhenValueLessThan
