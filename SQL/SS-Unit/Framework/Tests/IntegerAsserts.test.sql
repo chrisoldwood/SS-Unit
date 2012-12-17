@@ -84,6 +84,22 @@ as
 	exec ssunit.AssertIntegerIsNull @actual;
 go
 
+create procedure test._@Test@_AssertIntegerIsNotNull_ShouldFail_WhenValueIsNull
+as
+	declare @actual int;
+	set		@actual = null;
+
+	exec ssunit.AssertIntegerIsNotNull @actual;
+go
+
+create procedure test._@Test@_AssertIntegerIsNotNull_ShouldPass_WhenValueIsNotNull
+as
+	declare @actual int;
+	set		@actual = 42;
+
+	exec ssunit.AssertIntegerIsNotNull @actual;
+go
+
 create procedure test._@Test@_AssertIntegerLessThan_ShouldPass_WhenValueLessThan
 as
 	declare @actual int;

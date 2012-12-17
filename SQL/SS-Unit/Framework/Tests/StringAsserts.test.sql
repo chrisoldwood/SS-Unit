@@ -84,6 +84,22 @@ as
 	exec ssunit.AssertStringIsNull @actual;
 go
 
+create procedure test._@Test@_AssertStringIsNotNull_ShouldFail_WhenValueIsNull
+as
+	declare @actual varchar(max);
+	set		@actual = null;
+
+	exec ssunit.AssertStringIsNotNull @actual;
+go
+
+create procedure test._@Test@_AssertStringIsNotNull_ShouldPass_WhenValueIsNotNull
+as
+	declare @actual varchar(max);
+	set		@actual = '42';
+
+	exec ssunit.AssertStringIsNotNull @actual;
+go
+
 create procedure test._@Test@_AssertStringLike_ShouldPass_WhenValueMatchesRegex
 as
 	declare @actual varchar(max) = 'unit test';
