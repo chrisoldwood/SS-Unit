@@ -42,36 +42,6 @@ as
 	exec ssunit.AssertFail '2nd failure reported';
 go
 
-create procedure test._@Helper@_RaiseAnError
-as
-	raiserror('test error', 16, 1);
-go
-
-create procedure test._@Test@_AssertThrew_ShouldPassTheTest_WhenErrorRaised
-as
-	exec ssunit.AssertThrew 'test error', 'test._@Helper@_RaiseAnError'
-go
-
-create procedure test._@Helper@_DontRaiseAnError
-as
-	-- Do nothing.
-go
-
-create procedure test._@Test@_AssertThrew_ShouldFailTheTest_WhenNoErrorRaised
-as
-	exec ssunit.AssertThrew 'test error', 'test._@Helper@_DontRaiseAnError'
-go
-
-create procedure test._@Helper@_RaiseDifferentError
-as
-	raiserror('different error', 16, 1);
-go
-
-create procedure test._@Test@_AssertThrew_ShouldFailTheTest_WhenDifferentErrorRaised
-as
-	exec ssunit.AssertThrew 'test error', 'test._@Helper@_RaiseDifferentError'
-go
-
 create procedure test._@Test@_AssertTrue_ShouldPass_WhenValueIsTrue
 as
 	declare @actual bit;
