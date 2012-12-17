@@ -27,6 +27,9 @@ create table ssunit_impl.Configuration
 
 	--! Return the test result summary?
 	ReportSummary	ssunit.ReportCondition	not null,
+
+	--! Run the tear-downs before the fixture set-up?
+	TearDownFirst	ssunit.Bool				not null,
 );
 go
 
@@ -35,5 +38,5 @@ set nocount on;
 declare @always ssunit.ReportCondition = ssunit.ReportCondition_Always();
 
 insert into ssunit_impl.Configuration
-	  (SchemaName, DisplayWidth, ReportResults, ReportSummary)
-select 'test',     80,           @always,       @always
+	  (SchemaName, DisplayWidth, ReportResults, ReportSummary, TearDownFirst)
+select 'test',     80,           @always,       @always,       ssunit.False()

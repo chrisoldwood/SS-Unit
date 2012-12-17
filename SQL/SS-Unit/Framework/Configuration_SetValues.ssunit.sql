@@ -20,6 +20,10 @@ if (object_id('ssunit.Configuration_SetReportSummaryDefault') is not null)
 	drop procedure ssunit.Configuration_SetReportSummaryDefault;
 go
 
+if (object_id('ssunit.Configuration_SetTearDownFirstDefault') is not null)
+	drop procedure ssunit.Configuration_SetTearDownFirstDefault;
+go
+
 /**
  * Sets the default schema name used for the tests.
  */
@@ -165,6 +169,42 @@ as
 	
 		update	ssunit_impl.Configuration
 		set		ReportSummary = @value;
+
+	end try
+	begin catch
+
+		if (@@trancount != 0)
+			rollback transaction;
+
+		set @error = 'Failed to set configuration value - '
+				   + error_message();
+		
+		raiserror(@error, 16, 1);
+
+	end catch
+go
+
+/**
+ * Sets the default for whether to invoke the tear-down procedures before
+ * invoking the set-up ones.
+ */
+
+create procedure ssunit.Configuration_SetTearDownFirstDefault
+(
+	@value	ssunit.Bool		--!< The configuration value.
+)
+as
+	set nocount on;
+
+	declare @error varchar(max);
+
+	begin try
+
+		if (@value is null)
+			raiserror('Invalid configuration value: (null)', 16, 1);
+	
+		update	ssunit_impl.Configuration
+		set		TearDownFirst = @value;
 
 	end try
 	begin catch
