@@ -1,4 +1,6 @@
+TypeTests.test.sql
 BasicAsserts.test.sql
+ThrowAsserts.test.sql
 IntegerAsserts.test.sql
 StringAsserts.test.sql
 DateTimeAsserts.test.sql
@@ -8,3 +10,5 @@ FixtureTests.test.sql
 TableAsserts.test.sql
 ReportCondition.test.sql
 Configuration.test.sql
+DateAsserts.test.sql
+RealAsserts.test.sql
