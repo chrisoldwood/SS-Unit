@@ -155,4 +155,31 @@ as
 	exec ssunit.Configuration_SetReportSummaryDefault @oldValue;
 go
 
+create procedure test._@Helper@_SetTearDownFirstDefaultToNull
+as
+	exec ssunit.Configuration_SetTearDownFirstDefault null;
+go
+
+create procedure test._@Test@_$Configuration$_SetTearDownFirstDefault_ShouldThrow_WhenValueIsNull
+as
+	exec ssunit.AssertThrew '%Invalid configuration value%', 'test._@Helper@_SetTearDownFirstDefaultToNull';
+go
+
+create procedure test._@Test@_$Configuration$_SetTearDownFirstDefault_ShouldSetValue
+as
+	declare @oldValue ssunit.Bool;
+	select	@oldValue = c.TearDownFirst from ssunit_impl.Configuration c;
+
+	declare @expected ssunit.Bool = ssunit.False();
+
+	exec ssunit.Configuration_SetTearDownFirstDefault @expected;
+
+	declare @actual ssunit.Bool;
+	select	@actual = c.TearDownFirst from ssunit_impl.Configuration c;
+	
+	exec ssunit.AssertIntegerEqualTo @expected, @actual;
+
+	exec ssunit.Configuration_SetTearDownFirstDefault @oldValue;
+go
+
 exec ssunit.RunTests;
