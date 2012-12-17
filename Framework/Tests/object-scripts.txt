@@ -2,3 +2,4 @@ GetIntegerValue.dbo.sql
 GetStringValue.dbo.sql
 GetDateTimeValue.dbo.sql
 CreateSchemas.test.sql
+GetDateValue.dbo.sql
