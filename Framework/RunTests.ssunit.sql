@@ -20,7 +20,9 @@ create procedure ssunit.RunTests
 	@displayWidth	int = null,							--!< The width of the console in batch mode.
 	@reportResults	ssunit.ReportCondition = null,		--!< Return the per-test results?
 	@reportSummary	ssunit.ReportCondition = null,		--!< Return the test result summary?
-	@isInteractive	bit = null							--!< Override the output mode.
+	@isInteractive	bit = null,							--!< Override the output mode.
+	@testNameFilter	ssunit.ProcedureName = null,		--!< The full or partial name of a test to run.
+	@tearDownFirst	ssunit.Bool = null					--!< Run the tear-downs before fixture set-up?
 )
 as
 	set nocount on;
@@ -41,6 +43,9 @@ as
 	if (@isInteractive is null)
 		set @isInteractive = ssunit.IsInteractive();
 
+	if (@tearDownFirst is null)
+		select @tearDownFirst = c.TearDownFirst from ssunit_impl.Configuration c;
+
 	-- Clear out any old results.
 	exec ssunit_impl.TestResult_Clear;
 
@@ -57,7 +62,7 @@ as
 	into	#Tests
 	from	sys.procedures p
 	where	p.schema_id = @testSchemaId
-	and		p.name like '[_]@Test@[_]%'
+	and		p.name like '%[_]@Test@[_]%'
 	order	by FixtureName;
 
 	-- Find all unit test fixtures.
@@ -66,7 +71,7 @@ as
 	into	#Fixtures
 	from	sys.procedures p
 	where	p.schema_id = @testSchemaId
-	and		p.name like '[_]@Test@[_]%'
+	and		p.name like '%[_]@Test@[_]%'
 	group	by ssunit_impl.GetFixtureName(p.name)
 
 	declare @currentFixture ssunit_impl.FixtureName = '[none]',
@@ -105,35 +110,66 @@ as
 
 			declare @fixtureFilter ssunit.ProcedureName = '%[_]$' + @fixtureName + '$[_]%';
 
+			if (exists(	select	1
+						from	sys.procedures p
+						where	p.schema_id = @testSchemaId
+						and		p.name like '%[_]$Fixture1$[_]%'
+						and
+						(
+								p.name like '%[_]@FixtureSetUp@[_]%'
+							or	p.name like '%[_]@FixtureTearDown@[_]%'
+							or	p.name like '%[_]@TestSetUp@[_]%'
+							or	p.name like '%[_]@TestTearDown@[_]%'
+						)
+						group	by substring(p.name, charindex('_@', p.name)+2, charindex('@_', p.name)-(charindex('_@', p.name)+2))
+						having	count(*) > 1
+				))
+			begin
+				raiserror('Duplicate Fixture/Test SetUp/TearDown procedure defined', 16, 1);
+			end
+
 			select	@fixtureSetUpProcedure = (@schemaName + '.' + p.name)
 			from	sys.procedures p
 			where	p.schema_id = @testSchemaId
 			and		p.name like @fixtureFilter
-			and		p.name like '[_]@FixtureSetUp@[_]%'
+			and		p.name like '%[_]@FixtureSetUp@[_]%'
 
 			select	@fixtureTearDownProcedure = (@schemaName + '.' + p.name)
 			from	sys.procedures p
 			where	p.schema_id = @testSchemaId
 			and		p.name like @fixtureFilter
-			and		p.name like '[_]@FixtureTearDown@[_]%'
+			and		p.name like '%[_]@FixtureTearDown@[_]%'
 
 			select	@testSetUpProcedure = (@schemaName + '.' + p.name)
 			from	sys.procedures p
 			where	p.schema_id = @testSchemaId
 			and		p.name like @fixtureFilter
-			and		p.name like '[_]@TestSetUp@[_]%'
+			and		p.name like '%[_]@TestSetUp@[_]%'
 
 			select	@testTearDownProcedure = (@schemaName + '.' + p.name)
 			from	sys.procedures p
 			where	p.schema_id = @testSchemaId
 			and		p.name like @fixtureFilter
-			and		p.name like '[_]@TestTearDown@[_]%'
+			and		p.name like '%[_]@TestTearDown@[_]%'
 
 			set @currentFixture = @fixtureName;
 		end
 
-		-- Run the test.
 		exec ssunit_impl.CurrentTest_SetTest @procedure = @testProcedure;
+
+		-- Set-up the test fixture
+		if (@tearDownFirst = ssunit.True())
+		begin
+			if (@testTearDownProcedure is not null)
+			begin
+				exec ssunit_impl.RunTestTearDown @procedure = @testTearDownProcedure;
+			end
+
+			if (@fixtureTearDownProcedure is not null)
+			begin
+				exec ssunit_impl.RunFixtureTearDown @procedure = @fixtureTearDownProcedure;
+			end
+		end
 
 		if (@fixtureSetUpProcedure is not null)
 		begin
@@ -142,9 +178,13 @@ as
 			set @fixtureSetUpProcedure = null;
 		end
 
-		exec ssunit_impl.RunTest @procedure = @testProcedure,
-								 @setUpProcedure = @testSetUpProcedure,
-								 @tearDownProcedure = @testTearDownProcedure;
+		-- Run the test.
+		if ( (@testNameFilter is null) or (@testProcedure like @testNameFilter) )
+		begin
+			exec ssunit_impl.RunTest @procedure = @testProcedure,
+									 @setUpProcedure = @testSetUpProcedure,
+									 @tearDownProcedure = @testTearDownProcedure;
+		end
 
 		-- Drop the unit test procedure.
 		exec('drop procedure ' + @testProcedure);
