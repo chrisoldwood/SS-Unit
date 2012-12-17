@@ -215,10 +215,10 @@ and so there should be no need to access its objects from tests.</i>
 
 <p>
 Due to the limitations of T-SQL not supporting overloading based on type the
-assert names have to encode the type instead. So far only a basic set of assert
-procedures have been written for the core types - integers, strings and datetimes.
-Given that SQL Server will do most convert type conversions automatically you
-can still get a lot done with just these few:-
+assert names have to encode the type instead. The set of assert procedures have
+been written only for the main types - integer (int), string (varchar), datetime,
+date and real. Given that SQL Server will do most type conversions automatically
+you should still be able to achieve most of your testing with just this subset.
 </p>
 <table id="asserts">
 <tr>
@@ -230,7 +230,7 @@ can still get a lot done with just these few:-
 <td>Denotes the test as having conclusively passed</td>
 </tr>
 <tr>
-<td>AssertFail</td>
+<td>AssertFail @reason</td>
 <td>Denotes the test as having conclusively failed</td>
 </tr>
 <tr>
@@ -238,56 +238,72 @@ can still get a lot done with just these few:-
 <td>Fails the test with a reason of "Not implemented"</td>
 </tr>
 <tr>
-<td>AssertTrue</td>
+<td>AssertTrue @actual</td>
 <td>Compares the resultant value to 1 (i.e. true)</td>
 </tr>
 <tr>
-<td>AssertFalse</td>
+<td>AssertFalse @actual</td>
 <td>Compares the resultant value to 0 (i.e. false)</td>
 </tr>
 <tr>
-<td>AssertThrew</td>
+<td>AssertThrew @error, @procedure</td>
 <td>Executes a helper procedure which performs the test and should result in an error being thrown</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>EqualTo</td>
-<td>Compares the resultant Xxx value to another for equivalence</td>
+<td>AssertThrewAnyError @procedure</td>
+<td>Shorthand for <code>AssertThrew '%'</code></td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>NotEqualTo</td>
+<td>Assert<i>Xxx</i>EqualTo @expected, @actual [, @tolerance]</td>
+<td>Compares the resultant Xxx value to another for equivalence (with optional tolerance)</td>
+</tr>
+<tr>
+<td>Assert<i>Xxx</i>NotEqualTo @expected, @actual</td>
 <td>Compares the resultant Xxx value to another for a difference</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>LessThan</td>
+<td>Assert<i>Xxx</i>LessThan @expected, @actual</td>
 <td>Performs a &lt; comparison with the resultant Xxx value</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>LessThanOrEqualTo</td>
+<td>Assert<i>Xxx</i>LessThanOrEqualTo @expected, @actual</td>
 <td>Performs a &lt;= comparison with the resultant Xxx value</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>GreaterThan</td>
+<td>Assert<i>Xxx</i>GreaterThan @expected, @actual</td>
 <td>Performs a &gt; comparison with the resultant Xxx value</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>GreaterThanOrEqualTo</td>
+<td>Assert<i>Xxx</i>GreaterThanOrEqualTo @expected, @actual</td>
 <td>Performs a &gt;= comparison with the resultant Xxx value</td>
 </tr>
 <tr>
-<td>Assert<i>Xxx</i>IsNull</td>
+<td>Assert<i>Xxx</i>IsNull @actual</td>
 <td>Compares the resultant Xxx value to NULL</td>
 </tr>
 <tr>
-<td>AssertIntegerBetween</td>
+<td>Assert<i>Xxx</i>IsNotNull @actual</td>
+<td>Compares the resultant Xxx value to NULL</td>
+</tr>
+<tr>
+<td>AssertIntegerBetween @lower, @upper, @actual</td>
 <td>Compares an integer to a range (lower and upper bounds are inclusive)</td>
 </tr>
 <tr>
-<td>AssertStringLike</td>
+<td>AssertStringLike @regex, @actual</td>
 <td>Compares two strings using the <code>LIKE</code> operator for a match</td>
 </tr>
 <tr>
-<td>AssertStringNotLike</td>
+<td>AssertStringNotLike @regex, @actual</td>
 <td>Compares two strings using the <code>LIKE</code> operator for a difference</td>
+</tr>
+<tr>
+<td>AssertTableRowCountEqualTo @expected, @table</td>
+<td>Compares the number of rows in the table with a constant</td>
+</tr>
+<tr>
+<td>AssertTableIsEmpty @table</td>
+<td>Shorthand for <code>AssertTableRowCountEqualTo 0</code></td>
 </tr>
 </table>
 <p>
@@ -487,6 +503,14 @@ and reporting:-
 <td>@isInteractive</td>
 <td>Override the SQL client type by setting this to 0 for batch mode and 1 for interactive</td>
 </tr>
+<tr>
+<td>@testNameFilter</td>
+<td>The full or partial name of a single test or tests to run (uses <code>LIKE</code> to match test names)</td>
+</tr>
+<tr>
+<td>@tearDownFirst</td>
+<td>Flag to run the test & fixture tear down procedures before running the fixture set up</td>
+</tr>
 </table>
 <p>
 The following example shows how to use a different schema and
@@ -532,6 +556,19 @@ exec ssunit.RunTests @reportResults = @onFailure;
 </pre><p>
 For more details about using UDFs to encapsulate constants and enumerations see
 my blog post <a href="http://chrisoldwood.blogspot.co.uk/2010/09/implementing-constants-enumerations-in.html">Implementing Constants & Enumerations in a Database</a>.
+</p><p>
+The <code>@testNameFilter</code> allows you to focus on a single test, or group
+of similarly named tests. This is useful when your test fixture is quite large
+and you want to minimise the noise in the output, say, in SSMS. To run a single
+test just specify the entire test name:-
+</p><pre>
+exec ssunit.RunTests @testNameFilter = 'test._@Test@_SystemUser_ShouldThrow_WhenDuplicateLoginNameAdded';
+</pre><p>
+The filter is applied to the test names using the <code>LIKE</code> operator
+which means you can match more than one test by using the wildcard characters:-
+</p><pre>
+exec ssunit.RunTests @testNameFilter = '%_SystemUser_%';
+</pre><p>
 </p>
 
 <a name="GlobalParameters"></a>
@@ -565,6 +602,10 @@ API procedure used to set its default:-
 <tr>
 <td>@reportSummary</td>
 <td>ssunit.Configuration_SetReportSummaryDefault</td>
+</tr>
+<tr>
+<td>@tearDownFirst</td>
+<td>ssunit.Configuration_SetTearDownFirstDefault</td>
 </tr>
 </table>
 <p>
@@ -641,7 +682,7 @@ you can use to "wipe the schema clean" before running any new tests -
 the specified schema (or 'test' by default) so that you won't have any errors
 caused by attempting to create duplicate objects.
 </p><p>
-Putting all these ideas together means that a boiler-plate test script might look
+Putting these ideas together means that a boiler-plate test script might look
 like the following:-
 </p><pre>
 exec ssunit.TestSchema_Clear;
@@ -662,6 +703,27 @@ go
 --
 
 exec ssunit.RunTests;
+</pre><p>
+A halfway house that can get you back to a stable point after messing up your
+test initially is to call the TearDown procedures manually to wipe the slate
+clean. You could also call them as the first step in your FixtureSetUp to
+ensure that you're always starting the tests with no data. The <code>@tearDownFirst</code>
+parameter was designed to automate this all for you. The only thing you need to
+remember is to add a guard when dropping objects as they may not exist the
+first time round.
+</p><pre>
+create procedure test._@FixtureSetUp@_$MyFixture$_
+as
+    create table test.Result( . . . );
+go
+
+create procedure test._@FixtureTearDown@_$MyFixture$_
+as
+    if (object_id('test.Result') is not null)
+        drop table test.Result;
+
+    delete from MyData;
+go
 </pre><p>
 Once you get more familar with the kinds of SQL error messages you see whilst
 writing unit tests with SS-Unit you may decide to forgo the pessimistic prologue
