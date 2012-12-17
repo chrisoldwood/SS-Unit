@@ -28,7 +28,7 @@ as
 	select	(@schemaName + '.' + p.name) as ProcedureName
 	from	sys.procedures p
 	where	p.schema_id = @testSchemaId
-	and		p.name like '[_]@Helper@[_]%';
+	and		p.name like '%[_]@Helper@[_]%';
 
 	open ProcedureCursor;
 

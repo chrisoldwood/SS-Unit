@@ -111,4 +111,63 @@ as
 	exec ssunit.AssertPass;
 go
 
+create procedure test._$Fixture6$_@FixtureSetUp@_
+as
+	create table test.TestCounter
+	(
+		Value	int
+	);
+
+	insert into test.TestCounter(Value) values(1);
+go
+
+create procedure test._$Fixture6$_@FixtureTearDown@_
+as
+	drop table test.TestCounter;
+go
+
+create procedure test._$Fixture6$_@TestSetUp@_
+as
+	update test.TestCounter
+	set	   Value = Value + 10;
+go
+
+create procedure test._$Fixture6$_@TestTearDown@_
+as
+	update test.TestCounter
+	set	   Value = Value + 100;
+go
+
+create procedure test._$Fixture6$_ShouldPassWithAtTestAtSuffix_@Test@_
+as
+	declare @value int;
+	select	@value = Value from test.TestCounter;
+
+	declare @passed bit = case when (@value = 11 or @value = 121) then 1 else 0 end;
+
+	exec ssunit.AssertTrue @passed;
+go
+
+create procedure test._$Fixture6$_@Test@_ShouldPassWithAtTestAtOnNeitherEnd
+as
+	declare @value int;
+	select	@value = Value from test.TestCounter;
+
+	declare @passed bit = case when (@value = 11 or @value = 121) then 1 else 0 end;
+
+	exec ssunit.AssertTrue @passed;
+go
+
+create procedure test.AtHelperAtSuffixProcedure_@Helper@_
+as
+	exec ssunit.AssertPass;
+go
+
+create procedure test._@Test@_TestShouldPassAndDeleteAtHelperAtSuffixProcedure
+as
+	exec test.AtHelperAtSuffixProcedure_@Helper@_
+
+	exec ssunit.AssertPass;
+go
+
 exec ssunit.RunTests;
