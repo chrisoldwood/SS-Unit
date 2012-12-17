@@ -32,8 +32,22 @@ as
 		on		s.schema_id = t.schema_id
 		join	sys.partitions p
 		on		p.object_id = t.object_id
+		and		p.index_id in (0, 1)			-- Heap or clustered index
 		where	s.name+'.'+t.name = @table;
 
-		exec ssunit.AssertIntegerEqualTo @expected, @count;
+		if (@count = @expected)
+		begin
+			exec ssunit.AssertPass;
+		end
+		else
+		begin
+			declare @failure ssunit.TextMessage;
+			set		@failure = 'Row count differs for ''' + @table + '''';
+
+			declare @reason ssunit.TextMessage;
+			set		@reason = ssunit_impl.FormatIntegerCompareFailure(@failure, @expected, @count);
+
+			exec ssunit.AssertFail @reason;
+		end
 	end
 go
