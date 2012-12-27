@@ -113,7 +113,7 @@ as
 			if (exists(	select	1
 						from	sys.procedures p
 						where	p.schema_id = @testSchemaId
-						and		p.name like '%[_]$Fixture1$[_]%'
+						and		p.name like @fixtureFilter
 						and
 						(
 								p.name like '%[_]@FixtureSetUp@[_]%'
