@@ -1,4 +1,4 @@
-SS-Unit v1.0
+SS-Unit v1.5
 ============
 
 
@@ -24,4 +24,4 @@ Web:   http://www.cix.co.uk/~gort
 
 Chris Oldwood 
 
-10th April 2012
+20th December 2012
