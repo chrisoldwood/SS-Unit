@@ -22,12 +22,23 @@ as
 	begin try
 
 		if (@setUpProcedure is not null)
-			exec @setUpProcedure;
+		begin
+			exec ssunit_impl.RunTestSetUp @setUpProcedure;
 
-		exec @procedure;
+			set @setUpProcedure = null;
+		end
+
+		if (ssunit_impl.TestResult_TestOutcome(@procedure) is null)
+		begin
+			exec @procedure;
+		end
 
 		if (@tearDownProcedure is not null)
-			exec @tearDownProcedure;
+		begin
+			exec ssunit_impl.RunTestTearDown @tearDownProcedure;
+
+			set @tearDownProcedure = null;
+		end
 
 		if (ssunit_impl.TestResult_TestOutcome(@procedure) is null)
 		begin
@@ -46,6 +57,13 @@ as
 		set		@error = error_message();
 
 		exec ssunit.AssertFail @error;
+
+		if (@tearDownProcedure is not null)
+		begin
+			exec ssunit_impl.RunTestTearDown @tearDownProcedure;
+
+			set @tearDownProcedure = null;
+		end
 
 	end catch
 go
