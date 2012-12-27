@@ -84,6 +84,7 @@ AssertRealGreaterThan.ssunit.sql
 AssertRealGreaterThanOrEqualTo.ssunit.sql
 AssertRealBetween.ssunit.sql
 
+FormatTableColumnList.ssunit_impl.sql
 AssertTableRowCountEqualTo.ssunit.sql
 AssertTableIsEmpty.ssunit.sql
 AssertTableEqualTo.ssunit.sql

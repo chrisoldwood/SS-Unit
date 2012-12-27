@@ -12,3 +12,10 @@
 
 create type ssunit_impl.FixtureName from varchar(128);
 go
+
+/**
+ * A comma-separated list of values.
+ */
+
+create type ssunit_impl.List from varchar(128);
+go

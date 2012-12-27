@@ -4,6 +4,9 @@
  * \author Chris Oldwood
  */
 
+exec ssunit.TestSchema_Clear;
+go
+
 create procedure test._@TestSetUp@_$Table$_
 as
 	create table test.TestTable
@@ -82,14 +85,19 @@ create procedure test._@FixtureSetUp@_$TableComparison$_
 as
 	create table test.Actual
 	(
-		FirstColumn		int not null,
+		FirstColumn		int null,
 		SecondColumn	varchar(100) null,
 	);
 
 	create table test.Expected
 	(
-		FirstColumn		int not null,
+		FirstColumn		int null,
 		SecondColumn	varchar(100) null,
+	);
+
+	create table test.DifferentSchema
+	(
+		Different		DateTime not null,
 	);
 go
 
@@ -105,11 +113,16 @@ as
 	delete from test.Actual;
 go
 
-create procedure test._@Test@_$TableComparison$_AssertTableEqualTo_ShouldPass_WhenTableEquivalent
+create procedure test._@Test@_$TableComparison$_AssertTableEqualTo_ShouldPass_WhenTablesEquivalent
 as
 	insert into test.Actual   values (42, 'forty-two');
 	insert into test.Expected values (42, 'forty-two');
 
+	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
+go
+
+create procedure test._@Test@_$TableComparison$_AssertTableEqualTo_ShouldPass_WhenTablesEmpty
+as
 	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
 go
 
@@ -121,4 +134,42 @@ as
 	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
 go
 
-exec ssunit.RunTests @testNameFilter = '%TableComparison%';
+create procedure test._@Test@_$TableComparison$_AssertTableEqualTo_ShouldPass_WhenTablesMatchNullValues
+as
+	insert into test.Actual   values (null, null);
+	insert into test.Expected values (null, null);
+
+	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
+go
+
+create procedure test._@Test@_$TableComparison$_AssertTableEqualTo_ShouldFail_WhenTableSchemasDiffer
+as
+	insert into test.DifferentSchema values ('2001-01-01');
+	insert into test.Expected        values (42, 'forty-two');
+
+	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.DifferentSchema';
+go
+
+create procedure test._@FixtureSetUp@_$TableSchema$_
+as
+	create table test.TableSchema
+	(
+		FirstColumn		int null,
+		SecondColumn	varchar(100) null,
+	);
+go
+
+create procedure test._@FixtureTearDown@_$TableSchema$_
+as
+	drop table test.TableSchema;
+go
+
+create procedure test._@Test@_$TableSchema$_FormatTableColumnList_ShouldReturnColumnName
+as
+	declare @expected ssunit_impl.List = 'FirstColumn,SecondColumn';
+	declare @actual ssunit_impl.List = ssunit_impl.FormatTableColumnList('test.TableSchema');
+
+	exec ssunit.AssertStringEqualTo @expected, @actual;
+go
+
+exec ssunit.RunTests;
