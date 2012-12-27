@@ -21,43 +21,57 @@ create procedure ssunit.AssertTableEqualTo
 	@actual		ssunit.TableName	--!< The actual table data.
 )
 as
-	if (object_id(''))
+	declare @reason ssunit.TextMessage;
 
-	create table ssunit_impl.TableComparison
-	(
-		Differences int not null
-	);
+	declare @expectedCols ssunit_impl.List = ssunit_impl.FormatTableColumnList(@expected);
+	declare @actualCols ssunit_impl.List = ssunit_impl.FormatTableColumnList(@actual);
 
-	declare @query varchar(max) =
-	  'select	1 as [True] '
-	+ 'into		#results '
-	+ 'from '
-	+ '( '
-	+ ' select	* '
-	+ '	from	'+ @actual +' '
-	+ '	union all '
-	+ '	select	* '
-	+ '	from	' + @expected + ' '
-	+ ') as AllRows '
-	+ 'group	by FirstColumn, SecondColumn '
-	+ 'having	count(*) <> 2 ';
-
-	--print @query;
-	exec(@query);
-
-	select * from #results;
-
-	if (not exists(select 1 from #results))
+	if (@actualCols <> @expectedCols)
 	begin
-		exec ssunit.AssertPass;
-	end
+		set @reason = 'The table schemas do not match for '
+					+ '''' + @expected + ''' and '
+					+ '''' + @actual   + '''';
+
+		exec ssunit.AssertFail @reason;		
+	end 
 	else
 	begin
-		declare @reason ssunit.TextMessage;
-		set		@reason = 'One or more rows differs between '
-						 + '''' + @expected + ''' and '
-						 + '''' + @actual   + '''';
+		if (object_id('ssunit_impl.TableDifference') is not null)
+			drop table ssunit_impl.TableDifference;
 
-		exec ssunit.AssertFail @reason;
+		create table ssunit_impl.TableDifference
+		(
+			True int not null
+		);
+
+		declare @query varchar(max) =
+		  'insert into ssunit_impl.TableDifference (True) '
+		+ 'select	1 as [True] '
+		+ 'from '
+		+ '( '
+		+ ' select	* '
+		+ '	from	'+ @actual +' '
+		+ '	union all '
+		+ '	select	* '
+		+ '	from	' + @expected + ' '
+		+ ') as AllRows '
+		+ 'group	by ' + @expectedCols + ' '
+		+ 'having	count(*) <> 2 ';
+
+		--print @query;
+		exec(@query);
+
+		if (not exists(select 1 from ssunit_impl.TableDifference))
+		begin
+			exec ssunit.AssertPass;
+		end
+		else
+		begin
+			set @reason = 'One or more rows differs between '
+						+ '''' + @expected + ''' and '
+						+ '''' + @actual   + '''';
+
+			exec ssunit.AssertFail @reason;
+		end
 	end
 go

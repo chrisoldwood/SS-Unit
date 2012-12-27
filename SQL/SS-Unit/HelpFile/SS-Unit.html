@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>SS-Unit v1.0 Manual</title>
+<title>SS-Unit v1.5 Manual</title>
 <meta name="author" content="Chris Oldwood">
 <style>
 <!--
@@ -14,7 +14,7 @@ td		{ font-family: Verdana, Arial; font-size: 10pt; border: 1px solid black; ver
 
 <body>
 
-<h3 align="center">SS-Unit v1.0</h3>
+<h3 align="center">SS-Unit v1.5</h3>
 
 <a name="Introduction"></a>
 <h4>Introduction</h4>
@@ -305,6 +305,10 @@ you should still be able to achieve most of your testing with just this subset.
 <td>AssertTableIsEmpty @table</td>
 <td>Shorthand for <code>AssertTableRowCountEqualTo 0</code></td>
 </tr>
+<tr>
+<td>AssertTableEqualTo @expected, @actual</td>
+<td>Compares the contents of two tables for equivalence</td>
+</tr>
 </table>
 <p>
 <i>NB: AssertPass and AssertFail provide the underpinnings of the framework - all
@@ -352,8 +356,7 @@ The problem with scraping error messages to verify a test is that they are
 subject to change, at least for application specific errors. And so the message
 comparison is done using the <code>LIKE</code> operator so that you can perform
 a fuzzy match. One benefit to explicitly naming your constraints is that you can
-then use them as the <code>@error</code> message instead of something more
-vague, e.g.
+then use them as the <code>@error</code> message instead of something vaguer, e.g.
 </p><pre>
     -- Matches any FK violation
     exec ssunit.AssertThrew '%FOREIGN KEY%constraint%', 'test._@Helper@_My_Procedure_That_Throws';
@@ -467,6 +470,61 @@ go
 </pre><p>
 Test procedures are dropped right after execution whereas helper procedures are
 only dropped at the end of the test run so they can be used multiple times.
+</p>
+
+<a name="AssertTableEqualTo"></a>
+<h5>AssertTableEqualTo</h5>
+
+<p>
+Originally the only way to compare the contents of tables, views, stored
+procedures, etc. was by capturing the output and executing a <code>SELECT</code>
+that looked for the exact data with a complex <code>WHERE</code> clause. Now
+you can build a replica table with the expected data and assert the two tables
+have the same contents, e.g.
+</p><pre>
+create procedure test._@FixtureSetUp@_$MyFixture$_
+as
+    create table test.Actual
+    (
+        FirstColumn     int not null,
+        SecondColumn    varchar(100) null,
+    );
+
+    create table test.Expected
+    (
+        FirstColumn     int not null,
+        SecondColumn    varchar(100) null,
+    );
+go
+
+create procedure test._@FixtureTearDown@_$MyFixture$_
+as
+    drop table test.Expected;
+    drop table test.Actual;
+go
+
+create procedure test._@Test@_$MyFixture$_TablesShouldMatch
+as
+    insert into test.Actual
+    exec pub.MyProcThatReturnsResults;
+
+    insert into test.Expected(FirstColumn, SecondColumn)
+              select 41, 'forty-one'
+    union all select 42, 'forty-two'
+    union all select 43, 'forty-three'
+
+    exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
+go
+</pre><p>
+Here we use the SetUp and TearDown helper procedures to define the schema for
+the tables we're going to use to capture the results and build the replica.
+Using the "<code>INSERT INTO/UNION ALL SELECT</code>" idiom we can build the
+table with our expected data in a nice readable fashion and then invoke the
+comparison.
+</p><p>
+<i>NB: Under the covers <code>AssertTableEqualTo</code> just performs a
+<code>UNION ALL</code> and <code>GROUP BY</code> using dynamic SQL and so the
+two table schemas must be identical.</i>
 </p>
 
 <a name="TestRunner"></a>
@@ -725,7 +783,7 @@ as
     delete from MyData;
 go
 </pre><p>
-Once you get more familar with the kinds of SQL error messages you see whilst
+Once you get more familiar with the kinds of SQL error messages you see whilst
 writing unit tests with SS-Unit you may decide to forgo the pessimistic prologue
 and just stick to the actual tests and invoking <code>ssunit.RunTests</code>.
 </p><p>
@@ -753,7 +811,7 @@ Email: <a href="mailto://gort@cix.co.uk">gort@cix.co.uk</a><br>
 Web: <a href="http://www.cix.co.uk/~gort">www.cix.co.uk/~gort</a><br>
 </p><p>
 Chris Oldwood<br>
-10th April 2012<br>
+20th December 2012<br>
 </p>
 
 </body>
