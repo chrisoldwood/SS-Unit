@@ -1,6 +1,17 @@
 Version 1.5
 ===========
 
+- Added support for comparing the contents of two tables (i.e. actual/expected).
+- Added support for comparing Date and Real values.
+- Added support for using a ms tolerance when comparing DateTime values.
+- Fixed a bug in AssertTableRowCountEqualTo when the table has other indexes.
+- Added AssertXxxIsNotNull overloads.
+- Added ability to invoke TearDown helpers before the fixture SetUp helper.
+- Fixed matching of "_@attributes@_" so that they can appear anywhere in the procedure name.
+- Added check to ensure that there can only be one SetUp/TearDown per fixture.
+- Added filter parameter to RunTests so that you can just run a subset of the tests.
+- Fixed a bug where the TearDown procedure was not called when the test unexpectedly threw.
+
 
 Version 1.0
 ===========
@@ -33,4 +44,4 @@ Version 0.5
 Chris Oldwood 
 [gort@cix.co.uk]
 
-10th December 2012
+9th January 2013

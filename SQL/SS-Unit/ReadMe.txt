@@ -19,9 +19,9 @@ There is a HelpFile folder with an HTML based manual in it.
 ------------------
 
 Email: gort@cix.co.uk
-Web:   http://www.cix.co.uk/~gort
+Web:   http://www.chrisoldwood.com
 
 
 Chris Oldwood 
 
-20th December 2012
+9th January 2013
