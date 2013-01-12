@@ -1,0 +1,5 @@
+- Faster PSH based install script
+
+- More examples, especially table comparsions
+
+- Version number UDF.

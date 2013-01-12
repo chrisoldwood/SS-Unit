@@ -28,5 +28,5 @@
  * \note
  * This documentation was generated directly from the SS-Unit T-SQL source code
  * using Doxygen and the sql2doxygen input filter.
- * See <a href="http://www.cix.co.uk/~gort">http://www.cix.co.uk/~gort</a>
+ * See <a href="http://www.chrisoldwood.com">http://www.chrisoldwood.com</a>
  */
