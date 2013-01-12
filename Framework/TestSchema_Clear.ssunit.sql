@@ -17,7 +17,7 @@ go
  * when you run your test script you can guarentee that you're starting from a
  * clean slate.
  *
- * \Note By default it clears all objects from the default test schema which is
+ * \note By default it clears all objects from the default test schema which is
  * called 'test'.
  */
 

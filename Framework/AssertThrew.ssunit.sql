@@ -13,7 +13,7 @@ go
  * The error is compared with the LIKE operator and so can contain wildcard
  * characters.
  *
- * \Note The helper procedure should contain the '_@Helper@_' attribute in its
+ * \note The helper procedure should contain the '_\@Helper\@_' attribute in its
  * name so that it is dropped automatically by the framework at the end of the
  * test run to save dropping it manually.
  */
