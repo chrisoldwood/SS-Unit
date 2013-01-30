@@ -154,22 +154,45 @@ create procedure test._@FixtureSetUp@_$TableSchema$_
 as
 	create table test.TableSchema
 	(
-		FirstColumn		int null,
-		SecondColumn	varchar(100) null,
+		[First Column]		int null,
+		[Second Column]		varchar(100) null,
+	);
+
+	create table test.TableWithManyColumns
+	(
+		ColumnNumber01  int null,
+		ColumnNumber02  int null,
+		ColumnNumber03  int null,
+		ColumnNumber04  int null,
+		ColumnNumber05  int null,
+		ColumnNumber06  int null,
+		ColumnNumber07  int null,
+		ColumnNumber08  int null,
+		ColumnNumber09  int null,
+		ColumnNumber10  int null,
 	);
 go
 
 create procedure test._@FixtureTearDown@_$TableSchema$_
 as
+	drop table test.TableWithManyColumns;
 	drop table test.TableSchema;
 go
 
-create procedure test._@Test@_$TableSchema$_FormatTableColumnList_ShouldReturnColumnName
+create procedure test._@Test@_$TableSchema$_FormatTableColumnList_ShouldReturnColumnNamesEscaped
 as
-	declare @expected ssunit_impl.List = 'FirstColumn,SecondColumn';
+	declare @expected ssunit_impl.List = '[First Column],[Second Column]';
 	declare @actual ssunit_impl.List = ssunit_impl.FormatTableColumnList('test.TableSchema');
 
 	exec ssunit.AssertStringEqualTo @expected, @actual;
+go
+
+create procedure test._@Test@_$TableSchema$_FormatTableColumnList_ShouldHandleTableWithManyColumns
+as
+	declare @actual ssunit_impl.List = ssunit_impl.FormatTableColumnList('test.TableWithManyColumns');
+
+	exec ssunit.AssertStringLike '%ColumnNumber01%', @actual;
+	exec ssunit.AssertStringLike '%ColumnNumber10%', @actual;
 go
 
 exec ssunit.RunTests;

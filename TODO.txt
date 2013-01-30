@@ -3,3 +3,9 @@
 - More examples, especially table comparsions
 
 - Version number UDF.
+
+- Detect bad attribute names, _@TearDown@_ instead of _@TestTearDown@_
+
+- Schema_Clear does not prepend schema name, bug?
+
+- Option to drop UDTs in schema too along with actual schema?

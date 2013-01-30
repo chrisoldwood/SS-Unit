@@ -45,7 +45,7 @@ begin
 		if (@@fetch_status <> 0)
 			break;
 
-		set @columns = @columns + @column + ',';
+		set @columns = @columns + '[' + @column + '],';
 	end
 
 	close columnCursor;
