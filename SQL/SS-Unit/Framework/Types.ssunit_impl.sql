@@ -5,6 +5,14 @@
  */
 
 /**
+ * The name of an attribute used to mark a procedure as special. Attributes
+ * are used to annotate which procedures are tests or helpers.
+ */
+
+create type ssunit_impl.AttributeName from varchar(128);
+go
+
+/**
  * The name of a test fixture. The fixture name is used to group together tests
  * for the same 'module' and provides a convenient mechansim for factoring out
  * the performance burden of common SetUp & TearDown helper procedures.

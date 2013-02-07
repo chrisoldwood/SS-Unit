@@ -56,6 +56,25 @@ as
 	from	sys.schemas s
 	where	s.name = @schemaName;
 
+	-- Validate all attribute names on procedures.
+	declare @name ssunit_impl.AttributeName;
+
+	select	@name = (@schemaName + '.' + p.name)
+	from	sys.procedures p
+	where	p.schema_id = @testSchemaId
+	and		p.name like '%[_]@%@[_]%'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'Test'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'TestSetUp'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'TestTearDown'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'FixtureSetUp'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'FixtureTearDown'
+	and		ssunit_impl.GetAttributeName(p.name) <> 'Helper'
+
+	if (@name is not null)
+	begin
+		raiserror('Unknown SS-Unit attribute on procedure ''%s''', 16, 1, @name);
+	end
+
 	-- Find all unit test stored procedures.
 	select	(@schemaName + '.' + p.name) as TestProcedure,
 			ssunit_impl.GetFixtureName(p.name) as FixtureName

@@ -94,4 +94,32 @@ as
 	exec ssunit.AssertStringEqualTo @expected, @actual;
 go
 
-exec ssunit.RunTests;
+create procedure test._@Test@_GetAttributeName_ShouldReturnNull_WhenNoNameExists
+as
+	declare @actual ssunit_impl.AttributeName = ssunit_impl.GetAttributeName('test.NoAttributeExists');
+
+	exec ssunit.AssertStringIsNull @actual;
+go
+
+create procedure test._@Test@_GetAttributeName_ShouldReturnName_WhenNameExists
+as
+	declare @expected ssunit_impl.AttributeName = 'AttributeName';
+	declare @testName ssunit.ProcedureName = 'test._@' + @expected + '@_TestName';
+
+	declare @actual ssunit_impl.AttributeName = ssunit_impl.GetAttributeName(@testName);
+
+	exec ssunit.AssertStringEqualTo @expected, @actual;
+go
+
+create procedure test._@Test@_GetAttributeName_ShouldReturnNull_WhenAttributeNameMalformed
+as
+	declare @actual ssunit_impl.AttributeName = ssunit_impl.GetAttributeName('test._@AttributeName_');
+
+	exec ssunit.AssertStringIsNull @actual;
+
+	set @actual = ssunit_impl.GetAttributeName('test._Attribute@_');
+
+	exec ssunit.AssertStringIsNull @actual;
+go
+
+exec ssunit.RunTests @testNameFilter='%GetAttributeName%';
