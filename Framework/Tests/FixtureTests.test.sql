@@ -170,4 +170,26 @@ as
 	exec ssunit.AssertPass;
 go
 
+create procedure test._@Test@_$TestSchema$_Clear_ShouldPassByRemovingUserDefinedTypes
+as
+	if (type_id('unit_test.TestType') is not null)
+		drop type unit_test.TestType;
+
+	create type unit_test.TestType from tinyint;
+
+	exec ssunit.TestSchema_Clear @schemaName = 'unit_test';
+
+	declare @count int;
+
+	select	@count = count(*)
+	from	sys.schemas s
+	join	sys.types t
+	on		t.schema_id = s.schema_id
+	where	s.name = 'unit_test'
+	and		t.name = 'TestType'
+
+	exec ssunit.AssertIntegerEqualTo 0, @count;
+go
+
 exec ssunit.RunTests;
+go
