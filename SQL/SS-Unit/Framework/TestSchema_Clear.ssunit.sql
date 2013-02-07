@@ -80,4 +80,30 @@ as
 
 	close ObjectCursor;
 	deallocate ObjectCursor;
+
+	-- For all types in the schema...
+	declare TypeCursor cursor local fast_forward
+	for
+	select	(@schemaName + '.' + t.name) as TypeName
+	from	sys.types t
+	where	t.schema_id = @testSchemaId
+
+	open TypeCursor;
+
+	while (1 = 1)
+	begin
+		declare @typeName sysname;
+
+		fetch	next
+		from	TypeCursor
+		into	@typeName;
+
+		if (@@fetch_status <> 0)
+			break;
+
+		exec('drop type ' + @typeName);
+	end
+
+	close TypeCursor;
+	deallocate TypeCursor;
 go
