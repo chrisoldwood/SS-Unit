@@ -31,3 +31,12 @@ go
 
 create type ssunit.TextMessage from varchar(max);
 go
+
+/**
+ * The version number as a single integer. For example v1.5.0 is
+ * represented as the integer 150. This allows for the standard
+ * arithmetic operators to be used for comparison.
+ */
+
+create type ssunit.Version from int;
+go
