@@ -12,3 +12,4 @@ ReportCondition.test.sql
 Configuration.test.sql
 DateAsserts.test.sql
 RealAsserts.test.sql
+VersionTests.test.sql
