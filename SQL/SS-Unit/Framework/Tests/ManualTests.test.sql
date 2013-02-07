@@ -94,3 +94,15 @@ declare @true ssunit.Bool = ssunit.True();
 exec ssunit.RunTests @tearDownFirst = @true;
 go
 */
+
+/*
+exec ssunit.TestSchema_Clear;
+go
+
+create procedure test._@InvalidAttribute@_
+as
+go
+
+exec ssunit.RunTests;
+go
+*/

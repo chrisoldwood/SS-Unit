@@ -6,6 +6,7 @@ TestOutcome.ssunit_impl.sql
 Types.ssunit.sql
 Bool.ssunit.sql
 ReportCondition.ssunit.sql
+Version.ssunit.sql
 
 CurrentTest.ssunit_impl.sql
 CurrentTest_SetTest.ssunit_impl.sql
@@ -92,6 +93,7 @@ AssertTableEqualTo.ssunit.sql
 Configuration.ssunit_impl.sql
 Configuration_SetValues.ssunit.sql
 
+GetAttributeName.ssunit_impl.sql
 GetFixtureName.ssunit_impl.sql
 FormatResultTestName.ssunit_impl.sql
 IsInteractive.ssunit.sql
