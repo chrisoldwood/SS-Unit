@@ -6,7 +6,13 @@
 
 create procedure test._@FixtureSetUp@_$Bug$_
 as
-	create table test.BugResults
+	create table test.Actual
+	(
+		BugId	pub.BugId_t		not null,
+		Summary	pub.BodyText_t	not null,
+	);
+
+	create table test.Expected
 	(
 		BugId	pub.BugId_t		not null,
 		Summary	pub.BodyText_t	not null,
@@ -15,24 +21,27 @@ go
 
 create procedure test._@FixtureTearDown@_$Bug$_
 as
-	drop table test.BugResults;
+	drop table test.Expected;
+	drop table test.Actual;
 go
 
-create procedure test._@TestSetUp@_$Bug$_
+create procedure test._@Helper@_$Bug$_AddUser
+	@userId		pub.UserId_t	= 99,
+	@loginName	pub.LoginName_t	= 'test'
 as
-	declare @userId pub.UserId_t = 99;
-	declare @loginName pub.LoginName_t = 'test';
-
 	set identity_insert dbo.SystemUser on;
 
-	insert into dbo.SystemUser(UserId, LoginName, FirstName, LastName)
-	                   values (@userId, @loginName, 'test', 'test');
+	insert into dbo.SystemUser(UserId,  LoginName,  FirstName, LastName)
+	                   values (@userId, @loginName, 'test',    'test');
 
 	set identity_insert dbo.SystemUser off;
+go
 
-	declare @bugId pub.BugId_t = 42;
-	declare @summary pub.BodyText_t = 'test summary';
-
+create procedure test._@Helper@_$Bug$_AddBug
+	@userId		pub.UserId_t	= 99,
+	@bugId		pub.BugId_t		= 42,
+	@summary	pub.BodyText_t	= 'test summary'
+as
 	set identity_insert dbo.Bug on;
 
 	insert into dbo.Bug(BugId, Summary, SubmitUserId)
@@ -76,17 +85,19 @@ go
 create procedure test._@Test@_$Bug$_FindBugsSubmittedByUser_ShouldReturnBugIdAndSummary
 as
 	declare @userId pub.UserId_t = 99;
-	declare @bugId pub.BugId_t = 42;
-	declare @summary pub.BodyText_t = 'test summary';
 
-	insert into BugResults
+	exec test._@Helper@_$Bug$_AddUser @userId;
+	exec test._@Helper@_$Bug$_AddBug @userId, 42, 'test summary';
+	exec test._@Helper@_$Bug$_AddBug @userId, 43, 'another';
+
+	insert into Actual
 	exec pub.Bug_FindBugsSubmittedByUser @userId;
 
-	declare @count int;
-	select	@count = count(*) from BugResults
-	where	BugId = @bugId and Summary = @summary;
+	insert into Expected(BugId, Summary)
+                  select 43,    'another'
+	    union all select 42,    'test summary'
 
-	exec ssunit.AssertIntegerEqualTo 1, @count;
+	exec ssunit.AssertTableEqualTo 'test.Expected', 'test.Actual';
 go
 
 exec ssunit.RunTests;
