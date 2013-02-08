@@ -1,8 +1,8 @@
 @echo off
 rem ************************************************************
 rem
-rem Create the SS-Unit framework objects instead the specified
-rem database .
+rem Create the SS-Unit framework objects inside the specified
+rem database. This version uses SQLCMD to execute the scripts.
 rem
 rem ************************************************************
 
