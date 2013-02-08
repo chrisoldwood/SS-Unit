@@ -7,11 +7,14 @@ Version 1.5
 - Fixed a bug in AssertTableRowCountEqualTo when the table has other indexes.
 - Added AssertXxxIsNotNull overloads.
 - Added ability to invoke TearDown helpers before the fixture SetUp helper.
-- Fixed matching of "_@attributes@_" so that they can appear anywhere in the procedure name.
+- Fixed matching of "_@attribute@_" so that it can appear anywhere in the procedure name.
 - Added check to ensure that there can only be one SetUp/TearDown per fixture.
 - Added filter parameter to RunTests so that you can just run a subset of the tests.
 - Fixed a bug where the TearDown procedure was not called when the test unexpectedly threw.
-
+- Added a Version() UDF so that it's possible to conditionally enable asserts.
+- Added check for invalid "_@attribute@_" names so spelling mistakes get highlighted.
+- Fixed TestSchema_Clear so that it removes UDT's defined in the schema too.
+- Added a much faster install script that uses PowerShell instead of SQLCMD.
 
 Version 1.0
 ===========
@@ -25,7 +28,6 @@ Version 1.0
 - Added handling of fixture set-up/tear-down errors.
 - Split SQL code into separate public and private schemas.
 
-
 Version 0.9
 ===========
 
@@ -34,14 +36,10 @@ Version 0.9
 - Added ability to run tests defined in schemas other than 'test'.
 - Added support for overriding the output width in batch mode.
 
-
 Version 0.5
 ===========
 
 - First public alpha.
 
-
 Chris Oldwood 
-[gort@cix.co.uk]
-
-9th January 2013
+8th February 2013
