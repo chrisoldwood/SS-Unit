@@ -80,8 +80,13 @@ that you can use to load the test framework into any database, e.g.
 </p><pre>
 C:\SS-Unit\Framework> Install .\SQLEXPRESS SSUnit_Examples
 </pre><p>
-<i>The note above about the dependency on <code>SQLCMD</code> also applies to the
-<code>Install.cmd</code> script.</i>
+That batch file uses <code>SQLCMD</code> to run the SQL scripts which is not
+exactly speedy and so there is an alternative that uses PowerShell instead, e.g.
+</p><pre>
+C:\SS-Unit\Framework> Install-ps .\SQLEXPRESS SSUnit_Examples
+</pre><p>
+<i>Note: Make sure you have used <code>PowerShell Set-ExecutionPolicy</code> to
+allow PowerShell scripts to run on your machine.</i>
 </p><p>
 Most likely you will already have your code in some form of Version Control
 System and also have some tool (or batch files) to create your baseline
@@ -792,6 +797,25 @@ data problem is to ensure that the production code runs as much as possible as
 it would in the real world.</i>
 </p>
 
+<a name="Version"></a>
+<h5>Detecting the SS-Unit Version</h5>
+
+<p>
+Some database deployment techniques rely on applying "deltas" or "patches" to
+take the database from one release to the next. This may mean that your 3rd
+Party components (i.e. SS-Unit) are also on different versions and so there is
+a UDF that tells you what version is installed, e.g.
+</p><pre>
+declare @version ssunit.Version = ssunit.Version();
+
+if (@version >= 150)
+begin
+    -- SS-Unit version is 1.5+
+end
+</pre><p>
+The version number is an integral value so that 1.0.0 = 100, 1.5.0 = 150, etc.
+</p>
+
 <hr>
 
 <a name="Warranty"></a>
@@ -811,7 +835,7 @@ Email: <a href="mailto://gort@cix.co.uk">gort@cix.co.uk</a><br>
 Web: <a href="http://www.chrisoldwood.com">www.chrisoldwood.com</a><br>
 </p><p>
 Chris Oldwood<br>
-9th January 2013<br>
+12th February 2013<br>
 </p>
 
 </body>
