@@ -21,7 +21,9 @@
  * \code
  * create procedure test._@Test@_Example
  * as
- *     exec ssunit.AssertPass;
+ *     declare @actual varchar(100) = '42';
+ *
+ *     exec ssunit.AssertStringEqualTo '42', @actual;
  * go
  * \endcode
  *
