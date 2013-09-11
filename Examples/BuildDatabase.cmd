@@ -19,13 +19,15 @@ setlocal enabledelayedexpansion
 set server=%1
 set database=SSUnit_Examples
 
+if /i not "%2" == "" set database=%2
+
 echo.
 echo ----------------------------------------
 echo Creating '%database%' database
 echo ----------------------------------------
 echo.
 
-sqlcmd -E -S %server% -d master -i CreateDatabase.dbo.sql
+sqlcmd -E -S %server% -d master -i CreateDatabase.dbo.sql -v DatabaseName=%database%
 
 for /f "delims=" %%f in (object-scripts.txt) do (
 	echo %%f
@@ -53,7 +55,8 @@ rem ************************************************************
 
 :usage
 echo.
-echo Usage: %~n0 ^<db server^>
+echo Usage: %~n0 ^<db server^> ^<db name^>
 echo.
 echo e.g.   %~n0 .\SQLEXPRESS
+echo        %~n0 .\SQLEXPRESS Examples
 goto :eof
