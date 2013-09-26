@@ -12,7 +12,7 @@ rem manually matched at the end.
 rem
 rem ************************************************************
 
-call RunTests .\SQLEXPRESS --testsonly ^
+call RunTests .\SQLEXPRESS --tests-only ^
      | egrep "^(Passed|FAILED)" ^
      | egrep -v "Passed[ ]+Failed[ ]+Unknown" ^
      | egrep -v "^Passed.*+ShouldPass" ^
