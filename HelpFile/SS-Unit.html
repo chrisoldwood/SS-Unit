@@ -522,14 +522,19 @@ as
 go
 </pre><p>
 Here we use the SetUp and TearDown helper procedures to define the schema for
-the tables we're going to use to capture the results and build the replica.
-Using the "<code>INSERT INTO/UNION ALL SELECT</code>" idiom we can build the
-table with our expected data in a nice readable fashion and then invoke the
-comparison.
+the tables we're going to use to capture the results (<code>Actual</code>) and
+define the expectation (<code>Expected</code>). Using the
+"<code>INSERT INTO/UNION ALL SELECT</code>" idiom we can build the table with
+our expected data in a nice readable fashion and then invoke the comparison.
 </p><p>
-<i>NB: Under the covers <code>AssertTableEqualTo</code> just performs a
+Under the covers <code>AssertTableEqualTo</code> just performs a
 <code>UNION ALL</code> and <code>GROUP BY</code> using dynamic SQL and so the
-two table schemas must be identical.</i>
+two table schemas must be identical. Unlike the other <code>AssertXxx</code>
+procedures, a table comparison is more complicated and so will report
+additional information about comparison failures using extra result sets. For
+instance if the table schemas don't match the column lists will be dumped,
+whereas if the table contents don't match the rows of the two tables will be
+returned.
 </p>
 
 <a name="TestRunner"></a>

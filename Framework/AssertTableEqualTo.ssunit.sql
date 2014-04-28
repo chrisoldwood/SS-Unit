@@ -21,6 +21,7 @@ create procedure ssunit.AssertTableEqualTo
 	@actual		ssunit.TableName	--!< The actual table data.
 )
 as
+	declare @query varchar(max);
 	declare @reason ssunit.TextMessage;
 
 	declare @expectedCols ssunit_impl.List = ssunit_impl.FormatTableColumnList(@expected);
@@ -28,9 +29,18 @@ as
 
 	if (@actualCols <> @expectedCols)
 	begin
+		set @query =
+		  'select ''' + @expected + ''' as [Table], ''' + @expectedCols + ''' as [Columns] '
+		+ 'union all '
+		+ 'select ''' + @actual   + ''' as [Table], ''' + @actualCols   + ''' as [Columns] ';
+
+		--print @query;
+		exec(@query);
+
 		set @reason = 'The table schemas do not match for '
 					+ '''' + @expected + ''' and '
-					+ '''' + @actual   + '''';
+					+ '''' + @actual   + ''' '
+					+ '(see results for column lists)';
 
 		exec ssunit.AssertFail @reason;		
 	end 
@@ -44,7 +54,7 @@ as
 			True int not null
 		);
 
-		declare @query varchar(max) =
+		set @query =
 		  'insert into ssunit_impl.TableDifference (True) '
 		+ 'select	1 as [True] '
 		+ 'from '
@@ -67,9 +77,18 @@ as
 		end
 		else
 		begin
+			set @query =
+			  'select ''' + @expected + ''' as [Table], * from ' + @expected + ' '
+			+ 'union all '
+			+ 'select ''' + @actual   + ''' as [Table], * from ' + @actual + ' ';
+
+			--print @query;
+			exec(@query);
+
 			set @reason = 'One or more rows differs between '
 						+ '''' + @expected + ''' and '
-						+ '''' + @actual   + '''';
+						+ '''' + @actual   + ''' '
+						+ '(see results for table contents)';
 
 			exec ssunit.AssertFail @reason;
 		end
