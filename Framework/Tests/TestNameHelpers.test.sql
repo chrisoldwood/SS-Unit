@@ -122,4 +122,4 @@ as
 	exec ssunit.AssertStringIsNull @actual;
 go
 
-exec ssunit.RunTests @testNameFilter='%GetAttributeName%';
+exec ssunit.RunTests;
