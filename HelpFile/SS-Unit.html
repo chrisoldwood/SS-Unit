@@ -185,7 +185,8 @@ If you've used NUnit you'll be accustomed to annotating your unit tests with a
 having to register them. Sadly T-SQL doesn't support attributes and so we have
 to find another way to achieve the same effect. So, it uses an adornment on the
 test name instead: <code>_@Test@_</code>. Hopefully the use of the '@' symbol will
-make you think <b>at</b><i>tribute</i>. So these two are supposedly equivalent:-
+make you think <b>at</b><i>tribute</i>. So these two (NUnit and SS-Unit) test
+definitions are intended to be equivalent:-
 </p><pre>
 [Test]
 public void Thing_ShouldDoThat_WhenItDoesThis()
@@ -198,6 +199,15 @@ as
 . . .
 go
 </pre><p>
+The position of any "attributes" is not important and so you can put them on
+the end if it makes the test name easier to read:-
+</p><pre>
+create procedure Thing_ShouldDoThat_WhenItDoesThis_@Test@_
+as
+. . .
+go
+</pre><p>
+</p><p>
 As for why you don't need to write the usual <code>if object_id()/drop procedure</code>
 prologue, that's because the test framework drops the procedure for you. Why?
 Because unit test names <i>should be verbose</i> and nothing kills your flow
@@ -399,12 +409,18 @@ out any that you don't need.
 This just leaves the question of how you define a fixture. In NUnit it is the
 name of the class that contains the test methods, but there are no classes in
 T-SQL and so once again we must look to adorn the test name. This time we
-use the format <code>_$FixtureName$_</code>. So, putting this all together we
-have the following example of how to write a test that has both fixture-level
-and test-level SetUp & TearDown helpers:-
+use the format <code>_$FixtureName$_</code> to define the name of the fixture.
+All procedures that include the same <code>_$XXX$_</code> in their name are
+assumed to be part of the same fixture. Tests that belong to the same fixture
+are run consecutively so that the fixture-level SetUp and TearDown helpers, if
+defined, only have to be run once. 
+</p><p>
+So, putting this all together we have the following example of how to write a
+test that has both fixture-level and test-level SetUp &amp; TearDown helpers:-
 </p><pre>
 create procedure test._@FixtureSetUp@_$CounterTests$_
 as
+    -- A good place to define static data and test tables.
     create table test.TestCounter
     (
         Value int
@@ -443,7 +459,9 @@ exec ssunit.RunTests;
 There is no restriction on the number of fixtures and tests that you can define
 in a single script. If you prefer you can run all the test creation scripts in
 one phase and then execute <code>ssunit.RunTests</code> right at the end in one
-go.
+go. That said, it is anticipated that you <i>will</i> partition your tests and
+so the fixture name does not appear in the results output to conserve valuable
+space.
 </p>
 
 <a name="Helpers"></a>

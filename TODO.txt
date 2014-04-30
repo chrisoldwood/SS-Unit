@@ -1,5 +1,3 @@
-- Check the limit on test/fixture names
+#2 Check the limit on test/fixture names
 
-- Invoke TearDown first should only happen on first test of new fixture, c.f. temp tables dropped in fixture tear down.
-
-- Clearer documentation of the _$Xxx$_ attribute syntax.
+#3 Invoke TearDown first should only happen on first test of new fixture, c.f. temp tables dropped in fixture tear down.
