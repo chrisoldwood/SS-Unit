@@ -41,22 +41,23 @@ echo Creating '%database%' database
 echo ----------------------------------------
 echo.
 
-sqlcmd -E -S %server% -d master -i CreateDatabase.dbo.sql -v DatabaseName=%database%
+sqlcmd -E -S %server% -d master -b -i CreateDatabase.dbo.sql -v DatabaseName=%database%
+if !errorlevel! neq 0 exit /b !errorlevel!
 
 if "%usePsInstaller%" == "0" (
 	for /f "delims=" %%f in (object-scripts.txt) do (
 		echo %%f
 		sqlcmd -E -S %server% -d %database% -b -i "%%f"
-		if errorlevel 1 (
-			echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
-			exit /b 1
+		if !errorlevel! neq 0 (
+			echo ERROR: Failed to execute SQL script [!errorlevel!]
+			exit /b !errorlevel!
 		)
 	)
 ) else (
 	PowerShell -File ..\Framework\ApplyScripts.ps1 %server% %database% object-scripts.txt
-	if errorlevel 1 (
-		echo ERROR: Failed to build examples database [!ERRORLEVEL!]
-		exit /b 1
+	if !errorlevel! neq 0 (
+		echo ERROR: Failed to build examples database [!errorlevel!]
+		exit /b !errorlevel!
 	)
 )
 
@@ -67,9 +68,9 @@ if "%usePsInstaller%" == "0" (
 	call Install-ps %server% %database%
 )
 popd
-if errorlevel 1 (
-	echo ERROR: Failed to install SS-Unit [!ERRORLEVEL!]
-	exit /b 1
+if !errorlevel! neq 0 (
+	echo ERROR: Failed to install SS-Unit [!errorlevel!]
+	exit /b !errorlevel!
 )
 
 :success

@@ -47,22 +47,23 @@ echo Creating '%database%' database
 echo ----------------------------------------
 echo.
 
-sqlcmd -E -S %server% -d master -i CreateDatabase.dbo.sql
+sqlcmd -E -S %server% -d master -b -i CreateDatabase.dbo.sql
+if !errorlevel! neq 0 exit /b !errorlevel!
 
 if "%usePsInstaller%" == "0" (
 	for /f "delims=" %%f in (object-scripts.txt) do (
 		echo %%f
 		sqlcmd -E -S %server% -d %database% -b -i "%%f"
-		if errorlevel 1 (
-			echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
-			exit /b 1
+		if !errorlevel! neq 0 (
+			echo ERROR: Failed to execute SQL script [!errorlevel!]
+			exit /b !errorlevel!
 		)
 	)
 ) else (
 	PowerShell -File ..\ApplyScripts.ps1 %server% %database% object-scripts.txt
-	if errorlevel 1 (
-		echo ERROR: Failed to build tests database [!ERRORLEVEL!]
-		exit /b 1
+	if !errorlevel! neq 0 (
+		echo ERROR: Failed to build tests database [!errorlevel!]
+		exit /b !errorlevel!
 	)
 )
 
@@ -73,9 +74,9 @@ if "%usePsInstaller%" == "0" (
 	call Install-ps %server% %database%
 )
 popd
-if errorlevel 1 (
-	echo ERROR: Failed to install SS-Unit [!ERRORLEVEL!]
-	exit /b 1
+if !errorlevel! neq 0 (
+	echo ERROR: Failed to install SS-Unit [!errorlevel!]
+	exit /b !errorlevel!
 )
 
 :run_tests
@@ -87,7 +88,8 @@ echo ----------------------------------------
 echo.
 
 echo Setting display width to '%displayWidth%'
-sqlcmd -E -S %server% -d %database% -Q "exec ssunit.Configuration_SetDisplayWidthDefault %displayWidth%"
+sqlcmd -E -S %server% -d %database% -b -Q "exec ssunit.Configuration_SetDisplayWidthDefault %displayWidth%"
+if !errorlevel! neq 0 exit /b !errorlevel!
 
 for /f "delims=" %%f in (test-scripts.txt) do (
 	echo.
@@ -96,9 +98,9 @@ for /f "delims=" %%f in (test-scripts.txt) do (
 	echo ========================================
 	echo.
 	sqlcmd -E -S %server% -d %database% -i "%%f" -v DisplayWidth=%displayWidth%
-	if errorlevel 1 (
-		echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
-		exit /b 1
+	if !errorlevel! neq 0 (
+		echo ERROR: Failed to execute SQL script [!errorlevel!]
+		exit /b !errorlevel!
 	)
 )
 

@@ -35,7 +35,7 @@ for /f "delims=" %%f in (test-scripts.txt) do (
 	echo ========================================
 	echo.
 	sqlcmd -E -S %server% -d %database% -b -i "%%f"
-	if errorlevel 1 set failed=true
+	if !errorlevel! neq 0 set failed=true
 )
 
 if /i "%failed%" == "true" goto failed

@@ -27,9 +27,9 @@ echo Installing SS-Unit framework
 echo ----------------------------------------
 echo.
 PowerShell -File ApplyScripts.ps1 %server% %database% filelist.txt
-if errorlevel 1 (
-	echo ERROR: Failed to install framework [!ERRORLEVEL!]
-	exit /b 1
+if !errorlevel! neq 0 (
+	echo ERROR: Failed to install framework [!errorlevel!]
+	exit /b !errorlevel!
 )
 
 :success

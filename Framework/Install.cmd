@@ -28,9 +28,9 @@ echo.
 for /f "delims=" %%f in (filelist.txt) do (
 	echo %%f
 	sqlcmd -E -S %server% -d %database% -b -i "%%f"
-	if errorlevel 1 (
-		echo ERROR: Failed to execute SQL script [!ERRORLEVEL!]
-		exit /b 1
+	if !errorlevel! neq 0 (
+		echo ERROR: Failed to execute SQL script [!errorlevel!]
+		exit /b !errorlevel!
 	)
 )
 
