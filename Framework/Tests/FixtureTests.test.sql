@@ -191,5 +191,41 @@ as
 	exec ssunit.AssertIntegerEqualTo 0, @count;
 go
 
+create procedure test._@FixtureSetup@_$123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789$_
+as
+	create table test.TestCounter
+	(
+		Value	int
+	);
+
+	insert into test.TestCounter(Value) values(1);
+go
+
+create procedure test._@FixtureTearDown@_$123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789$_
+as
+	drop table test.TestCounter;
+go
+
+create procedure test._@TestSetUp@_$123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789$_
+as
+	update test.TestCounter
+	set	   Value = Value + 1;
+go
+
+create procedure test._@Test@_$123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789$_ShouldPass_With_Very_Long_Fixture_Name
+as
+	declare @value int;
+	select	@value = Value from test.TestCounter;
+
+	declare @passed bit = case when (@value = 2) then 1 else 0 end;
+
+	exec ssunit.AssertTrue @passed;
+go
+
+create procedure test._@Test@_ShouldPass_With_Very_Long_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_1234_Test_Name
+as
+	exec ssunit.AssertPass;
+go
+
 exec ssunit.RunTests;
 go

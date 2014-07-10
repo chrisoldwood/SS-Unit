@@ -5,24 +5,26 @@
  */
 
 /**
- * The fully qualified name of a stored procedure.
+ * The name of an object's schema.
  */
 
-create type ssunit.ProcedureName from varchar(128);
+create type ssunit.SchemaName from varchar(128);
 go
 
 /**
- * The name of an object schema.
+ * The fully qualified name of a stored procedure. The type includes space for
+ * the schema name, separator and procedure name (128 + 1 + 128).
  */
 
-create type ssunit.SchemaName from varchar(32);
+create type ssunit.ProcedureName from varchar(257);
 go
 
 /**
- * The fully qualified name of a table.
+ * The fully qualified name of a table. The type includes space for the schema
+ * name, separator and table name (128 + 1 + 128).
  */
 
-create type ssunit.TableName from varchar(128);
+create type ssunit.TableName from varchar(257);
 go
 
 /**
