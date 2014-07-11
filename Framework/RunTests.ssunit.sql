@@ -179,14 +179,12 @@ as
 		-- Set-up the test fixture
 		if (@tearDownFirst = ssunit.True())
 		begin
-			if (@testTearDownProcedure is not null)
+			if (@fixtureSetUpProcedure is not null)
 			begin
-				exec ssunit_impl.RunTestTearDown @procedure = @testTearDownProcedure;
-			end
-
-			if (@fixtureTearDownProcedure is not null)
-			begin
-				exec ssunit_impl.RunFixtureTearDown @procedure = @fixtureTearDownProcedure;
+				if (@fixtureTearDownProcedure is not null)
+				begin
+					exec ssunit_impl.RunFixtureTearDown @procedure = @fixtureTearDownProcedure;
+				end
 			end
 		end
 
@@ -198,6 +196,14 @@ as
 		end
 
 		-- Run the test.
+		if (@tearDownFirst = ssunit.True())
+		begin
+			if (@testTearDownProcedure is not null)
+			begin
+				exec ssunit_impl.RunTestTearDown @procedure = @testTearDownProcedure;
+			end
+		end
+
 		if ( (@testNameFilter is null) or (@testProcedure like @testNameFilter) )
 		begin
 			exec ssunit_impl.RunTest @procedure = @testProcedure,
