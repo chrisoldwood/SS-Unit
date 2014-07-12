@@ -72,7 +72,7 @@ as
 
 	if (@name is not null)
 	begin
-		raiserror('Unknown SS-Unit attribute on procedure ''%s''', 16, 1, @name);
+		raiserror('Unknown SQL-Unit attribute on procedure ''%s''', 16, 1, @name);
 	end
 
 	-- Find all unit test stored procedures.

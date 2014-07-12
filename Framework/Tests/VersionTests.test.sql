@@ -6,7 +6,7 @@
 
 create procedure test._@Test@_Version_ShouldReturnCurrentVersion
 as
-	declare @expected ssunit.Version = 150;
+	declare @expected ssunit.Version = 160;
 	declare @actual ssunit.Version = ssunit.Version();
 
 	exec ssunit.AssertIntegerEqualTo @expected, @actual;

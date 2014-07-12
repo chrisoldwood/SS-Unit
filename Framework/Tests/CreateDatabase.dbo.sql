@@ -2,11 +2,13 @@
  * \file
  * \brief  Creates the database for the unit tests.
  * \author Chris Oldwood
+ * \note   The database name is passed via the -v switch of SQLCMD.
+ *         e.g. sqlcmd -E ... -d master -i CreateDatabase.dbo.sql -v DatabaseName=MyDatabase
  */
 
-if (db_id('SSUnit_Tests')  is not null)
-	drop database SSUnit_Tests;
+if (db_id('$(DatabaseName)')  is not null)
+	drop database $(DatabaseName);
 go
 
-create database SSUnit_Tests;
+create database $(DatabaseName);
 go

@@ -1,7 +1,7 @@
 @echo off
 rem ************************************************************
 rem
-rem Build the Examples database and install the SS-Unit
+rem Build the Examples database and install the SQL-Unit
 rem framework into it.
 rem
 rem ************************************************************
@@ -17,7 +17,7 @@ if /i "%1" == "" call :usage & exit /b 1
 setlocal
 setlocal enabledelayedexpansion
 set server=%1
-set database=SSUnit_Examples
+set database=SQL_Unit_Examples
 set usePsInstaller=0
 
 :parse_args
@@ -69,7 +69,7 @@ if "%usePsInstaller%" == "0" (
 )
 popd
 if !errorlevel! neq 0 (
-	echo ERROR: Failed to install SS-Unit [!errorlevel!]
+	echo ERROR: Failed to install SQL-Unit [!errorlevel!]
 	exit /b !errorlevel!
 )
 
@@ -87,5 +87,5 @@ echo.
 echo e.g.   %~n0 .\SQLEXPRESS
 echo        %~n0 .\SQLEXPRESS Examples
 echo.
-echo Note: The default database name is SSUnit_Examples.
+echo Note: The default database name is SQL_Unit_Examples.
 goto :eof

@@ -1,8 +1,8 @@
 @echo off
 rem ************************************************************
 rem
-rem Build a database and run a set of unit tests for the SS-Unit
-rem framework.
+rem Build a database and run a set of unit tests for the
+rem SQL-Unit framework.
 rem
 rem NB: Many of the tests are supposed to fail and so we cannot
 rem use the "-b" switch and "errorlevel" to return a definitive
@@ -21,7 +21,7 @@ if /i "%1" == "" call :usage & exit /b 1
 setlocal
 setlocal enabledelayedexpansion
 set server=%1
-set database=SSUnit_Tests
+set database=SQL_Unit_Tests
 set displayWidth=120
 set usePsInstaller=0
 
@@ -47,7 +47,7 @@ echo Creating '%database%' database
 echo ----------------------------------------
 echo.
 
-sqlcmd -E -S %server% -d master -b -i CreateDatabase.dbo.sql
+sqlcmd -E -S %server% -d master -b -i CreateDatabase.dbo.sql -v DatabaseName=%database%
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 if "%usePsInstaller%" == "0" (
@@ -75,7 +75,7 @@ if "%usePsInstaller%" == "0" (
 )
 popd
 if !errorlevel! neq 0 (
-	echo ERROR: Failed to install SS-Unit [!errorlevel!]
+	echo ERROR: Failed to install SQL-Unit [!errorlevel!]
 	exit /b !errorlevel!
 )
 
@@ -118,5 +118,5 @@ echo.
 echo e.g.   %~n0 .\SQLEXPRESS
 echo        %~n0 .\SQLEXPRESS Tests
 echo.
-echo Note: The default database name is SSUnit_Tests.
+echo Note: The default database name is SQL_Unit_Tests.
 goto :eof

@@ -9,13 +9,13 @@
  *
  * \section introduction Introduction
  *
- * SS-Unit is a unit testing framework for SQL Server (i.e. T-SQL).
+ * SQL-Unit is a unit testing framework for SQL Server (i.e. T-SQL).
  *
  * \section example Example Test
  *
  * The following example shows a simple standalone test. T-SQL doesn't support
  * attributes and so we have to annotate the name instead with a string. In
- * SS-Unit the form "_@attrib@_" pair should be considered synonmous with
+ * SQL-Unit the form "_@attrib@_" pair should be considered synonmous with
  * "[attrib]" in NUnit; hence the attribute "_@Test@_" defines a test.
  *
  * \code
@@ -28,7 +28,7 @@
  * \endcode
  *
  * \note
- * This documentation was generated directly from the SS-Unit T-SQL source code
+ * This documentation was generated directly from the SQL-Unit T-SQL source code
  * using Doxygen and the sql2doxygen input filter.
  * See <a href="http://www.chrisoldwood.com">http://www.chrisoldwood.com</a>
  */

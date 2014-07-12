@@ -16,7 +16,7 @@ if /i "%1" == "" call :usage & exit /b 1
 setlocal
 setlocal enabledelayedexpansion
 set server=%1
-set database=SSUnit_Examples
+set database=SQL_Unit_Examples
 set failed=false
 
 if /i not "%2" == "" set database=%2
@@ -67,5 +67,5 @@ echo.
 echo e.g.   %~n0 .\SQLEXPRESS
 echo        %~n0 .\SQLEXPRESS Examples
 echo.
-echo Note: The default database name is SSUnit_Examples.
+echo Note: The default database name is SQL_Unit_Examples.
 goto :eof

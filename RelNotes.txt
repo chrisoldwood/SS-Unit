@@ -1,6 +1,7 @@
 Version 1.6
 ===========
 
+- Changed the product abbreviation to "SQL-Unit" (#7).
 - Fixed the build scripts to ensure they fail correctly when SQLCMD fails (#6).
 - Improved the output when a table comparison assert fails (#5).
 - Fixed a bug where the fixture-level tear-down handler was called for every test (#3).

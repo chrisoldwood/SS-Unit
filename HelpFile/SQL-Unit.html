@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>SS-Unit v1.5 Manual</title>
+<title>SQL Server Unit v1.6 Manual</title>
 <meta name="author" content="Chris Oldwood">
 <style>
 <!--
@@ -14,24 +14,31 @@ td		{ font-family: Verdana, Arial; font-size: 10pt; border: 1px solid black; ver
 
 <body>
 
-<h3 align="center">SS-Unit v1.5</h3>
+<h3 align="center">SQL Server Unit v1.6</h3>
 
 <a name="Introduction"></a>
 <h4>Introduction</h4>
 
 <p>
-SS-Unit is a unit testing framework for SQL Server (i.e. T-SQL). It comprises
-of a set of stored procedures that allow you to write unit tests for your SQL
-objects and code in T-SQL itself using the familiar xUnit model. By this I mean
-that the concepts of Fixtures, the SetUp & TearDown helper functions and use of
-AssertXxx functions to verify expectations are all present. Naturally there are
-limitations to T-SQL that make these concepts less accessible than in a language
-like C# but they should be pretty easy to grasp.
+SQL Server Unit (aka SQL-Unit or SS-Unit*) is a unit testing framework for SQL
+Server (i.e. T-SQL). It comprises of a set of stored procedures that allow you
+to write unit tests for your SQL objects and code in T-SQL itself using the
+familiar xUnit model. By this I mean that the concepts of Fixtures, the SetUp
+&amp; TearDown helper functions and use of <code>AssertXxx</code> functions to verify
+expectations are all present. Naturally there are limitations to T-SQL that make
+these concepts less accessible than in a language like C# but they should be
+pretty easy to grasp.
 </p><p>
 For a little more rationale around why you might choose to unit test your SQL
 code this way rather than through, say, your back-end services see my blog
 posts <a href="http://chrisoldwood.blogspot.com/2011/04/you-write-your-sql-unit-tests-in-sql.html">You Write Your SQL Unit Tests in SQL?</a>
 &amp; <a href="http://chrisoldwood.blogspot.com/2011/05/public-interface-of-database.html">The Public Interface of a Database</a>.
+</p><p>
+<i>* The unfortunate choice of the original "SS-Unit" abbreviation only came to
+light a couple of years later when I started using the test framework in my
+<a href="https://www.youtube.com/watch?v=5-MWYKLM3r0">Test-Driven SQL</a>
+presentation. I have since tried to replace it with "SQL-Unit" where possible
+with only a few key places remaining - the schema names and some URLs.</i>
 </p>
 
 <hr>
@@ -40,24 +47,24 @@ posts <a href="http://chrisoldwood.blogspot.com/2011/04/you-write-your-sql-unit-
 <h4>The 'Examples' Database</h4>
 
 <p>
-The easiest way to see how SS-Unit works is to look at the examples which are
-contained in the <code>SS-Unit\Examples</code> folder. The <code>*.dbo.sql</code>
+The easiest way to see how SQL-Unit works is to look at the examples which are
+contained in the <code>Examples</code> folder. The <code>*.dbo.sql</code>
 files are intended to represent the production code and the <code>*.test.sql</code>
 scripts are the unit tests. You can run the examples either in batch mode (just
 as your build server would) this way:-
 </p><pre>
-C:\SS-Unit\Examples> BuildDatabase .\SQLEXPRESS
-C:\SS-Unit\Examples> RunTests .\SQLEXPRESS
+C:\SQL-Unit\Examples> BuildDatabase .\SQLEXPRESS
+C:\SQL-Unit\Examples> RunTests .\SQLEXPRESS
 </pre><p>
-or you can build the example database (with SS-Unit applied) and run the unit
+or you can build the example database (with SQL-Unit applied) and run the unit
 test scripts interactively through a GUI tool such as SQL Server Management
 Studio (SSMS):-
 </p><pre>
-C:\SS-Unit\Examples> BuildDatabase .\SQLEXPRESS
-C:\SS-Unit\Examples> SSMS
+C:\SQL-Unit\Examples> BuildDatabase .\SQLEXPRESS
+C:\SQL-Unit\Examples> SSMS
 </pre><p>
 These batch files take the name of the SQL Server instance and assume a database
-name of "SSUnit_Examples". The command line above shows how to access a local instance
+name of "SQL_Unit_Examples". The command line above shows how to access a local instance
 of SQL Server Express which is freely available and makes an excellent tool for
 developing SQL code via TDD as its limitations are beyond the scope of what unit
 testing requires.
@@ -78,12 +85,12 @@ it to your baseline database schema and then run your set of test scripts.
 There is a batch file in the Framework folder called <code>Install.cmd</code>
 that you can use to load the test framework into any database, e.g.
 </p><pre>
-C:\SS-Unit\Framework> Install .\SQLEXPRESS SSUnit_Examples
+C:\SQL-Unit\Framework> Install .\SQLEXPRESS SQL_Unit_Examples
 </pre><p>
 That batch file uses <code>SQLCMD</code> to run the SQL scripts which is not
 exactly speedy and so there is an alternative that uses PowerShell instead, e.g.
 </p><pre>
-C:\SS-Unit\Framework> Install-ps .\SQLEXPRESS SSUnit_Examples
+C:\SQL-Unit\Framework> Install-ps .\SQLEXPRESS SQL_Unit_Examples
 </pre><p>
 <i>Note: Make sure you have used <code>PowerShell Set-ExecutionPolicy</code> to
 allow PowerShell scripts to run on your machine.</i>
@@ -106,7 +113,7 @@ between the objects in the framework and your production codebase.
 <p>
 It's assumed that you're already familiar with the xUnit testing framework -
 probably NUnit - but if not, then as long as you have used one of the more
-popular ones SS-Unit should make sense. As mentioned in the Introduction
+popular ones SQL-Unit should make sense. As mentioned in the Introduction
 some artistic license was required to map the mechanisms a language like C# has
 at its disposal for metadata and reflection onto the much simpler T-SQL world.
 </p>
@@ -128,7 +135,7 @@ go
 
 exec ssunit.RunTests;
 </pre><p>
-If you run this piece of code in SSMS (using, say, the SSUnit_Examples database)
+If you run this piece of code in SSMS (using, say, the SQL_Unit_Examples database)
 you should see the following output:-
 </p><img src="HelloWorldResult.gif"><p>
 Alternatively you can save the query into a text file and run it with SQLCMD:-
@@ -139,16 +146,16 @@ of the test outcomes for that run.
 </p>
 
 <a name="HelloWorld"></a>
-<h5>Hello SS-Unit</h5>
+<h5>Hello SQL-Unit</h5>
 
 <p>
 To make things a little more interesting, change either the expectation or the
 actual value to something different and run the test again. I changed the actual
-value to "hello ss-unit" and got this:-
+value to "Hello SQL-Unit" and got this:-
 </p><pre>
-    exec ssunit.AssertStringEqualTo @expected, 'hello ss-unit';
+    exec ssunit.AssertStringEqualTo @expected, 'Hello SQL-Unit';
 </pre>
-<img src="HelloSSUnitResult.gif"><p>
+<img src="HelloSqlUnitResult.gif"><p>
 Grrr, our first failed test! This time the outcome has changed to "FAILED" and
 the "Failure Reason" column is populated with a simple message that shows you
 why the comparison failed.
@@ -161,7 +168,7 @@ why the comparison failed.
 As one more final simple exercise, comment out the assert. This time the test
 is deemed "inconclusive" and so the outcome changes to "Unknown":-
 </p><pre>
-    --exec ssunit.AssertStringEqualTo @expected, 'hello ss-unit';
+    --exec ssunit.AssertStringEqualTo @expected, 'Hello SQL-Unit';
 </pre>
 <img src="HelloNobodyResult.gif"><p>
 It is expected that all code paths should assert <i>at least one</i> condition
@@ -185,7 +192,7 @@ If you've used NUnit you'll be accustomed to annotating your unit tests with a
 having to register them. Sadly T-SQL doesn't support attributes and so we have
 to find another way to achieve the same effect. So, it uses an adornment on the
 test name instead: <code>_@Test@_</code>. Hopefully the use of the '@' symbol will
-make you think <b>at</b><i>tribute</i>. So these two (NUnit and SS-Unit) test
+make you think <b>at</b><i>tribute</i>. So these two (NUnit and SQL-Unit) test
 definitions are intended to be equivalent:-
 </p><pre>
 [Test]
@@ -215,14 +222,14 @@ more than having to fix your script because you forgot to drop the proc first or
 you misspelled it. This <i>then</i> means that you can alternate between the production
 code and writing/running the tests very rapidly.
 </p><p>
-A slightly more subtle point you may have noticed is that all the SS-Unit
+A slightly more subtle point you may have noticed is that all the SQL-Unit
 objects live in a separate schema called <code>ssunit</code>. This gives it all
 the benefits of namespaces to avoid name clashes with your test or production
 code. The test runner assumes that all tests live in a schema called <code>test</code>
 but that can be overridden as explained later.
 </p><p>
-<i>NB: The schema <code>ssunit_impl</code> is used for the implementation of SS-Unit
-and so there should be no need to access its objects from tests.</i>
+<i>NB: The schema <code>ssunit_impl</code> is used for the implementation of
+SQL-Unit and so there should be no need to access its objects from tests.</i>
 </p>
 
 <a name="Asserts"></a>
@@ -334,7 +341,7 @@ with NULL. It would have been quite easy to make the AssertXxxEqualTo procedures
 support a comparison with NULL, but I felt that goes against how NULL's are
 handled in real SQL. You learn early on that NULL can be synonymous for
 'unknown' and so you never write "x = null", but "x is null". Consequently in
-SS-Unit you don't say "AssertXxxEqualTo null, @x", but "AssertXxxIsNull @x". 
+SQL-Unit you don't say "AssertXxxEqualTo null, @x", but "AssertXxxIsNull @x". 
 </p>
 
 <a name="AssertThrew"></a>
@@ -398,9 +405,9 @@ per-fixture. Within each pair the "SetUp" method is run before the test(s) and
 the "TearDown" method after.
 </p><p>
 In NUnit the first pair of methods are annotated with the <code>[TestSetUp]</code>
-and <code>[TestTearDown]</code> attributes, which in SS-Unit is mapped to the
+and <code>[TestTearDown]</code> attributes, which in SQL-Unit is mapped to the
 name adornments <code>_@TestSetUp@_</code> and <code>_@TestTearDown@_</code>.
-Naturally it follows that the fixture-level pair in SS-Unit are similarly named
+Naturally it follows that the fixture-level pair in SQL-Unit are similarly named
 <code>_@FixtureSetUp@_</code> and <code>_@FixtureTearDown@_</code>. In both
 cases the rest of the procedure name is irrelevant and can be left off if so
 desired. Each of the four helper procedures is optional too, so you can leave
@@ -695,7 +702,7 @@ API procedure used to set its default:-
 </tr>
 </table>
 <p>
-NB: The @isInteractive parameter was added to aid in testing SS-Unit and as a
+NB: The @isInteractive parameter was added to aid in testing SQL-Unit and as a
 workaround for when the UDF <code>ssunit.IsInteractive()</code> doesn't correctly
 categorise the client so there is no way to override the default.
 </p>
@@ -716,7 +723,7 @@ text wrapping in a console window. When running as part of an automated build yo
 redirecting the output and so effectively want to configure an "infinitely wide"
 console instead.
 </p><p>
-As of v1.0 the SS-Unit framework test script (<code>RunTests.cmd</code>) uses
+As of v1.0 the SQL-Unit framework test script (<code>RunTests.cmd</code>) uses
 the <a href="#GlobalParameters">global parameters</a> feature to set the display
 width once by invoking the relevant procedure:-
 </p><pre>
@@ -762,7 +769,7 @@ helper procedure that just deletes from <i>every</i> table as part of the
 fixture TearDown; you could also call it as part of the fixture SetUp for a
 belt-and-braces approach.
 </p><p>
-To aid with the schema side of the problem SS-Unit provides a procedure that
+To aid with the schema side of the problem SQL-Unit provides a procedure that
 you can use to "wipe the schema clean" before running any new tests - 
 <code>ssunit.TestSchema_Clear</code>. This procedure will drop all objects in
 the specified schema (or 'test' by default) so that you won't have any errors
@@ -812,7 +819,7 @@ as
 go
 </pre><p>
 Once you get more familiar with the kinds of SQL error messages you see whilst
-writing unit tests with SS-Unit you may decide to forgo the pessimistic prologue
+writing unit tests with SQL-Unit you may decide to forgo the pessimistic prologue
 and just stick to the actual tests and invoking <code>ssunit.RunTests</code>.
 </p><p>
 <i>NB: The reason the test runner doesn't use nested transactions to avoid the
@@ -821,19 +828,19 @@ it would in the real world.</i>
 </p>
 
 <a name="Version"></a>
-<h5>Detecting the SS-Unit Version</h5>
+<h5>Detecting the SQL-Unit Version</h5>
 
 <p>
 Some database deployment techniques rely on applying "deltas" or "patches" to
 take the database from one release to the next. This may mean that your 3rd
-Party components (i.e. SS-Unit) are also on different versions and so there is
+Party components (i.e. SQL-Unit) are also on different versions and so there is
 a UDF that tells you what version is installed, e.g.
 </p><pre>
 declare @version ssunit.Version = ssunit.Version();
 
 if (@version >= 150)
 begin
-    -- SS-Unit version is 1.5+
+    -- SQL-Unit version is 1.5+
 end
 </pre><p>
 The version number is an integral value so that 1.0.0 = 100, 1.5.0 = 150, etc.
@@ -858,7 +865,7 @@ Email: <a href="mailto://gort@cix.co.uk">gort@cix.co.uk</a><br>
 Web: <a href="http://www.chrisoldwood.com">www.chrisoldwood.com</a><br>
 </p><p>
 Chris Oldwood<br>
-12th February 2013<br>
+12th July 2014<br>
 </p>
 
 </body>

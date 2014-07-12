@@ -1,7 +1,7 @@
 @echo off
 rem ************************************************************
 rem
-rem Create the SS-Unit framework objects inside the specified
+rem Create the SQL-Unit framework objects inside the specified
 rem database. This version uses SQLCMD to execute the scripts.
 rem
 rem ************************************************************
@@ -22,7 +22,7 @@ set database=%2
 
 echo.
 echo ----------------------------------------
-echo Installing SS-Unit framework
+echo Installing SQL-Unit framework
 echo ----------------------------------------
 echo.
 for /f "delims=" %%f in (filelist.txt) do (
@@ -45,5 +45,5 @@ rem ************************************************************
 echo.
 echo Usage: %~n0 ^<db server^> ^<db name^>
 echo.
-echo e.g.   %~n0 .\SQLEXPRESS SSUnit_Examples
+echo e.g.   %~n0 .\SQLEXPRESS SQL_Unit_Examples
 goto :eof

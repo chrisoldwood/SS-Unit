@@ -1,0 +1,22 @@
+Development Structure
+---------------------
+
+The source folder structure is required by the solution & projects to be like
+this:-
+
++-SQL-Unit
+| +-Examples
+| +-Framework
+| +-HelpFile
++-sql2doxygen
+
+The following commands will create that structure by cloning the various
+application and dependent tool repositories:-
+
+C:\> mkdir SQL
+C:\> git clone https://github.com/chrisoldwood/SS-Unit.git SQL\SQL-Unit
+<optional>
+C:\> git clone https://github.com/chrisoldwood/sql2doxygen.git SQL\sql2doxygen
+
+Chris Oldwood 
+12th July 2014
