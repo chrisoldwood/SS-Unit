@@ -1,3 +1,13 @@
+Version 1.6
+===========
+
+- Fixed the build scripts to ensure they fail correctly when SQLCMD fails (#6).
+- Improved the output when a table comparison assert fails (#5).
+- Fixed a bug where the fixture-level tear-down handler was called for every test (#3).
+- Fixed a bug where long-named test procedures wouldn't be dropped (#2).
+- Added optional script switch "--use-ps" to enable the faster PowerShell based SQL runner.
+- Added optional script argument so the database names can be customised (#1).
+
 Version 1.5
 ===========
 
@@ -42,4 +52,4 @@ Version 0.5
 - First public alpha.
 
 Chris Oldwood 
-8th February 2013
+12th July 2014

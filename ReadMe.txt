@@ -12,6 +12,15 @@ AssertXxx functions to verify expectations are all present. Naturally there are
 limitations to T-SQL that make these concepts less accessible than in a language
 like C# but they should be pretty easy to grasp.
 
+Releases
+--------
+
+Stable releases are formally packaged and made available from my SQL tools page:
+http://www.chrisoldwood.com/sql.htm
+
+The latest code is available from my GitHub repo:
+https://github.com/chrisoldwood/SS-Unit
+
 Installation
 ------------
 
@@ -22,7 +31,13 @@ framework test suite/examples.
 Documentation
 -------------
 
-In the HelpFile folder there is a HTML based manual.
+In the stable release package there is a HelpFile folder containing an HTML
+based manual. There is also an online version of the manual available here:
+http://www.chrisoldwood.com/sql/ss-unit/manual/SS-Unit.html
+
+Doxygen based documentation (generated with my sql2doxygen script) for the
+framework API is available here:
+http://www.chrisoldwood.com/sql/ss-unit/dox/index.html
 
 Contact Details
 ------------------
@@ -31,4 +46,4 @@ Email: gort@cix.co.uk
 Web:   http://www.chrisoldwood.com
 
 Chris Oldwood 
-8th February 2013
+12th July 2014
