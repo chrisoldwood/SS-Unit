@@ -58,7 +58,7 @@ foreach ($file in $files)
 		write-output "Applying batch: $file"
 
 		$batch = [System.IO.File]::ReadAllText($file)
-		$scripts = $batch -split 'go'
+		$scripts = $batch -split '^go',0,'Multiline'
 		
 		foreach ($script in $scripts)
 		{
