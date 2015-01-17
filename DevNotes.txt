@@ -18,5 +18,13 @@ C:\> git clone https://github.com/chrisoldwood/SS-Unit.git SQL\SQL-Unit
 <optional>
 C:\> git clone https://github.com/chrisoldwood/sql2doxygen.git SQL\sql2doxygen
 
+Formal Release Checklist
+------------------------
+
+- Bump version number in Version.ssunit.sql, Doxygen.cfg, SQL-Unit.html and ReadMe.txt.
+- Update the release notes.
+- Tag the master branch and push to GitHub.
+- Build and upload package & documentation to the web site.
+
 Chris Oldwood 
-12th July 2014
+17th January 2015

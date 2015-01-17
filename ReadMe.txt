@@ -26,7 +26,9 @@ Installation
 
 None required, this archive contains only source files and scripts. You do need
 to have SQLCMD on your path to apply the framework to a database or run the
-framework test suite/examples.
+framework test suite/examples. Alternatively you can run the batch files with
+the --use-ps switch and it will use the (experimental) PowerShell based SQL
+runner instead.
 
 Documentation
 -------------
@@ -51,4 +53,4 @@ Email: gort@cix.co.uk
 Web:   http://www.chrisoldwood.com
 
 Chris Oldwood 
-12th July 2014
+17th January 2015
